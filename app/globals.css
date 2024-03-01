@@ -2,3 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+/* styles.css */
+@keyframes shimmer {
+  0% {
+    background-position: -200%;
+  }
+  100% {
+    background-position: 200%;
+  }
+}
+
+.shimmer-effect {
+  background: linear-gradient(90deg, transparent, #2d3748, transparent); /* Use the desired background color */
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
