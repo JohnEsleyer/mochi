@@ -7,12 +7,14 @@ const MODEL_NAME = "gemini-1.0-pro";
 const API_KEY = "AIzaSyCYa3-6mEBS4qJ-FYA24ruXHaiXYj1t4iQ";
 
 
+
+
 export interface GeneratedText {
     meaning:  string;
     romaji:   string;
     furigana: string;
     context: string;
-    kanji: { key: {key: string} };
+    words: { key: {key: string} };
 }
   
 
@@ -46,17 +48,22 @@ async function run(text: string) {
     },
   ];
 
-  const allKanji = extractKanji(filterJapanese(text));
+  const allKanji = filterJapanese(text);
   console.log("All Kanji" + JSON.stringify(allKanji));
   const parts = [
     { text: `Given a Japanese text "${text}"
-    Give the following:
+    Give the following JSON:
     {
     "meaning": "The meaning of the text",
     "romaji": "The romaji equivalent of the text",
     "furigana": "The furigana version of the text",
     "context": "Where and when does the text used during conversation?"
-    "kanji": ${JSON.stringify(allKanji)},
+    "words": {
+      "1": {
+        "word": "word",
+        "meaning": "meaning of the word"
+      },
+    },
     }` },
   ];
 

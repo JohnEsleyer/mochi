@@ -9,7 +9,7 @@ export interface GeneratedText {
   romaji: string;
   furigana: string;
   context: string;
-  kanji: { [key: string]: { kanji: string, meaning: string } };
+  words: { [key: string]: { word: string, meaning: string } };
 }
 
 
@@ -19,9 +19,9 @@ export default function Home() {
     romaji: '',
     furigana: '',
     context: '',
-    kanji: {
+    words: {
       '': {
-        kanji: '',
+        word: '',
         meaning: '',
       },
     },
@@ -63,10 +63,10 @@ export default function Home() {
         <div className={`${isLoading ? "shimmer-effect" : ""} max-w-md p-6 rounded-lg m-16 shadow-lg w-4/5 bg-gray-800`}>
         <div className="flex items-center justify-center">
         <Image src="/mochi.png" width={100} height={100} alt="mochi"/>
-          <div className="flex items-center grid">
-          <h1 className="text-4xl font-bold mt-4"><span className="text-yellow-500">M</span><span className="text-pink-500">o</span><span className="text-green-500">c</span>h<span className="text-orange-500">i</span></h1>
-          <span className="text-sm">Japanese AI Text Analyzer</span>
-          {/* <span className="text-xs">Made by <a className="text-orange-300"href="https://www.github.com/johnesleyer">@JohnEsleyer</a></span> */}
+          <div className="flex items-center mb-6 grid">
+          <h1 className="text-4xl font-bold mt-4"><span className="text-yellow-300">M</span><span className="text-pink-300">o</span><span className="text-green-300">c</span>h<span className="text-orange-300">i</span></h1>
+          <span className="text-sm">Analyze Japanese Texts with AI</span>
+          <span className="text-xs">Made by <a className="text-orange-300"href="https://www.github.com/johnesleyer">@JohnEsleyer</a></span>
           </div>
           </div>
           <input
@@ -109,12 +109,12 @@ export default function Home() {
             <span className="font-bold text-xl mr-4">Context:</span>
             <span className="text-lg">{responseGeneratedText.context}</span>
           </div>
-          <span className="font-bold text-2xl mr-4">Kanji</span>
-          {Object.keys(responseGeneratedText.kanji).map((key) => (
+          <span className="font-bold text-2xl mr-4">words</span>
+          {Object.keys(responseGeneratedText.words).map((key) => (
             <React.Fragment key={key}>
               <div className="flex items-start justify-start p-2">
-                <span className="font-bold text-4xl mr-4">{responseGeneratedText.kanji[key].kanji}</span>
-                <span className="text-lg">{responseGeneratedText.kanji[key].meaning}</span>
+                <span className="font-bold text-4xl mr-4">{responseGeneratedText.words[key].word}</span>
+                <span className="text-lg">{responseGeneratedText.words[key].meaning}</span>
               </div>
 
             </React.Fragment>
