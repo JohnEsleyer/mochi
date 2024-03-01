@@ -60,7 +60,7 @@ export default function Home() {
   return (
     <>
       <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white font-sans">
-        <div className={`${isLoading ? "shimmer-effect" : ""} max-w-md p-6 rounded-lg m-16 shadow-lg w-4/5 bg-gray-800`}>
+        <div className={`${isLoading ? "shimmer-effect" : ""}  p-6 rounded-lg m-12 shadow-lg w-full md:w-auto bg-gray-800`}>
         <div className="flex items-center justify-center">
         <Image src="/mochi.png" width={100} height={100} alt="mochi"/>
           <div className="flex items-center mb-6 grid">
@@ -74,13 +74,13 @@ export default function Home() {
             value={inputValue}
             onChange={handleInputChange}
             placeholder="Type word or phrase"
-            className="w-full p-2 mb-4 rounded bg-gray-700 text-white"
+            className="block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           />
           
           {isLoading ? <p></p> : <button
           
           onClick={handleClick}
-          className="w-full p-2 mb-4 rounded text-black bg-orange-200 transition duration-300"
+          className="w-full p-2 mt-4 mb-4 rounded text-black bg-orange-200 transition duration-300"
         >
           Analyze Text
         </button>}
@@ -109,12 +109,13 @@ export default function Home() {
             <span className="font-bold text-xl mr-4">Context:</span>
             <span className="text-lg">{responseGeneratedText.context}</span>
           </div>
-          <span className="font-bold text-2xl mr-4">words</span>
+          <hr className="p-2"/>
+          <span className="font-bold text-3xl mr-4 p-2">Words Breakdown</span>
           {Object.keys(responseGeneratedText.words).map((key) => (
             <React.Fragment key={key}>
               <div className="flex items-start justify-start p-2">
-                <span className="font-bold text-4xl mr-4">{responseGeneratedText.words[key].word}</span>
-                <span className="text-lg">{responseGeneratedText.words[key].meaning}</span>
+                <span className="container w-25 font-bold text-3xl mr-4">{responseGeneratedText.words[key].word}</span>
+                <span className="text-lg container">{responseGeneratedText.words[key].meaning}</span>
               </div>
 
             </React.Fragment>
