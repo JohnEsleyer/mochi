@@ -28,8 +28,15 @@ export default function Home() {
   const [responseGeneratedText, setGeneratedText] = useState<GeneratedText>(defaultData);
 
   const [inputValue, setInputValue] = useState<string>('');
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+
+  const toggleVisibility = () => {
+    setIsVisible(!isVisible);
+  }
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+
+    setIsVisible(false);
     setInputValue(e.target.value);
   };
 
@@ -45,13 +52,14 @@ export default function Home() {
 
     const generatedText: GeneratedText = await res.json();
     setGeneratedText(generatedText);
+    toggleVisibility();
 
   }
 
   return (
     <>
       <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white font-sans">
-        <div className="max-w-md p-6 rounded-lg shadow-lg bg-gray-800">
+        <div className="max-w-md p-6 rounded-lg m-16 shadow-lg bg-gray-800">
           <h1 className="text-4xl font-bold mb-4">Mochi</h1>
           <input
             type="text"
@@ -68,6 +76,9 @@ export default function Home() {
           </button>
           <h3 className="text-xl font-semibold mb-2"></h3>
 
+          <div className={`transition-opacity transition-height duration-500 ease-in-out overflow-hidden ${
+          isVisible ? 'opacity-100 max-h-full' : 'opacity-0 max-h-0'
+        }`}>
           <span className="font-bold text-xl mr-4">"{inputValue}"</span>
 
           <div className="flex items-start justify-start p-2">
@@ -97,6 +108,7 @@ export default function Home() {
             </React.Fragment>
           ))}
 
+        </div>
         </div>
       </div>
 
