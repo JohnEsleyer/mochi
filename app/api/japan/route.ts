@@ -1,14 +1,18 @@
 const { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } = require("@google/generative-ai");
 import removeCodeBlock from "@/app/functions/removeCodeBlock";
+import extractKanji from "@/app/functions/extractKanji";
+import filterJapanese from "@/app/functions/filterJapanese";
 
 const MODEL_NAME = "gemini-1.0-pro";
 const API_KEY = "AIzaSyCYa3-6mEBS4qJ-FYA24ruXHaiXYj1t4iQ";
+
 
 export interface GeneratedText {
     meaning:  string;
     romaji:   string;
     furigana: string;
-    examples: { [key: string]: string };
+    context: string;
+    kanji: { key: {key: string} };
 }
   
 
@@ -42,8 +46,18 @@ async function run(text: string) {
     },
   ];
 
+  const allKanji = extractKanji(filterJapanese(text));
+  console.log("All Kanji" + JSON.stringify(allKanji));
   const parts = [
-    { text: `Explain the following Japanese word:\"${text}\" The output would be json: {\"meaning\": \"\", \"romaji\":\"\", \"furigana\":\"\", \"examples\": {\"1\": \"\", \"2\": \"\"}} Give 2 example usage` },
+    { text: `Given a Japanese text "${text}"
+    Give the following:
+    {
+    "meaning": "The meaning of the text",
+    "romaji": "The romaji equivalent of the text",
+    "furigana": "The furigana version of the text",
+    "context": "Where and when does the text used during conversation?"
+    "kanji": ${JSON.stringify(allKanji)},
+    }` },
   ];
 
   const result = await model.generateContent({
