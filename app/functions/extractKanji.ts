@@ -49,7 +49,7 @@ export default function extractKanji(japaneseText: string): { [index: number]: s
       } else {
         // If it's hiragana, katakana, or alphanumeric, check if we have accumulated kanji
         if (currentKanji) {
-          result[index++] = `${currentKanji} - meaning`;
+          result[index++] = `{kanji: ${currentKanji}, meaning: ""`;
           currentKanji = ''; // Reset the accumulated kanji
         }
       }
