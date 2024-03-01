@@ -9,7 +9,14 @@ export interface GeneratedText {
   romaji: string;
   furigana: string;
   context: string;
-  words: { [key: string]: { word: string, meaning: string } };
+  words: { [key: string]: { 
+    word: string, 
+    romaji: string, 
+    category: string, 
+    meaning: string, 
+    context: string
+  } 
+};
 }
 
 
@@ -22,16 +29,28 @@ export default function Home() {
     words: {
       '': {
         word: '',
+        romaji: '',
+        category: '',
         meaning: '',
+        context: '',
       },
     },
+  };
+
+  const colorWordCategory: {[key: string]: string} = {
+    noun: 'text-green-300',
+    particle: 'text-pink-300',
+    pronoun: 'text-yellow-300',
+    verb: 'text-orange-300',
+    adjective: 'text-blue-300',
+    copula: 'text-purple-300',
   };
   const [responseGeneratedText, setGeneratedText] = useState<GeneratedText>(defaultData);
 
   const [inputValue, setInputValue] = useState<string>('');
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  // const [didUpdate, setDidUpdate] = useState<boolean>(false);
+  
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
 
 
@@ -91,10 +110,11 @@ export default function Home() {
           <div className={`transition-opacity transition-height duration-500 ease-in-out overflow-hidden ${
           isVisible ? 'opacity-100 max-h-full' : `${isLoading ? 'opacity-0 max-h-full' : 'opacity-0 max-h-0'}`
         }`}>
-          <span className="font-bold text-xl mr-4">"{inputValue}"</span>
+          <span className="font-bold text-2xl mr-4 ">"{inputValue}"</span>
+          <hr/>
 
           <div className="flex items-start justify-start p-2">
-            <span className="font-bold text-xl mr-4">Meaning:</span>
+            <span className="font-bold text-xl mr-4 ">Meaning:</span>
             <span className="text-lg">{responseGeneratedText.meaning}</span>
           </div>
           <div className="flex items-start justify-start p-2">
@@ -110,12 +130,30 @@ export default function Home() {
             <span className="text-lg">{responseGeneratedText.context}</span>
           </div>
           <hr className="p-2"/>
-          <span className="font-bold text-3xl mr-4 p-2">Words Breakdown</span>
+          <p className="font-bold text-3xl mr-4 p-2">Words Breakdown</p>
+          <span className="font-bold text-3xl mr-4 p-2">{
+           Object.keys(responseGeneratedText.words).map((key) => (
+            <React.Fragment key={key}>
+                <span className={`text-3xl font-bold mb-2 
+                ${responseGeneratedText.words[key].category in colorWordCategory ? 
+                colorWordCategory[responseGeneratedText.words[key].category] : 'text-white-300'}`}>
+                  {responseGeneratedText.words[key].word}
+                  </span>
+            </React.Fragment>
+          ))
+          }</span>
           {Object.keys(responseGeneratedText.words).map((key) => (
             <React.Fragment key={key}>
-              <div className="flex items-start justify-start p-2">
-                <span className="container w-25 font-bold text-3xl mr-4">{responseGeneratedText.words[key].word}</span>
-                <span className="text-lg container">{responseGeneratedText.words[key].meaning}</span>
+              <div className="flex flex-col rounded-lg p-4 shadow-md">
+                <span className={`text-3xl font-bold mb-2 ${responseGeneratedText.words[key].category in colorWordCategory ? 
+                colorWordCategory[responseGeneratedText.words[key].category] : 'text-white-300'}`}>
+                  {responseGeneratedText.words[key].word}
+                  </span>
+                <span className="text-lg "><b>Romaji</b>: {responseGeneratedText.words[key].romaji}</span>
+                <span className="text-lg "><b>Category</b>: {responseGeneratedText.words[key].category}</span>
+                <span className="text-lg "><b>Meaning</b>: {responseGeneratedText.words[key].meaning}</span>
+                <span className="text-lg "><b>Context</b>: {responseGeneratedText.words[key].context}</span>
+
               </div>
 
             </React.Fragment>

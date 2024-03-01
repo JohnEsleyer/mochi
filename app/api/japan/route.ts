@@ -3,14 +3,22 @@ const { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } = require("@googl
 import runAi from "@/app/functions/runAi";
 
 
+
 export interface GeneratedText {
-    meaning:  string;
-    romaji:   string;
-    furigana: string;
-    context: string;
-    words: { key: {key: string} };
+  meaning: string;
+  romaji: string;
+  furigana: string;
+  context: string;
+  words: { [key: string]: { 
+    word: string, 
+    romaji: string, 
+    category: string, 
+    meaning: string, 
+    context: string
+  } 
+};
 }
-  
+
 
 export async function POST(request: Request) {
     const {message} = await request.json();

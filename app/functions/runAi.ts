@@ -3,7 +3,7 @@ import filterJapanese from "./filterJapanese";
 import removeCodeBlock from "./removeCodeBlock";
 
 const MODEL_NAME = "gemini-1.0-pro";
-const API_KEY = "AIzaSyCYa3-6mEBS4qJ-FYA24ruXHaiXYj1t4iQ";
+const API_KEY = process.env.API_KEY || '';
 
 export default async function runAi(text: string) {
     const genAI = new GoogleGenerativeAI(API_KEY);
@@ -48,7 +48,10 @@ export default async function runAi(text: string) {
       "words": {
         "1": {
           "word": "word",
-          "meaning": "meaning of the word or how to use the word, if it is particle then how to use the particle?"
+          "romaji": "romaji version of the word",
+          "category": "is it noun? verb? particle?, etc?",
+          "meaning": "meaning of the word or how to use the word, if it is particle then how to use the particle?",
+          "context": "When and where the word is used? how a particular word is used in a given situation or environment"
         },
       },
       }` },
