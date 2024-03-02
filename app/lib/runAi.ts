@@ -39,7 +39,7 @@ export default async function runAi(text: string) {
     console.log("Filtered Japanese:" + JSON.stringify(allKanji));
     const parts = [
       { text: `Given a Japanese text: "${text}"
-      Give the following JSON (if the given word is gibberish or non-japanese give a single $ sign instead instead):
+      Give the following JSON (if the given text is gibberish or non-japanese give a single $ sign instead instead.):
       {
       "meaning": "The meaning of the text",
       "romaji": "The romaji equivalent of the text",
@@ -55,6 +55,44 @@ export default async function runAi(text: string) {
         },
       },
       }
+
+      Example: 
+      {
+        "meaning": "Studying is difficult",
+        "romaji": "Benkyou wa taihen desu",
+        "furigana": "べんきょうはたいへんです",
+        "context": "This phrase is often used by students to express the difficulty of their studies.",
+        "words": {
+        "1": {
+        "word": "勉強",
+        "romaji": "benkyou",
+        "class": "noun",
+        "meaning": "study",
+        "context": "This word is used to refer to the act of studying."
+      },
+        "2": {
+        "word": "は",
+        "romaji": "wa",
+        "class": "particle",
+        "meaning": "is",
+        "context": "This particle is used to mark the subject of a sentence."
+      },
+        "3": {
+        "word": "大変",
+        "romaji": "taihen",
+        "class": "adjective",
+        "meaning": "difficult",
+        "context": "This word is used to describe something that is difficult to do."
+      },
+        "4": {
+        "word": "です",
+        "romaji": "desu",
+        "class": "verb",
+        "meaning": "is",
+        "context": "This verb is used to indicate that something is true."
+      }
+      }
+      }
       ` },
     ];
   
@@ -63,36 +101,6 @@ export default async function runAi(text: string) {
       generationConfig,
       safetySettings,
     });
-
-    // const parts2 = [
-    //   { text: `Given the following JSON response text: "${result.response.text()}"
-
-    //   Check if it matches the following criteria (if not give the proper one): 
-    //   Give the following JSON (if the given word is gibberish or non-japanese give a single $ sign instead instead):
-    //   {
-    //   "meaning": "The meaning of the text",
-    //   "romaji": "The romaji equivalent of the text",
-    //   "furigana": "The furigana version of the text",
-    //   "context": "Where and when does the text used during conversation?"
-    //   "words": {
-    //     "1": {
-    //       "word": "word (In Japanese)",
-    //       "romaji": "romaji version of the word",
-    //       "category": "is it noun? verb? particle?, etc?",
-    //       "meaning": "meaning of the word or how to use the word, if it is particle then how to use the particle?",
-    //       "context": "When and where the word is used? how a particular word is used in a given situation or environment"
-    //     },
-    //   },
-    //   }
-    //   ` },
-    // ];
-
-    // const result2 = await model.generateContent({
-    //   contents: [{ role: "user", parts: parts2 }],
-    //   generationConfig,
-    //   safetySettings,
-    // });
-
   
     const response = result.response;
     console.log(removeCodeBlock(response.text()));

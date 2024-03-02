@@ -113,14 +113,14 @@ export default function Home() {
           <div><input
             type='text'
             value={inputValue}
-            maxLength={75}
+            maxLength={100}
             onChange={handleInputChange}
             placeholder='Type a word or phrase'
             className=' w-full lg:w-[32rem] lg:h-14 p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
           />
           
           </div>
-          <p className="text-xs p-2">{inputValue.length} / 75</p>
+          <p className="text-xs p-2">{inputValue.length} / 100</p>
           
           
         </div>
@@ -141,7 +141,7 @@ export default function Home() {
           {!isFailed && <div className={` transition-opacity transition-height duration-500 ease-in-out overflow-hidden ${
           isVisible ? 'opacity-100 max-h-full' : `${isLoading ? 'opacity-0 max-h-full' : 'opacity-0 max-h-0'}`
         }`}>
-          <div className='lg:drop-shadow-xl lg:mt-14'>
+          <div className='lg:drop-shadow-xl lg:mt-10'>
           <span className='font-bold text-2xl mr-4 text-3xl'>Input: "{inputValue}"</span>
           <hr className='h-px my-2 border-0 bg-gray-700'/>
 
