@@ -38,8 +38,8 @@ export default async function runAi(text: string) {
     const allKanji = filterJapanese(text);
     console.log("All Kanji" + JSON.stringify(allKanji));
     const parts = [
-      { text: `Given a Japanese text "${text}"
-      Give the following JSON:
+      { text: `Given a Japanese text: "${text}"
+      Give the following JSON (if the given word is gibberish or non-japanese give a single $ sign instead instead):
       {
       "meaning": "The meaning of the text",
       "romaji": "The romaji equivalent of the text",
@@ -54,7 +54,9 @@ export default async function runAi(text: string) {
           "context": "When and where the word is used? how a particular word is used in a given situation or environment"
         },
       },
-      }` },
+      }
+      
+      ` },
     ];
   
     const result = await model.generateContent({

@@ -1,52 +1,35 @@
 'use client'
 
-import React from "react";
-import { ChangeEvent, useState } from "react";
+import React from 'react';
+import { ChangeEvent, useState } from 'react';
 import Image from 'next/image';
-
-export interface GeneratedText {
-  meaning: string;
-  romaji: string;
-  furigana: string;
-  context: string;
-  words: { [key: string]: { 
-    word: string, 
-    romaji: string, 
-    category: string, 
-    meaning: string, 
-    context: string
-  } 
-};
-}
+import { colorWordCategory } from './lib/colors';
 
 
 export default function Home() {
   const defaultData = {
-    meaning: '',
-    romaji: '',
-    furigana: '',
-    context: '',
-    words: {
-      '': {
-        word: '',
-        romaji: '',
-        category: '',
-        meaning: '',
-        context: '',
+    status: 'success',
+    body: {
+      meaning: '',
+      romaji: '',
+      furigana: '',
+      context: '',
+      words: {
+        '': {
+          word: '',
+          romaji: '',
+          category: '',
+          meaning: '',
+          context: '',
+        },
       },
     },
+   
   };
 
-  const colorWordCategory: {[key: string]: string} = {
-    noun: 'text-green-300',
-    particle: 'text-pink-300',
-    pronoun: 'text-yellow-300',
-    verb: 'text-orange-300',
-    adjective: 'text-blue-300',
-    copula: 'text-purple-300',
-  };
-  const [responseGeneratedText, setGeneratedText] = useState<GeneratedText>(defaultData);
-
+  
+  const [responseJson, setJsonResponse] = useState<JsonResponse>(defaultData);
+  const [isFailed, setIsFailed] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>('');
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -59,8 +42,14 @@ export default function Home() {
   };
 
   const handleClick = async () => {
+    if (inputValue.length <= 0){
+      return 
+    }
+    setIsFailed(false);
     setIsVisible(false);
     setIsLoading(true);
+
+
     const res = await fetch('/api/japan', {
       method: 'POST',
       body: JSON.stringify({ message: inputValue }),
@@ -69,8 +58,19 @@ export default function Home() {
       },
     });
 
-    const generatedText: GeneratedText = await res.json();
-    setGeneratedText(generatedText);
+    const response: JsonResponse = await res.json();
+    console.log(response.status);
+    const status = response.status;
+    if (status == 'Failed'){
+  
+      setIsFailed(true);
+      setIsVisible(true);
+      setIsLoading(false);
+      return
+    }
+
+    setIsFailed(false);
+    setJsonResponse(response);
     setIsLoading(false);
     setIsVisible(true);
 
@@ -78,87 +78,98 @@ export default function Home() {
 
   return (
     <>
-      <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white font-sans">
-        <div className={`${isLoading ? "shimmer-effect" : ""}  p-6 rounded-lg m-12 shadow-lg w-full md:w-auto bg-gray-800`}>
-        <div className="flex items-center justify-center">
-        <Image src="/mochi.png" width={100} height={100} alt="mochi"/>
-          <div className="flex items-center mb-6 grid">
-          <h1 className="text-4xl font-bold mt-4"><span className="text-yellow-300">M</span><span className="text-pink-300">o</span><span className="text-green-300">c</span>h<span className="text-orange-300">i</span></h1>
-          <span className="text-sm">Analyze Japanese Texts with AI</span>
-          <span className="text-xs">Made by <a className="text-orange-300"href="https://www.github.com/johnesleyer">@JohnEsleyer</a></span>
+      <div className={` min-h-screen flex items-start justify-center bg-gray-800 text-white font-sans`}>
+        <div className={`${isLoading ? 'shimmer-effect' : ''} h-full w-full p-6 rounded-lg  lg:rounded-lg lg:m-12  lg:w-full  
+            `}>
+        <div className='flex items-center justify-center'>
+        <Image src='/mochi.png' width={100} height={100} alt='mochi'/>
+          <div className='flex items-center mb-6 grid'>
+          <h1 className='text-4xl font-bold mt-4'><span className='text-pink-300'>M</span><span className='text-grey-200'>o</span><span className='text-green-300'>c</span><span className='text-yellow-200'>h</span><span className='text-orange-300'>i</span></h1>
+          <span className='text-sm'>Analyze Japanese Texts with AI</span>
+          <span className='text-xs'>Made by <a className='text-orange-300'href='https://www.github.com/johnesleyer'>@JohnEsleyer</a></span>
           </div>
           </div>
+         
+          <div>
+            <div className='lg:flex lg:justify-center lg:items-center lg:grid lg:gap-2 lg:grid-rows-1 lg:grid-flow-col'>
           <input
-            type="text"
+            type='text'
             value={inputValue}
             onChange={handleInputChange}
-            placeholder="Type word or phrase"
-            className="block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder='Type a word or phrase'
+            className=' w-full lg:w-[32rem] lg:h-14 p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
           />
           
-          {isLoading ? <p></p> : <button
+          {isLoading ? <p></p> :<div className='flex justify-center'><button
           
           onClick={handleClick}
-          className="w-full p-2 mt-4 mb-4 rounded text-black bg-orange-200 transition duration-300"
+          className='w-full lg:w-32 p-2 mt-4 mb-4 rounded text-black bg-orange-200 transition duration-300'
         >
           Analyze Text
-        </button>}
-          
-          <h3 className="text-xl font-semibold mb-2"></h3>
-
-
-          <div className={`transition-opacity transition-height duration-500 ease-in-out overflow-hidden ${
+        </button></div>}
+        </div>
+        <div className='flex justify-center'>
+        {isFailed && <p>Server did not process your data properly. Please try sending it again after a few seconds.</p>}
+        </div>
+         
+          {!isFailed && <div className={`lg:grid lg:grid-rows-1 lg:grid-flow-col lg:gap-2 transition-opacity transition-height duration-500 ease-in-out overflow-hidden ${
           isVisible ? 'opacity-100 max-h-full' : `${isLoading ? 'opacity-0 max-h-full' : 'opacity-0 max-h-0'}`
         }`}>
-          <span className="font-bold text-2xl mr-4 ">"{inputValue}"</span>
-          <hr/>
+          <div className='lg:drop-shadow-xl lg:mt-14'>
+          <span className='font-bold text-2xl mr-4 text-3xl'>Input: '{inputValue}'</span>
+          <hr className='h-px my-2 border-0 bg-gray-700'/>
 
-          <div className="flex items-start justify-start p-2">
-            <span className="font-bold text-xl mr-4 ">Meaning:</span>
-            <span className="text-lg">{responseGeneratedText.meaning}</span>
+
+          <div className='flex items-start justify-start p-2'>
+            <span className='font-bold text-xl mr-4 '>Meaning:</span>
+            <span className='text-lg'>{responseJson.body.meaning}</span>
           </div>
-          <div className="flex items-start justify-start p-2">
-            <span className="font-bold text-xl mr-4">Romaji:</span>
-            <span className="text-lg">{responseGeneratedText.romaji}</span>
+          <div className='flex items-start justify-start p-2'>
+            <span className='font-bold text-xl mr-4'>Romaji:</span>
+            <span className='text-lg'>{responseJson.body.romaji}</span>
           </div>
-          <div className="flex items-start justify-start p-2">
-            <span className="font-bold text-xl mr-4">Furigana:</span>
-            <span className="text-lg">{responseGeneratedText.furigana}</span>
+          <div className='flex items-start justify-start p-2'>
+            <span className='font-bold text-xl mr-4'>Furigana:</span>
+            <span className='text-lg'>{responseJson.body.furigana}</span>
           </div>
-          <div className="flex items-start justify-start p-2">
-            <span className="font-bold text-xl mr-4">Context:</span>
-            <span className="text-lg">{responseGeneratedText.context}</span>
+          <div className='flex items-start justify-start p-2'>
+            <span className='font-bold text-xl mr-4'>Context:</span>
+            <span className='text-lg'>{responseJson.body.context}</span>
           </div>
-          <hr className="p-2"/>
-          <p className="font-bold text-3xl mr-4 p-2">Words Breakdown</p>
-          <span className="font-bold text-3xl mr-4 p-2">{
-           Object.keys(responseGeneratedText.words).map((key) => (
+          {/* <hr className='p-2'/> */}
+          </div>
+          <div>
+          <p className='font-bold text-3xl mr-4 p-2 mt-1'>Words Breakdown</p>
+          <span className='font-bold text-3xl mr-4 p-2'>{
+           Object.keys(responseJson.body.words).map((key) => (
             <React.Fragment key={key}>
                 <span className={`text-3xl font-bold mb-2 
-                ${responseGeneratedText.words[key].category in colorWordCategory ? 
-                colorWordCategory[responseGeneratedText.words[key].category] : 'text-white-300'}`}>
-                  {responseGeneratedText.words[key].word}
+                ${responseJson.body.words[key].category in colorWordCategory ? 
+                colorWordCategory[responseJson.body.words[key].category] : 'text-white-300'}`}>
+                  {responseJson.body.words[key].word}
                   </span>
             </React.Fragment>
           ))
           }</span>
-          {Object.keys(responseGeneratedText.words).map((key) => (
+          <hr className='h-px my-2 border-0 bg-gray-700'/>
+          {Object.keys(responseJson.body.words).map((key) => (
             <React.Fragment key={key}>
-              <div className="flex flex-col rounded-lg p-4 shadow-md">
-                <span className={`text-3xl font-bold mb-2 ${responseGeneratedText.words[key].category in colorWordCategory ? 
-                colorWordCategory[responseGeneratedText.words[key].category] : 'text-white-300'}`}>
-                  {responseGeneratedText.words[key].word}
+              <div className='flex flex-col rounded-lg p-4 shadow-md lg:shadow-lg'>
+                <span className={`text-3xl font-bold mb-2 ${responseJson.body.words[key].category in colorWordCategory ? 
+                colorWordCategory[responseJson.body.words[key].category] : 'text-white-300'}`}>
+                  {responseJson.body.words[key].word}
                   </span>
-                <span className="text-lg "><b>Romaji</b>: {responseGeneratedText.words[key].romaji}</span>
-                <span className="text-lg "><b>Category</b>: {responseGeneratedText.words[key].category}</span>
-                <span className="text-lg "><b>Meaning</b>: {responseGeneratedText.words[key].meaning}</span>
-                <span className="text-lg "><b>Context</b>: {responseGeneratedText.words[key].context}</span>
+                <span className='text-lg '><b>Romaji</b>: {responseJson.body.words[key].romaji}</span>
+                <span className='text-lg '><b>Category</b>: {responseJson.body.words[key].category}</span>
+                <span className='text-lg '><b>Meaning</b>: {responseJson.body.words[key].meaning}</span>
+                <span className='text-lg '><b>Context</b>: {responseJson.body.words[key].context}</span>
 
               </div>
 
             </React.Fragment>
           ))}
-
+        </div>
+        </div>} 
         </div>
         </div>
       </div>

@@ -1,28 +1,12 @@
 const { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } = require("@google/generative-ai");
 
-import runAi from "@/app/functions/runAi";
+import runAi from "@/app/lib/runAi";
 
-
-
-export interface GeneratedText {
-  meaning: string;
-  romaji: string;
-  furigana: string;
-  context: string;
-  words: { [key: string]: { 
-    word: string, 
-    romaji: string, 
-    category: string, 
-    meaning: string, 
-    context: string
-  } 
-};
-}
 
 
 export async function POST(request: Request) {
     const {message} = await request.json();
-    const maxAttempts = 5; // Set the maximum number of attempts
+    const maxAttempts = 3; // Set the maximum number of attempts
 
     let attempt = 1;
     let jsonObject;
@@ -44,11 +28,30 @@ export async function POST(request: Request) {
       console.error(`Failed to parse JSON after ${maxAttempts} attempts. Check the JSON format.`);
       return Response.json({
         status: "Failed",
+        body: {
+          meaning: '',
+          romaji: '',
+          furigana: '',
+          context: '',
+          words: {
+            '': {
+              word: '',
+              romaji: '',
+              category: '',
+              meaning: '',
+              context: '',
+            },
+          },
+        },
       });
     } else {
       // Use the parsed jsonObject as needed
       console.log("Successfully parsed JSON:", jsonObject);
     }
       
-    return Response.json(jsonObject);
+    return Response.json({
+      status: "Success",
+      body: jsonObject
+    }
+      );
 }

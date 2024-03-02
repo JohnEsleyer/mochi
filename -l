@@ -1,0 +1,35 @@
+[33mcommit afcd40d651f2de0155ec088c24b62386eee6b6cd[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: JohnEsleyer <ralphesleyer@gmail.com>
+Date:   Fri Mar 1 20:58:30 2024 +0800
+
+    added color indicator for different word categories
+
+[33mcommit ce755b9cb800ef19aa177a133473ad120be94cea[m
+Author: JohnEsleyer <ralphesleyer@gmail.com>
+Date:   Fri Mar 1 19:49:07 2024 +0800
+
+    api route will execute a maximum of 5 attempts if gemini response data is invalid
+
+[33mcommit d4ce5df0ea0af18048ce743ec7d5c1b72a15a471[m
+Author: JohnEsleyer <ralphesleyer@gmail.com>
+Date:   Fri Mar 1 18:34:04 2024 +0800
+
+    kanji display list is now words display list
+
+[33mcommit fdcee3ae8226e0bdb8637b1cb033198dddd8a95d[m
+Author: JohnEsleyer <ralphesleyer@gmail.com>
+Date:   Fri Mar 1 17:20:52 2024 +0800
+
+    added animations and icon
+
+[33mcommit 166076eeec4c2170ff4b6128723a1ada8de50b4e[m
+Author: JohnEsleyer <ralphesleyer@gmail.com>
+Date:   Fri Mar 1 15:07:01 2024 +0800
+
+    output will become invisible during typing
+
+[33mcommit 43404e9b51b9cd318df86ba5ee4c860ac8d1e455[m
+Author: JohnEsleyer <ralphesleyer@gmail.com>
+Date:   Fri Mar 1 14:29:41 2024 +0800
+
+    added new style

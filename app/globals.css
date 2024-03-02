@@ -13,7 +13,7 @@
 }
 
 .shimmer-effect {
-  background: linear-gradient(90deg, transparent, #2d3748, transparent); /* Use the desired background color */
+  background: linear-gradient(90deg, rgba(45, 55, 72, 0), #2d3748, rgba(45, 55, 72, 0)); /* Use the desired dark background color */
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
 }
