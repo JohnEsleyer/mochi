@@ -33,7 +33,7 @@ export default function Home() {
   const [inputValue, setInputValue] = useState<string>('');
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  
+
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
 
 
@@ -78,36 +78,54 @@ export default function Home() {
 
   return (
     <>
-      <div className={` min-h-screen flex items-start justify-center bg-gray-800 text-white font-sans`}>
-        <div className={`${isLoading ? 'shimmer-effect' : ''} h-full w-full p-6 rounded-lg  lg:rounded-lg lg:m-12  lg:w-full  
+      <div className="bg-gray-800">
+      <div className={` ${isLoading ? 'shimmer-effect' : ''} min-h-screen flex items-start justify-center bg-gray-800 text-white font-sans`}>
+        <div className={` h-max w-full rounded-lg  lg:rounded-lg lg:m-12  lg:w-full lg:h-full  
             `}>
+        <div className={`p-6`}>
         <div className='flex items-center justify-center'>
         <Image src='/mochi.png' width={100} height={100} alt='mochi'/>
           <div className='flex items-center mb-6 grid'>
-          <h1 className='text-4xl font-bold mt-4'><span className='text-pink-300'>M</span><span className='text-grey-200'>o</span><span className='text-green-300'>c</span><span className='text-yellow-200'>h</span><span className='text-orange-300'>i</span></h1>
+          <h1 className='text-4xl font-bold mt-4'>
+            <span className='text-pink-300'>M</span>
+            <span className='text-grey-200'>o</span>
+            <span className='text-green-300'>c</span>
+            <span className='text-yellow-200'>h</span>
+            <span className='text-orange-300'>i</span>
+            <span> AI</span>
+            </h1>
+            
           <span className='text-sm'>Analyze Japanese Texts with AI</span>
           <span className='text-xs'>Made by <a className='text-orange-300'href='https://www.github.com/johnesleyer'>@JohnEsleyer</a></span>
           </div>
           </div>
-         
           <div>
-            <div className='lg:flex lg:justify-center lg:items-center lg:grid lg:gap-2 lg:grid-rows-1 lg:grid-flow-col'>
-          <input
+            
+            <div className='lg:flex lg:pl-12 lg:justify-center lg:items-center lg:grid lg:gap-2 lg:grid-rows-1 lg:grid-flow-col'>
+          <div><input
             type='text'
             value={inputValue}
+            maxLength={75}
             onChange={handleInputChange}
             placeholder='Type a word or phrase'
             className=' w-full lg:w-[32rem] lg:h-14 p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
           />
           
-          {isLoading ? <p></p> :<div className='flex justify-center'><button
+          </div>
+          <p className="text-xs p-2">{inputValue.length} / 75</p>
+          
+          
+        </div>
+        {isLoading ? <p></p> :<div className='flex justify-center items-center'><button
           
           onClick={handleClick}
           className='w-full lg:w-32 p-2 mt-4 mb-4 rounded text-black bg-orange-200 transition duration-300'
         >
           Analyze Text
-        </button></div>}
-        </div>
+        </button>
+
+        </div>}
+       
         <div className='flex justify-center'>
         {isFailed && <p>Server did not process your data properly. Please try sending it again after a few seconds.</p>}
         </div>
@@ -116,7 +134,7 @@ export default function Home() {
           isVisible ? 'opacity-100 max-h-full' : `${isLoading ? 'opacity-0 max-h-full' : 'opacity-0 max-h-0'}`
         }`}>
           <div className='lg:drop-shadow-xl lg:mt-14'>
-          <span className='font-bold text-2xl mr-4 text-3xl'>Input: '{inputValue}'</span>
+          <span className='font-bold text-2xl mr-4 text-3xl'>Input: "{inputValue}"</span>
           <hr className='h-px my-2 border-0 bg-gray-700'/>
 
 
@@ -170,6 +188,8 @@ export default function Home() {
           ))}
         </div>
         </div>} 
+        </div>
+        </div>
         </div>
         </div>
       </div>
