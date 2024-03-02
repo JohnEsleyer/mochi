@@ -6,7 +6,7 @@ interface GeneratedText {
     words: { [key: string]: { 
       word: string, 
       romaji: string, 
-      category: string, 
+      class: string, 
       meaning: string, 
       context: string
     } 

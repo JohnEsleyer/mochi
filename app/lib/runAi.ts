@@ -36,7 +36,7 @@ export default async function runAi(text: string) {
     ];
   
     const allKanji = filterJapanese(text);
-    console.log("All Kanji" + JSON.stringify(allKanji));
+    console.log("Filtered Japanese:" + JSON.stringify(allKanji));
     const parts = [
       { text: `Given a Japanese text: "${text}"
       Give the following JSON (if the given word is gibberish or non-japanese give a single $ sign instead instead):
@@ -49,7 +49,7 @@ export default async function runAi(text: string) {
         "1": {
           "word": "word (In Japanese)",
           "romaji": "romaji version of the word",
-          "category": "is it noun? verb? particle?, etc?",
+          "class": "strictly choose among the four: (noun, verb, adjective, particle, conjunction, interjection, counter, pronoun, adverb)",
           "meaning": "meaning of the word or how to use the word, if it is particle then how to use the particle?",
           "context": "When and where the word is used? how a particular word is used in a given situation or environment"
         },

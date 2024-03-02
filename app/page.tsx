@@ -3,7 +3,7 @@
 import React from 'react';
 import { ChangeEvent, useState } from 'react';
 import Image from 'next/image';
-import { colorWordCategory } from './lib/colors';
+import { colorWordClass } from './lib/colors';
 
 
 export default function Home() {
@@ -18,7 +18,7 @@ export default function Home() {
         '': {
           word: '',
           romaji: '',
-          category: '',
+          class: '',
           meaning: '',
           context: '',
         },
@@ -50,30 +50,38 @@ export default function Home() {
     setIsLoading(true);
 
 
-    const res = await fetch('/api/japan', {
-      method: 'POST',
-      body: JSON.stringify({ message: inputValue }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    const response: JsonResponse = await res.json();
-    console.log(response.status);
-    const status = response.status;
-    if (status == 'Failed'){
+    try {
+      const res = await fetch('/api/japan', {
+          method: 'POST',
+          body: JSON.stringify({ message: inputValue }),
+          headers: {
+              'Content-Type': 'application/json',
+          },
+      });
   
-      setIsFailed(true);
-      setIsVisible(true);
+      const response: JsonResponse = await res.json();
+      console.log(response.status);
+  
+      const { status } = response;
+  
+      if (status === 'Failed') {
+          setIsFailed(true);
+      } else {
+          setIsFailed(false);
+          setJsonResponse(response);
+      }
+  
       setIsLoading(false);
-      return
+      setIsVisible(true);
+  
+    } catch (error) {
+      console.error("Error parsing response:", error);
+      setIsFailed(false);
+      setIsLoading(false);
+      setIsVisible(true);
     }
-
-    setIsFailed(false);
-    setJsonResponse(response);
-    setIsLoading(false);
-    setIsVisible(true);
-
+  
+  
   }
 
   return (
@@ -130,7 +138,7 @@ export default function Home() {
         {isFailed && <p>Server did not process your data properly. Please try sending it again after a few seconds.</p>}
         </div>
          
-          {!isFailed && <div className={`lg:grid lg:grid-rows-1 lg:grid-flow-col lg:gap-2 transition-opacity transition-height duration-500 ease-in-out overflow-hidden ${
+          {!isFailed && <div className={` transition-opacity transition-height duration-500 ease-in-out overflow-hidden ${
           isVisible ? 'opacity-100 max-h-full' : `${isLoading ? 'opacity-0 max-h-full' : 'opacity-0 max-h-0'}`
         }`}>
           <div className='lg:drop-shadow-xl lg:mt-14'>
@@ -162,23 +170,24 @@ export default function Home() {
            Object.keys(responseJson.body.words).map((key) => (
             <React.Fragment key={key}>
                 <span className={`text-3xl font-bold mb-2 
-                ${responseJson.body.words[key].category in colorWordCategory ? 
-                colorWordCategory[responseJson.body.words[key].category] : 'text-white-300'}`}>
+                ${responseJson.body.words[key].class in colorWordClass ? 
+                colorWordClass[responseJson.body.words[key].class] : 'text-white-300'}`}>
                   {responseJson.body.words[key].word}
                   </span>
             </React.Fragment>
           ))
           }</span>
           <hr className='h-px my-2 border-0 bg-gray-700'/>
+          <div className="lg:flex lg:flex-wrap">
           {Object.keys(responseJson.body.words).map((key) => (
             <React.Fragment key={key}>
-              <div className='flex flex-col rounded-lg p-4 shadow-md lg:shadow-lg'>
-                <span className={`text-3xl font-bold mb-2 ${responseJson.body.words[key].category in colorWordCategory ? 
-                colorWordCategory[responseJson.body.words[key].category] : 'text-white-300'}`}>
+              <div className='container lg:w-1/2 flex flex-col rounded-lg p-4 shadow-md lg:shadow-lg'>
+                <span className={`text-3xl font-bold mb-2 ${responseJson.body.words[key].class in colorWordClass ? 
+                colorWordClass[responseJson.body.words[key].class] : 'text-white-300'}`}>
                   {responseJson.body.words[key].word}
                   </span>
                 <span className='text-lg '><b>Romaji</b>: {responseJson.body.words[key].romaji}</span>
-                <span className='text-lg '><b>Category</b>: {responseJson.body.words[key].category}</span>
+                <span className='text-lg '><b>Class</b>: {responseJson.body.words[key].class}</span>
                 <span className='text-lg '><b>Meaning</b>: {responseJson.body.words[key].meaning}</span>
                 <span className='text-lg '><b>Context</b>: {responseJson.body.words[key].context}</span>
 
@@ -186,6 +195,7 @@ export default function Home() {
 
             </React.Fragment>
           ))}
+          </div>
         </div>
         </div>} 
         </div>
