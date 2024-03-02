@@ -6,7 +6,7 @@ import runAi from "@/app/lib/runAi";
 
 export async function POST(request: Request) {
     const {message} = await request.json();
-    const maxAttempts = 3; // Set the maximum number of attempts
+    const maxAttempts = 2; // Set the maximum number of attempts
 
     let attempt = 1;
     let jsonObject;
