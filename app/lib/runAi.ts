@@ -64,37 +64,37 @@ export default async function runAi(text: string) {
       safetySettings,
     });
 
-    const parts2 = [
-      { text: `Given the following JSON response text: "${result.response.text()}"
+    // const parts2 = [
+    //   { text: `Given the following JSON response text: "${result.response.text()}"
 
-      Check if it matches the following criteria (if not give the proper one): 
-      Give the following JSON (if the given word is gibberish or non-japanese give a single $ sign instead instead):
-      {
-      "meaning": "The meaning of the text",
-      "romaji": "The romaji equivalent of the text",
-      "furigana": "The furigana version of the text",
-      "context": "Where and when does the text used during conversation?"
-      "words": {
-        "1": {
-          "word": "word (In Japanese)",
-          "romaji": "romaji version of the word",
-          "category": "is it noun? verb? particle?, etc?",
-          "meaning": "meaning of the word or how to use the word, if it is particle then how to use the particle?",
-          "context": "When and where the word is used? how a particular word is used in a given situation or environment"
-        },
-      },
-      }
-      ` },
-    ];
+    //   Check if it matches the following criteria (if not give the proper one): 
+    //   Give the following JSON (if the given word is gibberish or non-japanese give a single $ sign instead instead):
+    //   {
+    //   "meaning": "The meaning of the text",
+    //   "romaji": "The romaji equivalent of the text",
+    //   "furigana": "The furigana version of the text",
+    //   "context": "Where and when does the text used during conversation?"
+    //   "words": {
+    //     "1": {
+    //       "word": "word (In Japanese)",
+    //       "romaji": "romaji version of the word",
+    //       "category": "is it noun? verb? particle?, etc?",
+    //       "meaning": "meaning of the word or how to use the word, if it is particle then how to use the particle?",
+    //       "context": "When and where the word is used? how a particular word is used in a given situation or environment"
+    //     },
+    //   },
+    //   }
+    //   ` },
+    // ];
 
-    const result2 = await model.generateContent({
-      contents: [{ role: "user", parts: parts2 }],
-      generationConfig,
-      safetySettings,
-    });
+    // const result2 = await model.generateContent({
+    //   contents: [{ role: "user", parts: parts2 }],
+    //   generationConfig,
+    //   safetySettings,
+    // });
 
   
-    const response = result2.response;
+    const response = result.response;
     console.log(removeCodeBlock(response.text()));
     return removeCodeBlock(response.text());
   }

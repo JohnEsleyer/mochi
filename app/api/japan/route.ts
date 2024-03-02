@@ -7,7 +7,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
     const {message} = await request.json();
-    const maxAttempts = 2; // Set the maximum number of attempts
+    const maxAttempts = 1; // Set the maximum number of attempts
 
     let attempt = 1;
     let jsonObject;
