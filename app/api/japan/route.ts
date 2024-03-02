@@ -3,9 +3,7 @@ const { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } = require("@googl
 import runAi from "@/app/lib/runAi";
 import { NextResponse } from "next/server";
 
-export const config = {
-  runtime: 'edge'
-}
+export const runtime = "edge"
 
 export async function POST(request: Request) {
     const {message} = await request.json();
