@@ -1,6 +1,7 @@
 const { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } = require("@google/generative-ai");
 
 import runAi from "@/app/lib/runAi";
+import { NextResponse } from "next/server";
 
 
 
@@ -49,9 +50,16 @@ export async function POST(request: Request) {
       console.log("Successfully parsed JSON:", jsonObject);
     }
       
-    return Response.json({
+    return NextResponse.json({
       status: "Success",
       body: jsonObject
+    },
+    {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+      }
     }
       );
 }
