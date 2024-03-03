@@ -15,10 +15,11 @@ export async function POST(request: Request) {
     while (attempt <= maxAttempts) {
       try {
         jsonObject = JSON.parse(await runAi(message));
+        console.log(jsonObject.text);
         // If parsing is successful, break out of the loop
         break;
       } catch (error) {
-        console.error(`Error parsing JSON (Attempt ${attempt})`);
+        console.error(`Error parsing JSON (Attempt ${attempt}) ${error}`);
         attempt++;
         // Add a 1-second delay before retrying
         await new Promise(resolve => setTimeout(resolve, 1000));
@@ -27,6 +28,7 @@ export async function POST(request: Request) {
     
     if (attempt > maxAttempts) {
       console.error(`Failed to parse JSON after ${maxAttempts} attempts. Check the JSON format.`);
+      
       return Response.json({
         status: "Failed",
         body: {

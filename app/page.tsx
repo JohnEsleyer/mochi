@@ -134,8 +134,13 @@ export default function Home() {
 
         </div>}
        
-        <div className='flex justify-center'>
-        {isFailed && <p>Server did not process your data properly. Please try sending it again after a few seconds.</p>}
+        <div className='text-center flex justify-center'>
+        {isFailed && <div>
+        <p>Server did not process your data properly. Please try sending it again after a few seconds.</p>
+        
+        </div>
+        }
+        <p className="text-yellow-200 text-xs pb-4">Please ensure that the text you input is meaningful and appropriate. Texts containing gibberish content or malicious data will be rejected by the server.</p>
         </div>
          
           {!isFailed && <div className={` transition-opacity transition-height duration-500 ease-in-out overflow-hidden ${
