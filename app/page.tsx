@@ -136,7 +136,7 @@ export default function Home() {
        
         <div className='text-center flex justify-center'>
         {isFailed && <div>
-        <p>Server did not process your data properly. Please try sending it again after a few seconds.</p>
+        <p>Server did not process your data properly.. Please try sending it again after a few seconds.</p>
         
         </div>
         }
