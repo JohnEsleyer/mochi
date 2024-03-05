@@ -140,7 +140,7 @@ export default function Home() {
         
         </div>
         }
-        <p className="text-yellow-200 text-xs pb-4">Please ensure that the text you input is meaningful and appropriate. Texts containing gibberish content or malicious data will be rejected by the server.</p>
+        <p className="text-yellow-200 text-xs pb-4">Please ensure that the text you input is meaningful and appropriate. Texts containing gibberish content or malicious data will be r by the server.</p>
         </div>
          
           {!isFailed && <div className={` transition-opacity transition-height duration-500 ease-in-out overflow-hidden ${
