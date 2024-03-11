@@ -92,18 +92,29 @@ export default function Home() {
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         <div className="flex items-center">
           <a href="#" className="text-white text-xl font-bold">
-            mochi
+          <h1 className='text-s font-bold mt-4'>
+            <span className='text-pink-300'>M</span>
+            <span className='text-grey-200'>o</span>
+            <span className='text-green-300'>c</span>
+            <span className='text-yellow-200'>h</span>
+            <span className='text-orange-300'>i</span>
+            <span> AI</span>
+            </h1>
+            
           </a>
         </div>
         <div className="hidden md:flex space-x-4">
-          <Link href="/signup" className="text-white hover:text-gray-300">
-            Sign Up
+        <Link href="/" className="text-white hover:text-gray-300">
+            Analyzer
           </Link>
-          <Link href="/signin" className="text-white hover:text-gray-300">
-            Sign In
+          <Link href="/" className="text-white hover:text-gray-300">
+            Chat AI
           </Link>
-          <Link href="/about" className="text-white hover:text-gray-300">
-            About
+          <Link href="/" className="text-white hover:text-gray-300">
+            Profile
+          </Link>
+          <Link href="/" className="text-white hover:text-red-300">
+            Logout
           </Link>
         
         </div>
@@ -148,7 +159,7 @@ export default function Home() {
           </div>
           <div>
             
-            <div className='lg:flex lg:pl-12 lg:justify-center lg:items-center lg:grid lg:gap-2 lg:grid-rows-1 lg:grid-flow-col'>
+            <div className='lg:flex lg:pl-16 lg:justify-center lg:items-center lg:grid lg:gap-2 lg:grid-rows-1 lg:grid-flow-col'>
           <div><input
             type='text'
             value={inputValue}
