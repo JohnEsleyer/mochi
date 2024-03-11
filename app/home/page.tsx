@@ -113,7 +113,7 @@ export default function Home() {
           <Link href="/" className="text-white hover:text-gray-300">
             Profile
           </Link>
-          <Link href="/" className="text-white hover:text-red-300">
+          <Link href="/signout" className="text-white hover:text-red-300">
             Logout
           </Link>
         

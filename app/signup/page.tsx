@@ -74,7 +74,7 @@ export default function SignUp() {
               required
             />
           </div>
-          <button type="submit" className="w-full bg-orange-500 text-white py-2 rounded">
+          <button type="submit" className="w-full text-black bg-orange-200 py-2 rounded">
             Sign Up
           </button>
         </form>
