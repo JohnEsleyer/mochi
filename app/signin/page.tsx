@@ -2,12 +2,15 @@
 
 import { useEffect, useState } from "react";
 import {useRouter} from 'next/navigation'
+import Image from 'next/image';
+
 
 export default function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(null);
+  const [errorText, setErrorText] = useState(String);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -20,6 +23,8 @@ export default function SignIn() {
 
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault(); // Prevent the default form submission behavior
+    
+    setIsLoading(true);
 
     const payload = {
       email: email,
@@ -39,19 +44,23 @@ export default function SignIn() {
       const {status} = data;
       if (status == 200){
         setIsLoggedIn(true);
+      }else if(status == 400){
+        setErrorText('Authentication failed. Please ensure your credentials are correct.');
       }
  
     } catch (error) {
 
       console.log(error);
     }
+    setIsLoading(false);
   };
 
   return  (
     <div className="bg-gray-800 min-h-screen flex items-center justify-center">
+      {/* // Start of Sign In Container */}
       <div className="max-w-md w-full p-6 bg-gray-700 rounded-lg">
         <h2 className="text-2xl font-bold mb-4 text-white">Sign In</h2>
-        {error && <p className="text-red-500 mb-4">{error}</p>}
+
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="email" className="block mb-2 text-white">Email</label>
@@ -79,7 +88,22 @@ export default function SignIn() {
             Sign in
           </button>
         </form>
+        {errorText != "" && <p className="text-red-400 pt-2">{errorText}</p>}
+        {/* // Start Loading Indicator */}
+        <div className="flex justify-center">
+          {isLoading && <Image
+            src="/loading.svg"
+            alt="My SVG"
+            width={50}
+            height={50}
+
+          />}
+        </div>
+        {/* // End of Loading Indicator */}
+
+       
       </div>
+      {/* // End of Sign In Container */}
     </div>
   );
 }

@@ -12,12 +12,10 @@ export async function POST(request: Request) {
     });
 
     if (error){
-        console.log(error);
+        console.log(error.status);
         return Response.json({
-            status: 0,
-            body: {
-                
-            }
+            status: 400,
+
         });
     }
 
