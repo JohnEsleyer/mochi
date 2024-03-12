@@ -17,3 +17,9 @@
   animation: shimmer 1.5s infinite linear; /* Added 'linear' for a smoother transition */
 }
 
+@keyframes shake {
+  0%, 100% { transform: translateY(0); }
+  25% { transform: translateY(-8px); }
+  50% { transform: translateY(8px); }
+  75% { transform: translateY(-4px); }
+}

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { cookies } from 'next/headers';
 import supabase from "./app/utils/supabase";
 
-const protectedRoutes = ["/home"]
+const protectedRoutes = ["/home", "/signout", "/api/japan"]
 
 export default async function middleware(req: NextRequest){
     try{
