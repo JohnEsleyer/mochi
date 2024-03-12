@@ -1,9 +1,14 @@
+'use client'
+import Template from "@/components/PageTemplate";
+import { useState } from "react";
 
-export default function ChatAI(){
+export default function Saved(){
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+
 
     return (
-        <div>
-            Saved
-        </div>
+        <Template className={isLoading ? 'shimmer-effect' : ''}>
+            <h1>Saved</h1>
+            </Template>
     );  
 }
