@@ -1,11 +1,42 @@
+'use client'
+
+import supabase from "@/utils/supabase";
+import {useRouter} from 'next/navigation';
 import Link from "next/link";
-
-
-
+import { useEffect, useState } from "react";
+import { isAuth } from "@/utils/isauth";
+import Image from 'next/image';
 
 export default function Template({ className, children }: { className: string; children: React.ReactNode }){
-    return (
+  const router = useRouter();
+  
+  const [authenticate, setAuthenticate] = useState(false);
+
+
+  useEffect(() => {
+    console.log('useEffect executed');
+    const fetchData = async () => {
+      const res = await isAuth();
+      if (res){
+        setAuthenticate(true);
+      }else{
+        router.push('/signin');
+      }
+    }
+    fetchData();
+  }, []);  
+
+  async function signOutHandler(){
+    const {error} = await supabase.auth.signOut();
+    console.log(`signoutHandler: ${error}`);
+    router.push('/signin');
+  }
+  
+  return (
         <>
+        { authenticate ?
+
+        // If user is authenticated, display the page
         <div className="bg-gray-800">
   <div className={` ${className}  min-h-screen justify-center bg-gray-800 text-white font-sans`}>
     <div>
@@ -49,9 +80,9 @@ export default function Template({ className, children }: { className: string; c
             <Link href="/account" className="text-white-300 ">
               Account
             </Link>
-            <Link href="/signout" className="text-red-300">
+            <button className="text-red-300" onClick={signOutHandler}>
               Logout
-            </Link>
+            </button>
           </div>
           <div className="md:hidden">
             <button className="text-white">
@@ -78,7 +109,18 @@ export default function Template({ className, children }: { className: string; c
         {/* // End of Body */}
     </div>
   </div>
-</div>
+</div> : 
+
+  // If user not authenticated, display loading indicator
+  <div className="bg-gray-800 w-screen h-screen flex justify-center items-center">
+    <Image
+            src="/loading.svg"
+            alt="My SVG"
+            width={50}
+            height={50}
+
+          />
+  </div>}
         </>
 
     );

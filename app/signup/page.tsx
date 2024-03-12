@@ -1,11 +1,14 @@
 'use client'
 
 import { useEffect, useState } from "react";
-import {useRouter} from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import Image from 'next/image';
+import supabase from "@/utils/supabase";
 
 
 export default function SignUp() {
+  const router = useRouter();
+  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorText, setErrorText] = useState(String);
@@ -13,16 +16,15 @@ export default function SignUp() {
   const [isLoading, setIsLoading] = useState(false);
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
 
-  const router = useRouter();
+  
 
   useEffect(() => {
     if (isLoggedIn){
-      router.push("/home");
-      return
+      router.push('/home');
     }
   }, [isLoggedIn]);
   
-
+  
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault(); // Prevent the default form submission behavior
     
@@ -30,10 +32,8 @@ export default function SignUp() {
       alert('Password and password confirmation do not match');
       return;
     }
-
-    setIsLoading(true);
-
     
+    setIsLoading(true);
 
     const payload = {
       email: email,
@@ -41,24 +41,15 @@ export default function SignUp() {
     };
 
     try {
-      const response = await fetch('api/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload),
-      });
+      const {data, error} = await supabase.auth.signUp(payload);
 
-      const data = await response.json();
-      const {status} = data;
-      if (status == 200){
+      if (!error){
         setIsLoggedIn(true);
-      }else if(status == 400){
+      }else{
         setErrorText('Authentication failed. Please ensure your credentials are correct.');
       }
  
     } catch (error) {
-
       console.log(error);
     }
     setIsLoading(false);

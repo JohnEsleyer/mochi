@@ -3,9 +3,10 @@
 import React from 'react';
 import { ChangeEvent, useState } from 'react';
 import Image from 'next/image';
-import { colorWordClass } from '../../lib/colors';
+import { colorWordClass } from '../../utils/colors';
 import Link from 'next/link';
 import Template from '@/components/PageTemplate';
+import supabase from '@/utils/supabase';
 
 
 export default function Home() {
@@ -82,9 +83,9 @@ export default function Home() {
       setIsLoading(false);
       setIsVisible(true);
     }
-  
-  
   }
+
+
 
   return (
     <>

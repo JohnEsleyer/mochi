@@ -1,26 +1,26 @@
 'use client'
 
 import { useEffect, useState } from "react";
-import {useRouter} from 'next/navigation'
+
 import Image from 'next/image';
+import supabase from "@/utils/supabase";
+import { useRouter } from "next/navigation";
 
 
 export default function SignIn() {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorText, setErrorText] = useState(String);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
 
   useEffect(() => {
     if (isLoggedIn){
-      router.push("/home");
-      return
+      router.push('/home');
     }
   }, [isLoggedIn]);
   
-
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault(); // Prevent the default form submission behavior
     
@@ -32,24 +32,15 @@ export default function SignIn() {
     };
 
     try {
-      const response = await fetch('api/signin', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload),
-      });
+      const {data, error} = await supabase.auth.signInWithPassword(payload);
 
-      const data = await response.json();
-      const {status} = data;
-      if (status == 200){
+      if (!error){
         setIsLoggedIn(true);
-      }else if(status == 400){
+      }else{
         setErrorText('Authentication failed. Please ensure your credentials are correct.');
       }
  
     } catch (error) {
-
       console.log(error);
     }
     setIsLoading(false);

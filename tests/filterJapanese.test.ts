@@ -1,4 +1,4 @@
-import filterJapanese  from '../lib/filterJapanese';
+import filterJapanese  from '../utils/filterJapanese';
 
 describe('filterJapanese', () => {
   it('should remove non-Japanese characters from a mixed string', () => {
