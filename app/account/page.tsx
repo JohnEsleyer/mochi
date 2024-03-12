@@ -2,13 +2,13 @@
 import Template from "@/components/PageTemplate";
 import { useState } from "react";
 
-export default function Hiragana(){
+export default function Account(){
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
 
     return (
         <Template className={isLoading ? 'shimmer-effect' : ''}>
-            <h1>Hiragana</h1>
+            <h1>Account</h1>
             </Template>
     );  
 }

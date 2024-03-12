@@ -1,4 +1,4 @@
-import supabase from "@/app/utils/supabase";
+import supabase from "@/utils/supabase";
 import {redirect} from 'next/navigation';
 import {NextResponse} from 'next/server';
 import {cookies} from 'next/headers';

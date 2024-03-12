@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from 'next/headers';
-import supabase from "./app/utils/supabase";
+import supabase from "./utils/supabase";
 
 const protectedRoutes = ["/home", "/signout", "/api/japan"]
 

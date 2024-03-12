@@ -1,6 +1,6 @@
 const { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } = require("@google/generative-ai");
 
-import runAi from "@/app/lib/runAi";
+import runAi from "@/lib/runAi";
 import { NextResponse } from "next/server";
 
 export const runtime = "edge"

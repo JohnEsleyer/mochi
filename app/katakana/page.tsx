@@ -1,10 +1,14 @@
+'use client'
+import Template from "@/components/PageTemplate";
+import { useState } from "react";
 
 export default function Katakana(){
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
 
     return (
-        <div>
-            Katakana
-        </div>
+        <Template className={isLoading ? 'shimmer-effect' : ''}>
+            <h1>Katakana</h1>
+            </Template>
     );  
 }

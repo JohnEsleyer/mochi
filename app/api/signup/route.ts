@@ -1,4 +1,4 @@
-import supabase from "@/app/utils/supabase";
+import supabase from "@/utils/supabase";
 import {cookies} from 'next/headers';
 import {NextResponse} from 'next/server';
 
