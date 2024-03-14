@@ -1,6 +1,7 @@
+
 const { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } = require("@google/generative-ai");
 
-import runAi from "@/utils/runAnalyzerAi";
+import runAi from "@/utils/runChatAi";
 import { NextResponse } from "next/server";
 
 export const runtime = "edge"
@@ -8,7 +9,9 @@ export const runtime = "edge"
 export async function POST(request: Request) {
     const {message} = await request.json();
     const maxAttempts = 1; // Set the maximum number of attempts
+    
 
+    console.log("Received Requests:" + JSON.stringify(message));
     let attempt = 1;
     let jsonObject;
     
@@ -32,19 +35,7 @@ export async function POST(request: Request) {
       return Response.json({
         status: "Failed",
         body: {
-          meaning: '',
-          romaji: '',
-          furigana: '',
-          context: '',
-          words: {
-            '': {
-              word: '',
-              romaji: '',
-              category: '',
-              meaning: '',
-              context: '',
-            },
-          },
+          
         },
       });
     } else {
