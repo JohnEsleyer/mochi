@@ -2,12 +2,12 @@
 import Template from "@/components/PageTemplate";
 import { useEffect, useState } from "react";
 
-interface ResponseMessage{
+interface ResponseMessage {
     message: string,
 }
 
 
-export default function ChatAI(){
+export default function ChatAI() {
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const [inputText, setInputText] = useState('');
@@ -21,7 +21,7 @@ export default function ChatAI(){
         setInputText('');
         const prevMessage = [...conversation, `${inputText}`];
         try {
-            if (prevMessage.length <= 1){
+            if (prevMessage.length <= 1) {
                 const response = await fetch('/api/chat', {
                     method: "POST",
                     headers: { 'Content-Type': 'application/json' },
@@ -36,7 +36,7 @@ export default function ChatAI(){
                 setTimeout(() => {
                     setConversation([...prevMessage, `${body.message}`]);
                 }, 500);
-            }else{
+            } else {
                 const response = await fetch('/api/chat', {
                     method: "POST",
                     headers: { 'Content-Type': 'application/json' },
@@ -52,7 +52,7 @@ export default function ChatAI(){
                     setConversation([...prevMessage, body.message]);
                 }, 500);
             }
-            
+
         } catch (error) {
             console.error('Error:', error);
         }
@@ -65,25 +65,38 @@ export default function ChatAI(){
 
     return (
         <Template className={isLoading ? 'shimmer-effect' : ''}>
-            
-            <div>
-            <h1>Chatbot</h1>
-            <div>
-                {conversation.map((message, index) => (
-                    <p key={index}><strong>{index % 2 === 0 ? 'Bot' : 'You:'}</strong> {message}</p>
-                ))}
+
+
+            <div className="">
+                <div className="no-scrollbar h-[65vh] lg:h-[80vh] overflow-auto scroll-smooth scrollbar-hide">
+                    <h1>Chatbot</h1>
+                    <div>
+                        {conversation.map((message, index) => (
+                            <p key={index}><strong>{index % 2 === 0 ? 'Bot' : 'You:'}</strong> {message}</p>
+                        ))}
+                    </div>
+                </div>
+
+                <div className=" ">
+                    <form onSubmit={handleSubmit} className="flex flex-col lg:flex-row">
+                        <input
+                            type="text"
+                            value={inputText}
+                            onChange={handleChange}
+                            placeholder="Type your message here..."
+                            className="lg:w-9/12 w-full  p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        />
+                        <button
+                            type="submit"
+                            className="lg:w-3/12 w-full p-2 mt-4 lg:mt-0 lg:ml-4 rounded text-black bg-orange-200 transition duration-300"
+                        >
+                            Send
+                        </button>
+
+                    </form>
+                </div>
+
             </div>
-            <form onSubmit={handleSubmit}>
-                <input
-                    type="text"
-                    value={inputText}
-                    onChange={handleChange}
-                    placeholder="Type your message here..."
-                    className="text-black"
-                />
-                <button type="submit">Send</button>
-            </form>
-        </div>
-            </Template>
-    );  
+        </Template>
+    );
 }
