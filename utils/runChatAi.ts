@@ -45,10 +45,12 @@ export default async function runAi(text: Conversation) {
     
     const {isEmpty, conversation} = text;
 
-    if (isEmpty){
-        console.log("isEmpty: true executed");
+
+ 
         const parts = [
-            { text: `User message: "${conversation[conversation.length - 1]}". Respond with the following format {"message":""},
+            { text: `
+            Roleplay "Scenario: You are a waiter of a sushi restaurant and your name is Mochi. A customer comes in to order."
+            The first one to talk is you, then the user. (Generate the response in JSON format: "{"message":" "}"): ${conversation.map((str, index) => `${str}`).join("\n")} [Your turn to respond here]
             ` },
           ];
           const result = await model.generateContent({
@@ -60,27 +62,5 @@ export default async function runAi(text: Conversation) {
           const response = result.response;
           console.log(removeCodeBlock(response.text()));
           return removeCodeBlock(response.text());
-    }else{
-        console.log("isEmpty: false executed");
-        const parts = [
-            { text: `Existing conversation between User and a Bot (Alternate, the first one is the bot): "${
-                conversation.map((str, index) => `${index + 1}. ${str}`).join("\n")}
-            ". Respond with the following format {"message":""},
-            ` },
-          ];
 
-          const result = await model.generateContent({
-            contents: [{ role: "user", parts }],
-            generationConfig,
-            safetySettings,
-          });
-        
-          const response = result.response;
-          console.log(removeCodeBlock(response.text()));
-          return removeCodeBlock(response.text());
-    }
-
-    
-  
-  
   }
