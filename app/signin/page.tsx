@@ -17,7 +17,7 @@ export default function SignIn() {
 
   useEffect(() => {
     if (isLoggedIn){
-      router.push('/home');
+      router.push('/analyzer');
     }
   }, [isLoggedIn]);
   

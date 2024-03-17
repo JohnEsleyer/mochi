@@ -57,9 +57,9 @@ export default function Template({ className, children }: { className: string; c
           </div>
           <div className="hidden md:flex space-x-4">
             <Link href="/chat" className="text-purple-300 hover:animate-shake">
-              Chat AI
+              Roleplay with AI
             </Link>
-            <Link href="/home" className="text-orange-300 hover:animate-shake">
+            <Link href="/analyzer" className="text-orange-300 hover:animate-shake">
               Analyzer
             </Link>
             <Link href="/learn" className="text-green-300 hover:animate-shake">
