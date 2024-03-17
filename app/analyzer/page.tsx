@@ -2,14 +2,13 @@
 
 import React from 'react';
 import { ChangeEvent, useState } from 'react';
-import Image from 'next/image';
 import { colorWordClass } from '../../utils/colors';
-import Link from 'next/link';
 import Template from '@/components/PageTemplate';
-import supabase from '@/utils/supabase';
+import { useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
 
 
-export default function Home() {
+export default function Analyzer() {
   const defaultData = {
     status: 'success',
     body: {
@@ -36,6 +35,16 @@ export default function Home() {
   const [inputValue, setInputValue] = useState<string>('');
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const searchParams = useSearchParams();
+  useEffect(() => {
+    // Get the value of 'text' query parameter
+    const text = searchParams.get('text');
+    if (text){
+      console.log('text:', text);
+      setInputValue(text as string);
+    }
+  }, [searchParams]);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
 
@@ -190,7 +199,6 @@ export default function Home() {
         </div>
       </div>
       </Template>
-
     </>
   );
 }

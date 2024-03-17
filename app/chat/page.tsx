@@ -26,15 +26,27 @@ export default function ChatAI() {
     ]);
     
 
-    const [isKanji, setIsKanji] = useState(true);
+    const [isFurigana, setIsFurigana] = useState(true);
+    const [isEnglishTranslate, setIsEnglishTranslate] = useState(true);
+    const [isRomaji, setIsRomaji] = useState(true);
 
-    const toggleSwitch = () => {
-        setIsKanji((prev) => {
+    const toggleFurigana = () => {
+        setIsFurigana((prev) => {
 
             return !prev
         });
+    };
 
+    const toggleEnglish = () => {
+        setIsEnglishTranslate((prev) => {
+            return !prev
+        });
+    };
 
+    const toggleRomaji = () => {
+        setIsRomaji((prev) => {
+            return !prev
+        });
     };
 
     const submitMessage = async () => {
@@ -97,7 +109,7 @@ export default function ChatAI() {
     };
 
     const chatComponent = () => {
-        if (isKanji){
+
             return <div>
             {conversationKanji.map((message, index) => (
                 <div className="p-2">
@@ -109,62 +121,94 @@ export default function ChatAI() {
                             {" " + "Server is overloaded with requests, please try again later"}
                             <button onClick={tryAgain} className="rounded text-xs p-1 text-black bg-orange-200 transition duration-300">Try Again</button></span>}</p>
                     <p className="text-lg">{message}</p>
-                    <p className="text-lg">{conversationRomaji[index]}</p>
-                    <p className="text-lg">{conversationEnglish[index]}</p>
+                    <div className="p-2">
+                    {isFurigana && <p>Furigana: <span className="text-purple-300">{conversationHiragana[index]}</span></p>}
+                    {isRomaji &&<p>Romaji: <span className="text-green-300">{conversationRomaji[index]}</span></p>}
+                    {isEnglishTranslate && <p>English: <span className="text-amber-200">{conversationEnglish[index]}</span></p>}
+                    </div>
                 </div>
             ))}
             </div>
-        }else{
-             return <div>
-            {conversationHiragana.map((message, index) => (
-                <div className="p-2">
 
-                    <p className="text-lg" key={index}><strong>{index % 2 === 0 ?
-                        <span className="text-purple-300">🤖Mochi:</span> :
-                        <span className="text-green-300">😄You:</span>}</strong>
-                        {message == "ERROR" && <span className="text-amber-300">
-                            {" " + "Server is overloaded with requests, please try again later"}
-                            <button onClick={tryAgain} className="rounded text-xs p-1 text-black bg-orange-200 transition duration-300">Try Again</button></span>}</p>
-                    <p className="text-lg">{message}</p>
-                    <p className="text-lg">{conversationRomaji[index]}</p>
-                    <p className="text-lg">{conversationEnglish[index]}</p>
-                    
-                </div>
-            ))}
-            </div>
-        }
     }
     return (
         <Template className={isLoading ? 'shimmer-effect' : ''}>
-            <div className="flex flex-col lg:flex-row">
-
-                {/* // Toggle */}
+            <div className="flex lg:flex-row p-2">
+                {/* // Toggle Furigana */}
                 <div className="flex items-center">
-                    <label className={`mr-2 ${isKanji ? 'text-red-500' : 'text-gray-500'}`}>Kanji</label>
+                    <label className={`pl-2 mr-2 ${isFurigana ? 'text-purple-300' : 'text-gray-500'}`}>Furigana</label>
                     <div className="relative">
                         <input
-                            id="toggle"
+                            id="toggleFurigana"
                             type="checkbox"
                             className="hidden"
-                            checked={!isKanji}
-                            onChange={toggleSwitch}
+                            checked={!isFurigana}
+                            onChange={toggleFurigana}
                         />
                         <label
-                            htmlFor="toggle"
+                            htmlFor="toggleFurigana"
                             className="flex items-center cursor-pointer select-none"
                         >
-                            <div className={`w-12 h-6 bg-gray-300 rounded-full p-1 flex items-center transition-colors duration-300 ${isKanji ? 'bg-red-500' : 'bg-blue-500'}`}>
+                            <div className={`w-12 h-6 rounded-full p-1 flex items-center transition-colors duration-300 ${isFurigana ? 'bg-purple-300' : 'bg-blue-500'}`}>
                                 <div
-                                    className={`bg-white w-6 h-6 rounded-full shadow-md transform transition-transform duration-300 ${!isKanji ? 'translate-x-6' : 'translate-x-0'
+                                    className={`bg-white w-6 h-6 rounded-full shadow-md transform transition-transform duration-300 ${!isFurigana ? 'translate-x-6' : 'translate-x-0'
                                         }`}
                                 ></div>
                             </div>
                         </label>
                     </div>
-                    <label className={`ml-2 ${!isKanji ? 'text-blue-500' : 'text-gray-500'}`}>Furigana</label>
                 </div>
-
-                {/* // End of Toggle */}
+                {/* // End of Toggle Furigana */}
+                {/* // Start of Toggle to show translation */}
+                <div className="flex items-center">
+                    <label className={`pl-2  mr-2 ${isEnglishTranslate ? 'text-amber-200' : 'text-gray-500'}`}>English Translation</label>
+                    <div className="relative">
+                        <input
+                            id="toggleEnglish"
+                            type="checkbox"
+                            className="hidden"
+                            checked={!isEnglishTranslate}
+                            onChange={toggleEnglish}
+                        />
+                        <label
+                            htmlFor="toggleEnglish"
+                            className="flex items-center cursor-pointer select-none"
+                        >
+                            <div className={`w-12 h-6 rounded-full p-1 flex items-center transition-colors duration-300 ${isEnglishTranslate ? 'bg-amber-200' : 'bg-gray-400'}`}>
+                                <div
+                                    className={`bg-white w-6 h-6 rounded-full shadow-md transform transition-transform duration-300 ${!isEnglishTranslate ? 'translate-x-6' : 'translate-x-0'
+                                        }`}
+                                ></div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                 {/* // End of Toggle to show translation */}
+                 {/* // Start of toggle to show romaji */}
+                 <div className="flex items-center">
+                    <label className={`pl-2  mr-2 ${isRomaji ? 'text-green-300' : 'text-gray-500'}`}>Romaji</label>
+                    <div className="relative">
+                        <input
+                            id="toggleRomaji"
+                            type="checkbox"
+                            className="hidden"
+                            checked={!isRomaji}
+                            onChange={toggleRomaji}
+                        />
+                        <label
+                            htmlFor="toggleRomaji"
+                            className="flex items-center cursor-pointer select-none"
+                        >
+                            <div className={`w-12 h-6 rounded-full p-1 flex items-center transition-colors duration-300 ${isRomaji ? 'bg-green-300' : 'bg-gray-400'}`}>
+                                <div
+                                    className={`bg-white w-6 h-6 rounded-full shadow-md transform transition-transform duration-300 ${!isRomaji ? 'translate-x-6' : 'translate-x-0'
+                                        }`}
+                                ></div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                {/* // End of toggle to show romaji */}
             </div>
 
             <div className="">
