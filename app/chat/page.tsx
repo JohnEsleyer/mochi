@@ -95,7 +95,10 @@ export default function ChatAI() {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-       submitMessage();
+        if (inputText.length > 0){
+            submitMessage();
+        }
+       
     };
 
 
@@ -113,8 +116,7 @@ export default function ChatAI() {
 
             return <div>
             {conversationKanji.map((message, index) => (
-                <div className="p-2">
-
+                <div className="p-2" key={index}>
                     <p className="text-lg" key={index}><strong>{index % 2 === 0 ?
                         <span className="text-purple-300">🤖Mochi:</span> :
                         <span className="text-green-300">😄You:</span>}</strong>
@@ -140,7 +142,14 @@ export default function ChatAI() {
     }
     return (
         <Template className={isLoading ? 'shimmer-effect' : ''}>
-            <div className="flex lg:flex-row p-2">
+            
+        
+            <div className="bg-gray-900 pb-2 rounded grid grid-rows-1 lg:grid-flow-col ">
+            
+            <div className="row-span-3 ">
+                <p className=" text-2xl font-bold pl-2">Roleplay: "Ordering a sushi at a sushi restaurant."</p>
+            </div>
+            <div id="toggles" className="row-span-2 flex justify-start">
                 {/* // Toggle Furigana */}
                 <div className="flex items-center">
                     <label className={`pl-2 mr-2 ${isFurigana ? 'text-purple-300' : 'text-gray-500'}`}>Furigana</label>
@@ -217,31 +226,33 @@ export default function ChatAI() {
                 </div>
                 {/* // End of toggle to show romaji */}
             </div>
+            </div>
+            <hr/>
 
             <div className="w-full">
-                <div className="no-scrollbar h-[68vh] lg:h-[68vh] overflow-auto scroll-smooth scrollbar-hide">
+                <div className="no-scrollbar h-[62vh] lg:h-[73vh] overflow-auto scroll-smooth scrollbar-hide">
                     <div className="pb-2">
                         {chatComponent()}
                     </div>
                 </div>
 
         
-                <form onSubmit={handleSubmit} className="grid grid-rows-1 grid-flow-col justify-stretch">
-                        <div className="col-span-4 h-[10vh]">
+                <form onSubmit={handleSubmit} className="h-[10vh] grid grid-rows-1 grid-flow-col ">
+                        <div className="col-span-5 lg:col-span-12 ">
+                        <p className="text-xs">Max Character Limit: {inputText.length} / 100 </p>
                         <input
                             type="text"
                             value={inputText}
                             maxLength={100}
                             onChange={handleChange}
                             placeholder="Type your message here..."
-                            className="w-full  h-full text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            className="w-full h-[43px] p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         />
-                        <p>Max Character Limit: {inputText.length} / 100 </p>
                         </div>
-                        <div className="h-[10vh]">
+                        <div className="col-span-2 flex items-end p-1">
                         <button
                             type="submit"
-                            className=" w-full h-full rounded text-black bg-orange-200 transition duration-300"
+                            className=" w-full h-[37px] rounded text-black bg-orange-200 transition duration-300"
                         >
                             Send
                         </button>

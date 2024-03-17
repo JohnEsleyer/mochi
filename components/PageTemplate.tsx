@@ -41,7 +41,7 @@ export default function Template({ className, children }: { className: string; c
   <div className={` ${className}  min-h-screen justify-center bg-gray-800 text-white font-sans`}>
     <div>
         {/* // Start of Navigation bar */}
-      <nav className="pb-2 pt-2 pl-2 pr-2">
+      <nav className="pb-2 pt-2 pl-2 pr-2 bg-gray-900">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="p-1">
             <a href="#" className="text-white text-xl font-bold">
@@ -56,25 +56,25 @@ export default function Template({ className, children }: { className: string; c
             </a>
           </div>
           <div className="hidden md:flex space-x-4">
-            <Link href="/chat" className="text-purple-300 hover:animate-shake">
+            <Link href="/chat" className="text-purple-300 ">
               Roleplay with AI
             </Link>
-            <Link href="/analyzer" className="text-orange-300 hover:animate-shake">
+            <Link href="/analyzer" className="text-orange-300 ">
               Analyzer
             </Link>
-            <Link href="/learn" className="text-green-300 hover:animate-shake">
+            <Link href="/learn" className="text-green-300 ">
               Learn
             </Link>
-            <Link href="/saved" className="text-yellow-300 hover:animate-shake">
+            <Link href="/saved" className="text-yellow-300">
               Saved
             </Link>
-            <Link href="/kanji" className="text-pink-300 hover:animate-shake">
+            <Link href="/kanji" className="text-pink-300 ">
               Kanji
             </Link>
-            <Link href="/hiragana" className="text-amber-300 hover:animate-shake">
+            <Link href="/hiragana" className="text-amber-300">
               Hiragana
             </Link>
-            <Link href="/katakana" className="text-lime-300 hover:animate-shake">
+            <Link href="/katakana" className="text-lime-300">
               Katakana
             </Link>
             <Link href="/account" className="text-white-300 ">

@@ -8,6 +8,7 @@ export default function Learn(){
 
     return (
         <Template className={isLoading ? 'shimmer-effect' : ''}>
+            <hr/>
             <h1>Learn</h1>
             </Template>
     );  

@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react';
+import React, { Suspense } from 'react';
 import { ChangeEvent, useState } from 'react';
 import { colorWordClass } from '../../utils/colors';
 import Template from '@/components/PageTemplate';
@@ -36,15 +36,15 @@ export default function Analyzer() {
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const searchParams = useSearchParams();
-  useEffect(() => {
-    // Get the value of 'text' query parameter
-    const text = searchParams.get('text');
-    if (text){
-      console.log('text:', text);
-      setInputValue(text as string);
-    }
-  }, [searchParams]);
+  // const searchParams = useSearchParams();
+  // useEffect(() => {
+  //   // Get the value of 'text' query parameter
+  //   const text = searchParams.get('text');
+  //   if (text){
+  //     console.log('text:', text);
+  //     setInputValue(text as string);
+  //   }
+  // }, [searchParams]);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
 
@@ -100,6 +100,7 @@ export default function Analyzer() {
     <>
       <Template className={isLoading ? 'shimmer-effect' : ''}>
           {/* // Body */}
+      <hr/>
       <div className={` h-max w-full rounded-lg lg:rounded-lg lg:h-full`}>
         <div className={`p-6 `}>
           <div className='flex items-center justify-center'>
@@ -198,6 +199,9 @@ export default function Analyzer() {
           </div>
         </div>
       </div>
+      <Suspense>
+        
+      </Suspense>
       </Template>
     </>
   );

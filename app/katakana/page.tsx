@@ -8,6 +8,7 @@ export default function Katakana(){
 
     return (
         <Template className={isLoading ? 'shimmer-effect' : ''}>
+            <hr/>
             <h1>Katakana</h1>
             </Template>
     );  

@@ -8,6 +8,7 @@ export default function Hiragana(){
 
     return (
         <Template className={isLoading ? 'shimmer-effect' : ''}>
+            <hr/>
             <h1>Hiragana</h1>
             </Template>
     );  

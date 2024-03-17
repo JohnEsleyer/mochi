@@ -8,6 +8,7 @@ export default function Saved(){
 
     return (
         <Template className={isLoading ? 'shimmer-effect' : ''}>
+            <hr/>
             <h1>Saved</h1>
             </Template>
     );  

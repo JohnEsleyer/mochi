@@ -8,6 +8,7 @@ export default function Kanji(){
 
     return (
         <Template className={isLoading ? 'shimmer-effect' : ''}>
+            <hr/>
             <h1>Kanji</h1>
             </Template>
     );  
