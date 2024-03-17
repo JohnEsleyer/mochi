@@ -6,7 +6,7 @@ const MODEL_NAME = "gemini-1.0-pro";
 const API_KEY = process.env.GEMINI_API_KEY || '';
 
 interface Conversation{
-    isEmpty: boolean,
+    isKanji: boolean,
     conversation: string[],
 }
 
@@ -43,15 +43,15 @@ export default async function runAi(text: Conversation) {
     // const allKanji = filterJapanese(text);
     // console.log("Filtered Japanese:" + JSON.stringify(allKanji));
     
-    const {isEmpty, conversation} = text;
+    const {conversation} = text;
 
-
+    const prompt = `
+    Roleplay "Scenario: You are a waiter of a sushi restaurant and your name is Mochi. A customer comes in to order."
+    The first one to talk is you, then the person you're talking with. The person you're talking with might be talking in either English or Japanese. Just keep answering their questions or statements. (Generate the response in Japanese only in JSON format: "{"message":" ", "hiragana": "","romaji": "", "english": ""}"): ${conversation.map((str, index) => `${str}`).join("\n")} [Your turn to respond here]
+    `
  
         const parts = [
-            { text: `
-            Roleplay "Scenario: You are a waiter of a sushi restaurant and your name is Mochi. A customer comes in to order."
-            The first one to talk is you, then the user. (Generate the response in JSON format: "{"message":" "}"): ${conversation.map((str, index) => `${str}`).join("\n")} [Your turn to respond here]
-            ` },
+            { text:  prompt},
           ];
           const result = await model.generateContent({
             contents: [{ role: "user", parts }],

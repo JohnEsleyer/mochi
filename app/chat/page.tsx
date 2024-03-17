@@ -2,128 +2,138 @@
 import Template from "@/components/PageTemplate";
 import Typewriter from "@/components/typewriter";
 import { useEffect, useState } from "react";
+import Kanji from "../kanji/page";
+
 
 
 export default function ChatAI() {
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const [inputText, setInputText] = useState('');
-    const [conversation, setConversation] = useState<string[]>([
+    const [conversationKanji, setConversationKanji] = useState<string[]>([
         "当店の寿司レストランへようこそ。ご注文はお決まりでしょうか、それともおすすめをお聞きになりますか？"
     ]);
+    const [conversationHiragana, setConversationHiragana] = useState<string[]>([
+        "とうてんのすしれすとらんへようこそ。ごちゅうもんはおきまりでしょうか、それともおすすめをおききになりますか?"
+    ]);
+    
+    const [conversationRomaji, setConversationRomaji] = useState<string[]>([
+        "tōten no sushi resutoran e yōkoso. gochūmon wa okimari deshō ka, soretomo osusume o o-kiki ni narimasu ka?"
+            ]);
+
+    const [conversationEnglish, setConversationEnglish] = useState<string[]>([
+"Welcome to our sushi restaurant. Have you decided on your order, or would you like to hear our recommendations?"
+    ]);
+    
 
     const [isKanji, setIsKanji] = useState(true);
 
     const toggleSwitch = () => {
         setIsKanji((prev) => {
-            if (!prev == true){
-                setConversation(
-                    ["当店の寿司レストランへようこそ。ご注文はお決まりでしょうか、それともおすすめをお聞きになりますか"]
-                )
-            }else{
-                setConversation(
-                    ["とうてんのすしれすとらんへようこそ。ごちゅうもんはおきまりでしょうか、それともおすすめをおききになりますか"]
-                )
-            }
+
             return !prev
         });
 
-        
+
     };
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        setConversation([...conversation, `${inputText}`]);
-        setInputText('');
-        const prevMessage = [...conversation, `${inputText}`];
+    const submitMessage = async () => {
+        var prevMessage: string[] = [];
+        var prevHiragana: string[] = [];
+        var prevRomaji: string[] = [];
+        var prevEnglish: string[] = [];
+
+            setConversationKanji([...conversationKanji, `${inputText}`]);
+            setInputText('');
+            prevMessage = [...conversationKanji, `${inputText}`];
+            setConversationHiragana([...conversationHiragana, `${inputText}`]);
+            prevHiragana = [...conversationHiragana, `${inputText}`];
+
+        prevRomaji = [...conversationRomaji, ' '];
+        prevEnglish = [...conversationEnglish, ' ']
+
         try {
-            if (prevMessage.length <= 1) {
+
                 const response = await fetch('/api/chat', {
                     method: "POST",
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         message: {
-                            isEmpty: true,
+                
                             conversation: prevMessage,
                         },
                     }),
                 });
                 const { body } = await response.json();
                 setTimeout(() => {
-                    setConversation([...prevMessage, `${body.message}`]);
+
+                        setConversationKanji([...prevMessage, `${body.message}`]);
+                        setConversationRomaji([...prevRomaji, `${body.romaji}`]);
+                        setConversationHiragana([...prevHiragana, `${body.hiragana}`]);
+                        setConversationEnglish([...prevEnglish, `${body.english}`]);
                 }, 500);
-            } else {
-                const response = await fetch('/api/chat', {
-                    method: "POST",
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        message: {
-                            isEmpty: false,
-                            conversation: prevMessage,
-                        },
-                    }),
-                });
-                const { body } = await response.json();
-                setTimeout(() => {
-                    setConversation([...prevMessage, body.message]);
-                }, 500);
-            }
+           
 
         } catch (error) {
             console.error('Error:', error);
         }
 
+    }
+
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+       submitMessage();
     };
 
 
     const tryAgain = async () => {
-        setConversation([...conversation, `${inputText}`]);
-        setInputText('');
-        const prevMessage = [...conversation, `${inputText}`];
-        try {
-            if (prevMessage.length <= 1) {
-                const response = await fetch('/api/chat', {
-                    method: "POST",
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        message: {
-                            isEmpty: true,
-                            conversation: prevMessage,
-                        },
-                    }),
-                });
-                const { body } = await response.json();
-                setTimeout(() => {
-                    setConversation([...prevMessage, `${body.message}`]);
-                }, 500);
-            } else {
-                const response = await fetch('/api/chat', {
-                    method: "POST",
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        message: {
-                            isEmpty: false,
-                            conversation: prevMessage,
-                        },
-                    }),
-                });
-                const { body } = await response.json();
-                setTimeout(() => {
-                    setConversation([...prevMessage, body.message]);
-                }, 500);
-            }
-
-        } catch (error) {
-            console.error('Error:', error);
-        }
-
+        submitMessage();
     };
 
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        console.log(conversationHiragana);
         setInputText(event.target.value);
     };
 
+    const chatComponent = () => {
+        if (isKanji){
+            return <div>
+            {conversationKanji.map((message, index) => (
+                <div className="p-2">
+
+                    <p className="text-lg" key={index}><strong>{index % 2 === 0 ?
+                        <span className="text-purple-300">🤖Mochi:</span> :
+                        <span className="text-green-300">😄You:</span>}</strong>
+                        {message == "ERROR" && <span className="text-amber-300">
+                            {" " + "Server is overloaded with requests, please try again later"}
+                            <button onClick={tryAgain} className="rounded text-xs p-1 text-black bg-orange-200 transition duration-300">Try Again</button></span>}</p>
+                    <p className="text-lg">{message}</p>
+                    <p className="text-lg">{conversationRomaji[index]}</p>
+                    <p className="text-lg">{conversationEnglish[index]}</p>
+                </div>
+            ))}
+            </div>
+        }else{
+             return <div>
+            {conversationHiragana.map((message, index) => (
+                <div className="p-2">
+
+                    <p className="text-lg" key={index}><strong>{index % 2 === 0 ?
+                        <span className="text-purple-300">🤖Mochi:</span> :
+                        <span className="text-green-300">😄You:</span>}</strong>
+                        {message == "ERROR" && <span className="text-amber-300">
+                            {" " + "Server is overloaded with requests, please try again later"}
+                            <button onClick={tryAgain} className="rounded text-xs p-1 text-black bg-orange-200 transition duration-300">Try Again</button></span>}</p>
+                    <p className="text-lg">{message}</p>
+                    <p className="text-lg">{conversationRomaji[index]}</p>
+                    <p className="text-lg">{conversationEnglish[index]}</p>
+                    
+                </div>
+            ))}
+            </div>
+        }
+    }
     return (
         <Template className={isLoading ? 'shimmer-effect' : ''}>
             <div className="flex flex-col lg:flex-row">
@@ -151,7 +161,7 @@ export default function ChatAI() {
                             </div>
                         </label>
                     </div>
-                    <label className={`ml-2 ${!isKanji ? 'text-blue-500' : 'text-gray-500'}`}>Hiragana</label>
+                    <label className={`ml-2 ${!isKanji ? 'text-blue-500' : 'text-gray-500'}`}>Furigana</label>
                 </div>
 
                 {/* // End of Toggle */}
@@ -160,18 +170,8 @@ export default function ChatAI() {
             <div className="">
                 <div className="no-scrollbar h-[65vh] lg:h-[75vh] overflow-auto scroll-smooth scrollbar-hide">
                     <div className="pb-2">
-                        {conversation.map((message, index) => (
-                            <div className="p-2">
-
-                                <p className="text-lg" key={index}><strong>{index % 2 === 0 ?
-                                    <span className="text-purple-300">🤖Mochi:</span> :
-                                    <span className="text-green-300 typewriter">😄You:</span>}</strong>
-                                    {message == "ERROR"  && <span className="text-amber-300">
-                                        {" " + "Server is overloaded with requests, please try again later"}
-                                        <button onClick={tryAgain} className="rounded text-xs p-1 text-black bg-orange-200 transition duration-300">Try Again</button></span>}</p>
-                                <p className="text-lg typewriter">{message}</p>
-                            </div>
-                        ))}
+                        {chatComponent()}
+        
                     </div>
                 </div>
 
