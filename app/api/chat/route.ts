@@ -10,6 +10,7 @@ export async function POST(request: Request) {
     const {message} = await request.json();
     const maxAttempts = 1; // Set the maximum number of attempts
     
+    const conversation = await 
 
     console.log("Received Requests:" + JSON.stringify(message));
     let attempt = 1;

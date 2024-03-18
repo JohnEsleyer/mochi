@@ -37,11 +37,11 @@ export default function Template({ className, children }: { className: string; c
         { authenticate ?
 
         // If user is authenticated, display the page
-        <div className="bg-gray-800">
-  <div className={` ${className}  min-h-screen justify-center bg-gray-800 text-white font-sans`}>
-    <div>
+        <div className="bg-gray-800 ">
+  <div className={` ${className} w-screen h-screen min-h-screen text-white font-sans`}>
+    <div className="">
         {/* // Start of Navigation bar */}
-      <nav className="pb-2 pt-2 pl-2 pr-2 bg-gray-900">
+      <nav className="h-[9vh] pb-2 pt-2 pl-2 pr-2 bg-gray-900">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="p-1">
             <a href="#" className="text-white text-xl font-bold">
@@ -105,10 +105,12 @@ export default function Template({ className, children }: { className: string; c
       </nav>
         {/* // End of Navigation Bar */}
         {/* // Start of Body  */}
+        <div className="h-[90vh]">
         {children}
+        </div>
         {/* // End of Body */}
+      </div>
     </div>
-  </div>
 </div> : 
 
   // If user not authenticated, display loading indicator

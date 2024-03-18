@@ -18,3 +18,6 @@ interface GeneratedText {
     body: GeneratedText;
   }
   
+  interface Conversation{
+    conversation: string[],
+}

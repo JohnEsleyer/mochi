@@ -6,7 +6,6 @@ const MODEL_NAME = "gemini-1.0-pro";
 const API_KEY = process.env.GEMINI_API_KEY || '';
 
 interface Conversation{
-    isKanji: boolean,
     conversation: string[],
 }
 

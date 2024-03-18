@@ -35,16 +35,31 @@ export default function Analyzer() {
   const [inputValue, setInputValue] = useState<string>('');
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const searchParams = useSearchParams();
 
-  // const searchParams = useSearchParams();
-  // useEffect(() => {
-  //   // Get the value of 'text' query parameter
-  //   const text = searchParams.get('text');
-  //   if (text){
-  //     console.log('text:', text);
-  //     setInputValue(text as string);
-  //   }
-  // }, [searchParams]);
+
+  const QueryGet = () => {
+    // Get the value of 'text' query parameter
+    const text = searchParams.get('text');
+    if (text){
+      console.log('text:', text);
+      setInputValue(text as string);
+    }
+    
+    // The purpose of this is to prevent an error.
+    return <Suspense fallback={<p></p>}>
+
+    </Suspense>
+
+  };
+
+  
+  useEffect(() => {
+  
+    // dump variable will not be used, but prevents an error.
+    const dump = QueryGet();
+
+  }, []);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
 
@@ -199,9 +214,7 @@ export default function Analyzer() {
           </div>
         </div>
       </div>
-      <Suspense>
-        
-      </Suspense>
+ 
       </Template>
     </>
   );
