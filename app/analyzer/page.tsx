@@ -26,11 +26,10 @@ export default function Analyzer() {
         },
       },
     },
-   
   };
 
   
-  const [responseJson, setJsonResponse] = useState<JsonResponse>(defaultData);
+  const [responseJson, setJsonResponse] = useState<AnalyzerResponse>(defaultData);
   const [isFailed, setIsFailed] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>('');
   const [isVisible, setIsVisible] = useState<boolean>(false);
@@ -38,28 +37,6 @@ export default function Analyzer() {
   const searchParams = useSearchParams();
 
 
-  const QueryGet = () => {
-    // Get the value of 'text' query parameter
-    const text = searchParams.get('text');
-    if (text){
-      console.log('text:', text);
-      setInputValue(text as string);
-    }
-    
-    // The purpose of this is to prevent an error.
-    return <Suspense fallback={<p></p>}>
-
-    </Suspense>
-
-  };
-
-  
-  useEffect(() => {
-  
-    // dump variable will not be used, but prevents an error.
-    const dump = QueryGet();
-
-  }, []);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
 
@@ -86,7 +63,7 @@ export default function Analyzer() {
           },
       });
   
-      const response: JsonResponse = await res.json();
+      const response: AnalyzerResponse = await res.json();
       console.log(response.status);
   
       const { status } = response;
@@ -113,10 +90,9 @@ export default function Analyzer() {
 
   return (
     <>
-      <Template className={isLoading ? 'shimmer-effect' : ''}>
+      <Template>
           {/* // Body */}
-      <hr/>
-      <div className={` h-max w-full rounded-lg lg:rounded-lg lg:h-full`}>
+      <div className={`${isLoading ? 'shimmer-effect' : ''} overflow-auto h-full w-full rounded-lg lg:rounded-lg`}>
         <div className={`p-6 `}>
           <div className='flex items-center justify-center'>
             {/* <Image src='/mochi.png' width={100} height={100} alt='mochi'/> */}
@@ -181,7 +157,8 @@ export default function Analyzer() {
                     <span className='text-lg'>{responseJson.body.context}</span>
                   </div>
                 </div>
-                <div>
+                {/* // Analyzer Output */}
+                <div className="overflow-auto">
                   <p className='font-bold text-3xl mr-4 p-2 mt-1'>Words Breakdown</p>
                   <span className='font-bold text-3xl mr-4 p-2'>{
                     Object.keys(responseJson.body.words).map((key) => (

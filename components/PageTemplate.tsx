@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { isAuth } from "@/utils/isauth";
 import Image from 'next/image';
 
-export default function Template({ className, children }: { className: string; children: React.ReactNode }){
+export default function Template({ children }: { children: React.ReactNode }){
   const router = useRouter();
   
   const [authenticate, setAuthenticate] = useState(false);
@@ -38,7 +38,7 @@ export default function Template({ className, children }: { className: string; c
 
         // If user is authenticated, display the page
         <div className="bg-gray-800 ">
-  <div className={` ${className} w-screen h-screen min-h-screen text-white font-sans`}>
+  <div className={` w-screen h-screen min-h-screen text-white font-sans`}>
     <div className="">
         {/* // Start of Navigation bar */}
       <nav className="h-[9vh] pb-2 pt-2 pl-2 pr-2 bg-gray-900">
@@ -105,6 +105,7 @@ export default function Template({ className, children }: { className: string; c
       </nav>
         {/* // End of Navigation Bar */}
         {/* // Start of Body  */}
+        <hr />
         <div className="h-[90vh]">
         {children}
         </div>

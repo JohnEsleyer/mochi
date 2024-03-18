@@ -36,3 +36,16 @@
     }
   }
 
+  @keyframes mochiFade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  .mochiFade {
+    animation: mochiFade 1s ease-in-out;
+  }
+  
