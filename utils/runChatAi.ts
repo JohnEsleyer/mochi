@@ -5,9 +5,7 @@ import removeCodeBlock from "./removeCodeBlock";
 const MODEL_NAME = "gemini-1.0-pro";
 const API_KEY = process.env.GEMINI_API_KEY || '';
 
-interface Conversation{
-    conversation: string[],
-}
+
 
 export default async function runAi(text: Conversation) {
     const genAI = new GoogleGenerativeAI(API_KEY);

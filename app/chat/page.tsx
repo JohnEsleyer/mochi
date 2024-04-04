@@ -6,6 +6,8 @@ import Kanji from "../kanji/page";
 import Link from "next/link";
 import { colorWordClass } from "@/utils/colors";
 import React from "react";
+import Image from "next/image";
+import ArrowBack from "/public/arrow_back.svg"
 
 const defaultData = {
     status: 'success',
@@ -225,9 +227,10 @@ export default function ChatAI() {
 
     }
 
-    const portraitDisplay = () => {
+    const chatUI = () => {
         return (
             <div className="grid grid-rows-8 h-full">
+     
                 {/* // Header */}
                 <div className="row-span-1 bg-gray-900">
                     <p className="text-xl  font-bold pl-2">Roleplay: "Ordering a sushi at a sushi restaurant."</p>
@@ -307,6 +310,8 @@ export default function ChatAI() {
                                 </label>
                             </div>
                         </div>
+                         {/* // End of toggle to show romaji */}
+               
                     </div>
                 </div>
 
@@ -345,21 +350,39 @@ export default function ChatAI() {
         );
     };
 
-    const landscapeDisplay = () => {
-        return (
 
-            <div className="grid grid-rows-1 grid-cols-2 h-full ">
-                {portraitDisplay()}
+    const analyzerUI = () => {
+        return (
                 <div className=" border-l-4 border-white h-full">
+                  
+            
                     {
                         isAnalyze ? 
                         <div className={`${isLoading ? 'shimmer-effect' : ''} h-full`}>
+                            
                             {isLoading ? 
                             <div></div> : 
                             <div className="mochiFade h-full grid grid-rows-9 opacity-100 transform transition-opacity duration-500 ease-in-out">
                             {/* // Header */}
+                      
                             <div className="row-span-3 bg-gray-900">
-                            <p className='font-bold text-3xl mr-4 p-2 mt-1'>Words Breakdown</p>
+                                <div className="flex justify-start">
+                                    
+                                    {isPortrait && <button
+                                            onClick={() => {
+                                                setIsAnalyze(false);
+                                            }}
+                                            ><Image
+                                                src={ArrowBack}
+                                                width={30}
+                                                height={30} alt={""} 
+                                                                               /></button>}
+                                
+                            <p className='font-bold text-3xl mr-4 p-2 mt-1'>
+                                
+                                Words Breakdown
+                                </p>
+                                </div>
                             <span className='font-bold text-3xl mr-4 p-2'>{
                               Object.keys(analyzerResponse.body.words).map((key) => (
                                 <React.Fragment key={key}>
@@ -390,13 +413,30 @@ export default function ChatAI() {
                             }
                         </div> 
                         : <div className="bg-gray-800 flex items-center justify-center h-full">
-                            <p>Press the 'Analyze' button to generate a breakdown of a Japanese text.</p>
+                            <p>Press the 'Analyze' button to generate a breakdown of the Japanese text.</p>
                         </div>
                     }
                 </div>
+        );
+    }
+
+    const portraitDisplay = () => {
+        return (
+            <div className="grid grid-rows-1 grid-cols-1 h-full ">
+                {isAnalyze ? analyzerUI() : chatUI()}
+            </div>
+        );
+    }
+    const landscapeDisplay = () => {
+        return (
+
+            <div className="grid grid-rows-1 grid-cols-2 h-full ">
+                {chatUI()}
+                {analyzerUI()}
             </div>
         );
     };
+
 
     return (
         <Template>
