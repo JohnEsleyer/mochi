@@ -390,7 +390,7 @@ export default function ChatAI() {
                             }
                         </div> 
                         : <div className="bg-gray-800 flex items-center justify-center h-full">
-                            <p>None</p>
+                            <p>Press the 'Analyze' button to generate a breakdown of a Japanese text.</p>
                         </div>
                     }
                 </div>
