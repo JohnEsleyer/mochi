@@ -1,77 +1,141 @@
 'use client'
 import Template from "@/components/PageTemplate";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+interface HiraganaMap{
+    hiragana: string;
+    romaji: string;
+}
+
+const hiraganaMap: HiraganaMap[] = [
+    { hiragana: "あ", romaji: "a" },
+    { hiragana: "い", romaji: "i" },
+    { hiragana: "う", romaji: "u" },
+    { hiragana: "え", romaji: "e" },
+    { hiragana: "お", romaji: "o" },
+    { hiragana: "か", romaji: "ka" },
+    { hiragana: "き", romaji: "ki" },
+    { hiragana: "く", romaji: "ku" },
+    { hiragana: "け", romaji: "ke" },
+    { hiragana: "こ", romaji: "ko" },
+    { hiragana: "さ", romaji: "sa" },
+    { hiragana: "し", romaji: "shi" },
+    { hiragana: "す", romaji: "su" },
+    { hiragana: "せ", romaji: "se" },
+    { hiragana: "そ", romaji: "so" },
+    { hiragana: "た", romaji: "ta" },
+    { hiragana: "ち", romaji: "chi" },
+    { hiragana: "つ", romaji: "tsu" },
+    { hiragana: "て", romaji: "te" },
+    { hiragana: "と", romaji: "to" },
+    { hiragana: "な", romaji: "na" },
+    { hiragana: "に", romaji: "ni" },
+    { hiragana: "ぬ", romaji: "nu" },
+    { hiragana: "ね", romaji: "ne" },
+    { hiragana: "の", romaji: "no" },
+    { hiragana: "は", romaji: "ha" },
+    { hiragana: "ひ", romaji: "hi" },
+    { hiragana: "ふ", romaji: "fu" },
+    { hiragana: "へ", romaji: "he" },
+    { hiragana: "ほ", romaji: "ho" },
+    { hiragana: "ま", romaji: "ma" },
+    { hiragana: "み", romaji: "mi" },
+    { hiragana: "む", romaji: "mu" },
+    { hiragana: "め", romaji: "me" },
+    { hiragana: "も", romaji: "mo" },
+    { hiragana: "や", romaji: "ya" },
+    { hiragana: "ゆ", romaji: "yu" },
+    { hiragana: "よ", romaji: "yo" },
+    { hiragana: "ら", romaji: "ra" },
+    { hiragana: "り", romaji: "ri" },
+    { hiragana: "る", romaji: "ru" },
+    { hiragana: "れ", romaji: "re" },
+    { hiragana: "ろ", romaji: "ro" },
+    { hiragana: "わ", romaji: "wa" },
+    { hiragana: "を", romaji: "wo" },
+    { hiragana: "ん", romaji: "n" }
+  ];
+
+const dakounMap: HiraganaMap[] = [
+    { hiragana: "が", romaji: "ga" },
+    { hiragana: "ぎ", romaji: "gi" },
+    { hiragana: "ぐ", romaji: "gu" },
+    { hiragana: "げ", romaji: "ge" },
+    { hiragana: "ご", romaji: "go" },
+    { hiragana: "ざ", romaji: "za" },
+    { hiragana: "じ", romaji: "ji" },
+    { hiragana: "ず", romaji: "zu" },
+    { hiragana: "ぜ", romaji: "ze" },
+    { hiragana: "ぞ", romaji: "zo" },
+    { hiragana: "だ", romaji: "da" },
+    { hiragana: "ぢ", romaji: "ji" },
+    { hiragana: "づ", romaji: "zu" },
+    { hiragana: "で", romaji: "de" },
+    { hiragana: "ど", romaji: "do" }
+];
+
+const handakounMap: HiraganaMap[] = [
+    { hiragana: "ぱ", romaji: "pa" },
+    { hiragana: "ぴ", romaji: "pi" },
+    { hiragana: "ぷ", romaji: "pu" },
+    { hiragana: "ぺ", romaji: "pe" },
+    { hiragana: "ぽ", romaji: "po" }
+
+];
 
 export default function Hiragana(){
+    var heightWidth;
+    if (typeof window == "undefined") {
+        console.log('Server');
+    } else {
+        heightWidth = window.innerHeight > window.innerWidth;
+    }
+
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isPortrait, setIsPortrait] = useState(heightWidth);
+   
+    const handleOrientationChange = () => {
+        setIsPortrait((window.innerHeight > window.innerWidth - 180));
+    };
+
+    useEffect(() => {
+        window.addEventListener('resize', handleOrientationChange);
+        return () => {
+            window.removeEventListener('resize', handleOrientationChange);
+        };
+    }, []);
 
 
     return (
         <Template>
-            <div className="h-full overflow-y-auto">
-            <hr/>
-            <h1>Hiragana</h1>
-            <div className="grid grid-cols-5 gap-4 p-2">
-            {/* <!-- Row 1 --> */}
-            <div className="bg-gray-200 p-4">1</div>
-            <div className="bg-gray-200 p-4">2</div>
-            <div className="bg-gray-200 p-4">3</div>
-            <div className="bg-gray-200 p-4">4</div>
-            <div className="bg-gray-200 p-4">5</div>
-            {/* <!-- Row 2 --> */}
-            <div className="bg-gray-200 p-4">6</div>
-            <div className="bg-gray-200 p-4">7</div>
-            <div className="bg-gray-200 p-4">8</div>
-            <div className="bg-gray-200 p-4">9</div>
-            <div className="bg-gray-200 p-4">10</div>
-            {/* <!-- Row 3 --> */}
-            <div className="bg-gray-200 p-4">11</div>
-            <div className="bg-gray-200 p-4">12</div>
-            <div className="bg-gray-200 p-4">13</div>
-            <div className="bg-gray-200 p-4">14</div>
-            <div className="bg-gray-200 p-4">15</div>
-            {/* <!-- Row 4 --> */}
-            <div className="bg-gray-200 p-4">16</div>
-            <div className="bg-gray-200 p-4">17</div>
-            <div className="bg-gray-200 p-4">18</div>
-            <div className="bg-gray-200 p-4">19</div>
-            <div className="bg-gray-200 p-4">20</div>
-            {/* <!-- Row 5 --> */}
-            <div className="bg-gray-200 p-4">21</div>
-            <div className="bg-gray-200 p-4">22</div>
-            <div className="bg-gray-200 p-4">23</div>
-            <div className="bg-gray-200 p-4">24</div>
-            <div className="bg-gray-200 p-4">25</div>
-            {/* <!-- Row 6 --> */}
-            <div className="bg-gray-200 p-4">26</div>
-            <div className="bg-gray-200 p-4">27</div>
-            <div className="bg-gray-200 p-4">28</div>
-            <div className="bg-gray-200 p-4">29</div>
-            <div className="bg-gray-200 p-4">30</div>
-            {/* <!-- Row 7 --> */}
-            <div className="bg-gray-200 p-4">31</div>
-            <div className="bg-gray-200 p-4">32</div>
-            <div className="bg-gray-200 p-4">33</div>
-            <div className="bg-gray-200 p-4">34</div>
-            <div className="bg-gray-200 p-4">35</div>
-            {/* <!-- Row 8 --> */}
-            <div className="bg-gray-200 p-4">36</div>
-            <div className="bg-gray-200 p-4">37</div>
-            <div className="bg-gray-200 p-4">38</div>
-            <div className="bg-gray-200 p-4">39</div>
-            <div className="bg-gray-200 p-4">40</div>
-            {/* <!-- Row 9 --> */}
-            <div className="bg-gray-200 p-4">41</div>
-            <div className="bg-gray-200 p-4">42</div>
-            <div className="bg-gray-200 p-4">43</div>
-            <div className="bg-gray-200 p-4">44</div>
-            <div className="bg-gray-200 p-4">45</div>
-            {/* <!-- Row 10 --> */}
-            <div className="bg-gray-200 p-4">46</div>
-            <div className="bg-gray-200 p-4">47</div>
-            <div className="bg-gray-200 p-4">48</div>
-            <div className="bg-gray-200 p-4">49</div>
-            <div className="bg-gray-200 p-4">50</div>
+            <div className={`h-full overflow-y-auto ${isPortrait ? 'p-2': 'p-5 pr-20 pl-20'}`}>
+            <h1 className="text-xl font-bold">Hiragana</h1>
+            <div className="grid grid-cols-5 gap-4 pb-5">
+            {hiraganaMap.map((item, index) => (
+                <div key={index} className="p-4 border border-gray-700 rounded-md flex flex-col items-center shadow-xl">
+                <div className="text-4xl font-bold text-yellow-300">{item.hiragana}</div>
+                <div className="mt-2">{item.romaji}</div>
+                </div>
+            ))}
+            </div>
+
+            <h1 className="text-xl font-bold">Dakoun</h1>
+            <div className="grid grid-cols-5 gap-4 pb-5">
+            {dakounMap.map((item, index) => (
+                <div key={index} className="p-4 border border-gray-700 rounded-md flex flex-col items-center shadow-xl">
+                <div className="text-4xl font-bold text-yellow-300">{item.hiragana}</div>
+                <div className="mt-2">{item.romaji}</div>
+                </div>
+            ))}
+            </div>
+            <h1 className="text-xl font-bold">Handakoun</h1>
+            <div className="grid grid-cols-5 gap-4 pb-5">
+            {handakounMap.map((item, index) => (
+                <div key={index} className="p-4 border border-gray-700 rounded-md flex flex-col items-center shadow-xl">
+                <div className="text-4xl font-bold text-yellow-300">{item.hiragana}</div>
+                <div className="mt-2">{item.romaji}</div>
+                </div>
+            ))}
             </div>
             </div>
 

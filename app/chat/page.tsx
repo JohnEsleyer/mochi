@@ -49,9 +49,9 @@ export default function ChatAI() {
     ]);
 
 
-    const [isFurigana, setIsFurigana] = useState(false);
+    const [isFurigana, setIsFurigana] = useState(true);
     const [isEnglishTranslate, setIsEnglishTranslate] = useState(true);
-    const [isRomaji, setIsRomaji] = useState(false);
+    const [isRomaji, setIsRomaji] = useState(true);
 
     var heightWidth;
     if (typeof window == "undefined") {
