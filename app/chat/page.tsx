@@ -198,8 +198,10 @@ export default function ChatAI() {
     const chatComponent = () => {
 
         return <div>
+            
             {conversationKanji.map((message, index) => (
                 <div className="p-2 shadow-lg" key={index}>
+                    
                     <p className="text-lg" key={index}><strong>{index % 2 === 0 ?
                         <span className="text-purple-300 text-xl">Mochi:</span> :
                         <span className="text-green-300 text-xl">You:</span>}</strong>
@@ -207,18 +209,19 @@ export default function ChatAI() {
                             {" " + "Server is overloaded with requests, please try again later"}
                             <button onClick={tryAgain} className="rounded text-xs p-1 text-black bg-orange-200 transition duration-300">Try Again</button></span>}</p>
                     <p className="text-lg font-bold">{message}</p>
-                    {index % 2 == 0 && <div className="p-2">
-                        {isFurigana && <p>Furigana: <span className="text-purple-300">{conversationHiragana[index]}</span></p>}
-                        {isRomaji && <p>Romaji: <span className="text-green-300">{conversationRomaji[index]}</span></p>}
-                        {isEnglishTranslate && <p>English: <span className="text-amber-200">{conversationEnglish[index]}</span></p>}
-                        <div className="pt-2">
+                    <div className="pt-2 pl-2">
                            <button 
-                           className="bg-orange-200 text-black p-1 pr-2 pl-2 rounded"
+                           className="bg-orange-200 text-xs text-black p-1 pr-2 pl-2 rounded"
                            onClick={() => {handleAnalyze(message)}}
                            >
                             Analyze
                            </button>
                         </div>
+                    {index % 2 == 0 && <div className="p-2">
+                        {isFurigana && <p>Furigana: <span className="text-purple-300">{conversationHiragana[index]}</span></p>}
+                        {isRomaji && <p>Romaji: <span className="text-green-300">{conversationRomaji[index]}</span></p>}
+                        {isEnglishTranslate && <p>English: <span className="text-amber-200">{conversationEnglish[index]}</span></p>}
+                        
 
                     </div>}
                 </div>
