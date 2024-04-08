@@ -7,7 +7,11 @@ import { useEffect, useState } from "react";
 import { isAuth } from "@/utils/isauth";
 import Image from 'next/image';
 
-export default function Template({ children }: { children: React.ReactNode }){
+interface TemplateProps{
+  children: React.ReactNode;
+}
+
+const Template: React.FC<TemplateProps> = ({children}) => {
   const router = useRouter();
   
   const [authenticate, setAuthenticate] = useState(false);
@@ -128,3 +132,5 @@ export default function Template({ children }: { children: React.ReactNode }){
 
     );
 }
+
+export default Template;

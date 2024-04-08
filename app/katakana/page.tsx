@@ -88,7 +88,7 @@ const handakutenMap: KatakanaMap[] = [
 
 ];
 
-export default function katakana(){
+export default function Katakana(){
     var heightWidth;
     if (typeof window == "undefined") {
         console.log('Server');

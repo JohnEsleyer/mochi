@@ -7,7 +7,7 @@ export default function Account(){
 
 
     return (
-        <Template className={isLoading ? 'shimmer-effect' : ''}>
+        <Template>
             <hr/>
             <h1>Account</h1>
             </Template>
