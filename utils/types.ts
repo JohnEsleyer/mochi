@@ -13,8 +13,11 @@ interface GeneratedText {
   };
   }
   
-  interface JsonResponse{
+  interface AnalyzerResponse{
     status: string;
     body: GeneratedText;
   }
   
+  interface Conversation{
+    conversation: string[],
+}
