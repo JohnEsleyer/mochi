@@ -56,7 +56,7 @@ const hiraganaMap: HiraganaMap[] = [
     { hiragana: "ん", romaji: "n" }
   ];
 
-const dakounMap: HiraganaMap[] = [
+const dakutenMap: HiraganaMap[] = [
     { hiragana: "が", romaji: "ga" },
     { hiragana: "ぎ", romaji: "gi" },
     { hiragana: "ぐ", romaji: "gu" },
@@ -74,7 +74,7 @@ const dakounMap: HiraganaMap[] = [
     { hiragana: "ど", romaji: "do" }
 ];
 
-const handakounMap: HiraganaMap[] = [
+const handakutenMap: HiraganaMap[] = [
     { hiragana: "ぱ", romaji: "pa" },
     { hiragana: "ぴ", romaji: "pi" },
     { hiragana: "ぷ", romaji: "pu" },
@@ -119,18 +119,18 @@ export default function Hiragana(){
             ))}
             </div>
 
-            <h1 className="text-xl font-bold">Dakoun</h1>
+            <h1 className="text-xl font-bold">Dakuten</h1>
             <div className="grid grid-cols-5 gap-4 pb-5">
-            {dakounMap.map((item, index) => (
+            {dakutenMap.map((item, index) => (
                 <div key={index} className="p-4 border border-gray-700 rounded-md flex flex-col items-center shadow-xl">
                 <div className="text-4xl font-bold text-yellow-300">{item.hiragana}</div>
                 <div className="mt-2">{item.romaji}</div>
                 </div>
             ))}
             </div>
-            <h1 className="text-xl font-bold">Handakoun</h1>
+            <h1 className="text-xl font-bold">Handakuten</h1>
             <div className="grid grid-cols-5 gap-4 pb-5">
-            {handakounMap.map((item, index) => (
+            {handakutenMap.map((item, index) => (
                 <div key={index} className="p-4 border border-gray-700 rounded-md flex flex-col items-center shadow-xl">
                 <div className="text-4xl font-bold text-yellow-300">{item.hiragana}</div>
                 <div className="mt-2">{item.romaji}</div>
