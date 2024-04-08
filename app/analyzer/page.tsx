@@ -4,7 +4,6 @@ import React, { Suspense } from 'react';
 import { ChangeEvent, useState } from 'react';
 import { colorWordClass } from '../../utils/colors';
 import Template from '@/components/PageTemplate';
-import { useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 
 
@@ -34,8 +33,6 @@ export default function Analyzer() {
   const [inputValue, setInputValue] = useState<string>('');
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const searchParams = useSearchParams();
-
 
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
