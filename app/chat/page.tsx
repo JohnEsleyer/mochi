@@ -199,10 +199,10 @@ export default function ChatAI() {
 
         return <div>
             {conversationKanji.map((message, index) => (
-                <div className="p-2" key={index}>
+                <div className="p-2 shadow-lg" key={index}>
                     <p className="text-lg" key={index}><strong>{index % 2 === 0 ?
-                        <span className="text-purple-300">🤖Mochi:</span> :
-                        <span className="text-green-300">😄You:</span>}</strong>
+                        <span className="text-purple-300 text-xl">Mochi:</span> :
+                        <span className="text-green-300 text-xl">You:</span>}</strong>
                         {message == "ERROR" && <span className="text-amber-300">
                             {" " + "Server is overloaded with requests, please try again later"}
                             <button onClick={tryAgain} className="rounded text-xs p-1 text-black bg-orange-200 transition duration-300">Try Again</button></span>}</p>
@@ -233,7 +233,7 @@ export default function ChatAI() {
      
                 {/* // Header */}
                 <div className="row-span-1 bg-gray-900">
-                    <p className="text-xl  font-bold pl-2">Roleplay: "Ordering a sushi at a sushi restaurant."</p>
+                    <p className="text-xl font-bold pl-2">Roleplay: "Ordering a sushi at a sushi restaurant."</p>
                     <div className="flex justify-start text-xs pt-1">
 
                         {/* // Toggle Furigana */}
@@ -353,7 +353,7 @@ export default function ChatAI() {
 
     const analyzerUI = () => {
         return (
-                <div className=" border-l-4 border-white h-full">
+                <div className={isPortrait ? "h-full" : "border-l-4 border-white h-full"}>
                   
             
                     {
@@ -413,7 +413,7 @@ export default function ChatAI() {
                             }
                         </div> 
                         : <div className="bg-gray-800 flex items-center justify-center h-full">
-                            <p>Press the 'Analyze' button to generate a breakdown of the Japanese text.</p>
+                            <p className="p-2">Press the 'Analyze' button to generate a breakdown of the Japanese text.</p>
                         </div>
                     }
                 </div>
