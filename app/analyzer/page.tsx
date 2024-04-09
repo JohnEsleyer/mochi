@@ -5,6 +5,7 @@ import { ChangeEvent, useState } from 'react';
 import { colorWordClass } from '../../utils/colors';
 import Template from '@/components/PageTemplate';
 import { useEffect } from 'react';
+import supabase from '@/utils/supabase';
 
 
 export default function Analyzer() {
@@ -51,10 +52,22 @@ export default function Analyzer() {
     setIsLoading(true);
 
 
+    const value = localStorage.getItem('sb-wrpppaehjcvmnwbcuxpa-auth-token');
+    let parsedValue;
+    try {
+      parsedValue = JSON.parse(value || '');
+    }catch(error){
+      console.error("Error parsing value:", error);
+    }
     try {
       const res = await fetch('/api/japan', {
           method: 'POST',
-          body: JSON.stringify({ message: inputValue }),
+          body: JSON.stringify(
+            { 
+              message: inputValue,
+              access_token: parsedValue.access_token,
+            }
+          ),
           headers: {
               'Content-Type': 'application/json',
           },
