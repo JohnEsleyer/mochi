@@ -2,12 +2,25 @@
 const { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } = require("@google/generative-ai");
 
 import runAi from "@/utils/runChatAi";
+import supabase from "@/utils/supabase";
 import { NextResponse } from "next/server";
 
 export const runtime = "edge"
 
 export async function POST(request: Request) {
-    const {message} = await request.json();
+  const { message, access_token } = await request.json();
+  const { data: { user } } = await supabase.auth.getUser(access_token);
+  console.log("Access Token:" + access_token);
+  
+  if (!user){
+   
+    console.log("Failed");
+    return NextResponse.json({
+      status: 401,
+      body: ""
+    });
+  }else{
+    console.log("Success");
     const maxAttempts = 1; // Set the maximum number of attempts
     
     const conversation = await 
@@ -34,7 +47,7 @@ export async function POST(request: Request) {
       console.error(`Failed to parse JSON after ${maxAttempts} attempts. Check the JSON format.`);
       
       return Response.json({
-        status: "Failed",
+        status: 401,
         body: {
           
         },
@@ -45,15 +58,17 @@ export async function POST(request: Request) {
     }
       
     return NextResponse.json({
-      status: "Success",
+      status: 200,
       body: jsonObject
     },
     {
       headers: {
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Methods": "POST",
         "Access-Control-Allow-Headers": "Content-Type, Authorization",
       }
     }
       );
+  }
+    
 }

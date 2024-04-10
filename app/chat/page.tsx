@@ -10,7 +10,7 @@ import Image from "next/image";
 import ArrowBack from "/public/arrow_back.svg"
 
 const defaultData = {
-    status: 'success',
+    status: 200,
     body: {
         meaning: '',
         romaji: '',
@@ -115,17 +115,25 @@ export default function ChatAI() {
         prevRomaji = [...conversationRomaji, ' '];
         prevEnglish = [...conversationEnglish, ' ']
 
+        const value = localStorage.getItem('sb-wrpppaehjcvmnwbcuxpa-auth-token');
+        let parsedValue;
         try {
-
+            parsedValue = JSON.parse(value || '');
+            console.log("parsedValue:" + parsedValue.access_token);
+        } catch (error) {
+            console.error("Error parsing value:", error);
+        }
+        try {
+            const payload = {
+                message: {
+                    conversation: prevMessage,
+                },
+                access_token: parsedValue.access_token,
+            };
             const response = await fetch('/api/chat', {
                 method: "POST",
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    message: {
-
-                        conversation: prevMessage,
-                    },
-                }),
+                body: JSON.stringify(payload),
             });
             const { body, status } = await response.json();
             if (status == "Failed") {
@@ -169,10 +177,21 @@ export default function ChatAI() {
     const handleAnalyze = async (message: string) => {
         setIsLoading(true);
         setIsAnalyze(true);
-        const payload = {
-            message: message
-        };
 
+
+        // Fetch access token stored from local storage.
+        const value = localStorage.getItem('sb-wrpppaehjcvmnwbcuxpa-auth-token');
+        let parsedValue;
+        try {
+            parsedValue = JSON.parse(value || '');
+        } catch (error) {
+            console.error("Error parsing value:", error);
+        }
+
+        const payload = {
+            message: message,
+            access_token: parsedValue.access_token,
+        };
         try {
             const res = await fetch('/api/japan', {
                 method: 'POST',
@@ -187,7 +206,7 @@ export default function ChatAI() {
 
             const { status } = response;
 
-            if (status === 'Failed') {
+            if (status === 401) {
                 console.log('Analyze Failed');
                 setIsAnalyzeFailed(true);
             } else {
@@ -219,7 +238,7 @@ export default function ChatAI() {
                     </div>
 
                     {index % 2 == 0 && <div>
-                       
+
                         <div className="p-2">
                             {isFurigana && <p>Furigana: <span className="text-red-300">{conversationHiragana[index]}</span></p>}
                             {isRomaji && <p>Romaji: <span className="text-green-300">{conversationRomaji[index]}</span></p>}
@@ -409,24 +428,24 @@ export default function ChatAI() {
                                         }</span>}
                                     </div>
                                     {/* // Words List */}
-                                    {isAnalyzeFailed ? 
-                                    <div className="flex justify-center p-2">
-                                        <p>Error occured. Please try again later.</p>
-                                    </div> : <div className="row-span-7 lg:flex lg:flex-wrap overflow-y-auto no-scrollbar">
-                                        {Object.keys(analyzerResponse.body.words).map((key) => (
-                                            <React.Fragment key={key}>
-                                                <div className='container lg:w-1/2 flex flex-col rounded-lg p-4 shadow-md lg:shadow-lg'>
-                                                    <span className={`text-3xl font-bold mb-2 ${analyzerResponse.body.words[key].class in colorWordClass ? colorWordClass[analyzerResponse.body.words[key].class] : 'text-white-300'}`}>
-                                                        {analyzerResponse.body.words[key].word}
-                                                    </span>
-                                                    <span className='text-lg '><b>Romaji</b>: {analyzerResponse.body.words[key].romaji}</span>
-                                                    <span className='text-lg '><b>Class</b>: {analyzerResponse.body.words[key].class}</span>
-                                                    <span className='text-lg '><b>Meaning</b>: {analyzerResponse.body.words[key].meaning}</span>
-                                                    <span className='text-lg '><b>Context</b>: {analyzerResponse.body.words[key].context}</span>
-                                                </div>
-                                            </React.Fragment>
-                                        ))}
-                                    </div>}
+                                    {isAnalyzeFailed ?
+                                        <div className="flex justify-center p-2">
+                                            <p>Error occured. Please try again later.</p>
+                                        </div> : <div className="row-span-7 lg:flex lg:flex-wrap overflow-y-auto no-scrollbar">
+                                            {Object.keys(analyzerResponse.body.words).map((key) => (
+                                                <React.Fragment key={key}>
+                                                    <div className='container lg:w-1/2 flex flex-col rounded-lg p-4 shadow-md lg:shadow-lg'>
+                                                        <span className={`text-3xl font-bold mb-2 ${analyzerResponse.body.words[key].class in colorWordClass ? colorWordClass[analyzerResponse.body.words[key].class] : 'text-white-300'}`}>
+                                                            {analyzerResponse.body.words[key].word}
+                                                        </span>
+                                                        <span className='text-lg '><b>Romaji</b>: {analyzerResponse.body.words[key].romaji}</span>
+                                                        <span className='text-lg '><b>Class</b>: {analyzerResponse.body.words[key].class}</span>
+                                                        <span className='text-lg '><b>Meaning</b>: {analyzerResponse.body.words[key].meaning}</span>
+                                                        <span className='text-lg '><b>Context</b>: {analyzerResponse.body.words[key].context}</span>
+                                                    </div>
+                                                </React.Fragment>
+                                            ))}
+                                        </div>}
                                 </div>
                             }
                         </div>

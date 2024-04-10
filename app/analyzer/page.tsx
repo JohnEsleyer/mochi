@@ -10,7 +10,7 @@ import supabase from '@/utils/supabase';
 
 export default function Analyzer() {
   const defaultData = {
-    status: 'success',
+    status: 200,
     body: {
       meaning: '',
       romaji: '',
@@ -78,7 +78,7 @@ export default function Analyzer() {
   
       const { status } = response;
   
-      if (status === 'Failed') {
+      if (status === 401) {
           setIsFailed(true);
       } else {
           setIsFailed(false);

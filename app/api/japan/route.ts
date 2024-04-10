@@ -9,7 +9,7 @@ export const runtime = "edge"
 
 export async function POST(request: Request) {
   const { message, access_token } = await request.json();
-
+  console.log("Access Token:" + access_token);
 
   const { data: { user } } = await supabase.auth.getUser(access_token);
 
@@ -64,7 +64,7 @@ export async function POST(request: Request) {
       console.error(`Failed to parse JSON after ${maxAttempts} attempts. Check the JSON format.`);
 
       return Response.json({
-        status: "Failed",
+        status: 401,
         body: {
           meaning: '',
           romaji: '',
