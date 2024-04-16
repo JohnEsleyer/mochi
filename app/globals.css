@@ -60,3 +60,7 @@
       scrollbar-width: none; /* Firefox */
     }
 }
+
+#navbar {
+  contain: strict;
+}
