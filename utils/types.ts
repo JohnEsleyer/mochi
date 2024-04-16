@@ -14,7 +14,7 @@ interface GeneratedText {
   }
   
   interface AnalyzerResponse{
-    status: string;
+    status: number;
     body: GeneratedText;
   }
   

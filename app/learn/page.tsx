@@ -6,6 +6,7 @@ export default function Learn(){
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
 
+
     return (
         <Template>
             <hr/>

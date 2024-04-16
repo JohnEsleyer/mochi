@@ -10,23 +10,23 @@ import Image from "next/image";
 import ArrowBack from "/public/arrow_back.svg"
 
 const defaultData = {
-    status: 'success',
+    status: 200,
     body: {
-      meaning: '',
-      romaji: '',
-      furigana: '',
-      context: '',
-      words: {
-        '': {
-          word: '',
-          romaji: '',
-          class: '',
-          meaning: '',
-          context: '',
+        meaning: '',
+        romaji: '',
+        furigana: '',
+        context: '',
+        words: {
+            '': {
+                word: '',
+                romaji: '',
+                class: '',
+                meaning: '',
+                context: '',
+            },
         },
-      },
     },
-  };
+};
 
 
 export default function ChatAI() {
@@ -99,6 +99,8 @@ export default function ChatAI() {
     };
 
     const submitMessage = async () => {
+        setIsAnalyzeFailed(false);
+
         var prevMessage: string[] = [];
         var prevHiragana: string[] = [];
         var prevRomaji: string[] = [];
@@ -113,19 +115,31 @@ export default function ChatAI() {
         prevRomaji = [...conversationRomaji, ' '];
         prevEnglish = [...conversationEnglish, ' ']
 
+        const value = localStorage.getItem('sb-wrpppaehjcvmnwbcuxpa-auth-token');
+        let parsedValue;
         try {
-
+            parsedValue = JSON.parse(value || '');
+            console.log("parsedValue:" + parsedValue.access_token);
+        } catch (error) {
+            console.error("Error parsing value:", error);
+        }
+        try {
+            const payload = {
+                message: {
+                    conversation: prevMessage,
+                },
+                access_token: parsedValue.access_token,
+            };
             const response = await fetch('/api/chat', {
                 method: "POST",
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    message: {
-
-                        conversation: prevMessage,
-                    },
-                }),
+                body: JSON.stringify(payload),
             });
-            const { body } = await response.json();
+            const { body, status } = await response.json();
+            if (status == "Failed") {
+                setIsAnalyzeFailed(true);
+                return
+            }
             setTimeout(() => {
 
                 setConversationKanji([...prevMessage, `${body.message}`]);
@@ -163,11 +177,22 @@ export default function ChatAI() {
     const handleAnalyze = async (message: string) => {
         setIsLoading(true);
         setIsAnalyze(true);
-        const payload = {
-            message: message
-        };
 
-        try{
+
+        // Fetch access token stored from local storage.
+        const value = localStorage.getItem('sb-wrpppaehjcvmnwbcuxpa-auth-token');
+        let parsedValue;
+        try {
+            parsedValue = JSON.parse(value || '');
+        } catch (error) {
+            console.error("Error parsing value:", error);
+        }
+
+        const payload = {
+            message: message,
+            access_token: parsedValue.access_token,
+        };
+        try {
             const res = await fetch('/api/japan', {
                 method: 'POST',
                 body: JSON.stringify(payload),
@@ -175,54 +200,57 @@ export default function ChatAI() {
                     'Content-Type': 'application/json',
                 },
             });
-        
+
             const response: AnalyzerResponse = await res.json();
             console.log(response.status);
-        
+
             const { status } = response;
-        
-            if (status === 'Failed') {
+
+            if (status === 401) {
                 console.log('Analyze Failed');
                 setIsAnalyzeFailed(true);
             } else {
                 setIsAnalyzeFailed(false);
                 setAnalyzerResponse(response);
             }
-        }catch(e){
+        } catch (e) {
             setIsAnalyzeFailed(true);
         }
 
-       setIsLoading(false);
+        setIsLoading(false);
     }
 
     const chatComponent = () => {
 
         return <div>
-            
+
             {conversationKanji.map((message, index) => (
                 <div className="p-2 shadow-lg" key={index}>
-                    
+
                     <p className="text-lg" key={index}><strong>{index % 2 === 0 ?
                         <span className="text-purple-300 text-xl">Mochi:</span> :
                         <span className="text-green-300 text-xl">You:</span>}</strong>
                         {message == "ERROR" && <span className="text-amber-300">
                             {" " + "Server is overloaded with requests, please try again later"}
                             <button onClick={tryAgain} className="rounded text-xs p-1 text-black bg-orange-200 transition duration-300">Try Again</button></span>}</p>
-                    <p className="text-lg font-bold">{message}</p>
-                    
+                    <div className={`${index % 2 == 0 ? "bg-purple-300" : "bg-green-300"} p-2 text-black rounded`}>
+                        <p className="text-2xl">{message}</p>
+                    </div>
+
                     {index % 2 == 0 && <div>
-                        <div>
-                           <button 
-                           className="bg-orange-200 text-xs text-black p-1 pr-2 pl-2 rounded"
-                           onClick={() => {handleAnalyze(message)}}
-                           >
-                            Analyze
-                           </button>
-                        </div>
+
                         <div className="p-2">
-                        {isFurigana && <p>Furigana: <span className="text-purple-300">{conversationHiragana[index]}</span></p>}
-                        {isRomaji && <p>Romaji: <span className="text-green-300">{conversationRomaji[index]}</span></p>}
-                        {isEnglishTranslate && <p>English: <span className="text-amber-200">{conversationEnglish[index]}</span></p>}
+                            {isFurigana && <p>Furigana: <span className="text-red-300">{conversationHiragana[index]}</span></p>}
+                            {isRomaji && <p>Romaji: <span className="text-green-300">{conversationRomaji[index]}</span></p>}
+                            {isEnglishTranslate && <p>English: <span className="text-amber-200">{conversationEnglish[index]}</span></p>}
+                        </div>
+                        <div className="flex justify-end p-2">
+                            <button
+                                className="bg-orange-200 text-black p-1 pr-2 pl-2 rounded"
+                                onClick={() => { handleAnalyze(message) }}
+                            >
+                                Use Analyzer
+                            </button>
                         </div>
 
                     </div>}
@@ -235,15 +263,15 @@ export default function ChatAI() {
     const chatUI = () => {
         return (
             <div className="grid grid-rows-8 h-full">
-     
+
                 {/* // Header */}
-                <div className="row-span-1 bg-gray-900">
+                <div className="row-span-1 bg-gray-900 p-1">
                     <p className="text-xl font-bold pl-2">Roleplay: "Ordering a sushi at a sushi restaurant."</p>
                     <div className="flex justify-start text-xs pt-1">
 
                         {/* // Toggle Furigana */}
                         <div className="flex items-center">
-                            <label className={`pl-2 mr-2 ${isFurigana ? 'text-purple-300' : 'text-gray-500'}`}>Furigana</label>
+                            <label className={`pl-2 mr-2 ${isFurigana ? 'text-red-300' : 'text-gray-500'}`}>Furigana</label>
                             <div className="relative scale-75">
                                 <input
                                     id="toggleFurigana"
@@ -256,7 +284,7 @@ export default function ChatAI() {
                                     htmlFor="toggleFurigana"
                                     className="flex items-center cursor-pointer select-none"
                                 >
-                                    <div className={`w-12 h-6 rounded-full p-1 flex items-center transition-colors duration-300 ${isFurigana ? 'bg-purple-300' : 'bg-gray-400'}`}>
+                                    <div className={`w-12 h-6 rounded-full p-1 flex items-center transition-colors duration-300 ${isFurigana ? 'bg-red-300' : 'bg-gray-400'}`}>
                                         <div
                                             className={`bg-white w-6 h-6 rounded-full shadow-md transform transition-transform duration-300 ${!isFurigana ? 'translate-x-6' : 'translate-x-0'
                                                 }`}
@@ -315,15 +343,15 @@ export default function ChatAI() {
                                 </label>
                             </div>
                         </div>
-                         {/* // End of toggle to show romaji */}
-               
+                        {/* // End of toggle to show romaji */}
+
                     </div>
                 </div>
 
                 {/* // Chat */}
                 <div className="bg-gray-800 row-span-7 grid grid-rows-8 ">
                     {/* // Chatbox */}
-                    <div className="row-span-7 overflow-auto">
+                    <div className="row-span-7 overflow-y-auto no-scrollbar">
                         {chatComponent()}
                     </div>
                     {/* // User input */}
@@ -358,70 +386,74 @@ export default function ChatAI() {
 
     const analyzerUI = () => {
         return (
-                <div className={isPortrait ? "h-full" : "border-l-4 border-white h-full"}>
-                  
-            
-                    {
-                        isAnalyze ? 
+            <div className={isPortrait ? "h-full" : "border-l-4 border-white h-full"}>
+
+
+                {
+                    isAnalyze ?
                         <div className={`${isLoading ? 'shimmer-effect' : ''} h-full`}>
-                            
-                            {isLoading ? 
-                            <div></div> : 
-                            <div className="mochiFade h-full grid grid-rows-9 opacity-100 transform transition-opacity duration-500 ease-in-out">
-                            {/* // Header */}
-                      
-                            <div className="row-span-3 bg-gray-900">
-                                <div className="flex justify-start">
-                                    
-                                    {isPortrait && <button
-                                            onClick={() => {
-                                                setIsAnalyze(false);
-                                            }}
+
+                            {isLoading ?
+                                <div></div> :
+                                <div className="mochiFade h-full grid grid-rows-9 opacity-100 transform transition-opacity duration-500 ease-in-out">
+                                    {/* // Header */}
+
+                                    <div className="row-span-3 bg-gray-900 shadow-2xl">
+                                        <div className="flex justify-start">
+
+                                            {isPortrait && <button
+                                                onClick={() => {
+                                                    setIsAnalyze(false);
+                                                }}
                                             ><Image
-                                                src={ArrowBack}
-                                                width={30}
-                                                height={30} alt={""} 
-                                                                               /></button>}
-                                
-                            <p className='font-bold text-3xl mr-4 p-2 mt-1'>
-                                
-                                Words Breakdown
-                                </p>
+                                                    src={ArrowBack}
+                                                    width={30}
+                                                    height={30} alt={""}
+                                                /></button>}
+
+                                            <p className='font-bold text-3xl mr-4 p-2 mt-1'>
+
+                                                Words Breakdown
+                                            </p>
+                                        </div>
+
+                                        {!isAnalyzeFailed && <span className='font-bold text-3xl mr-4 p-2'>{
+                                            Object.keys(analyzerResponse.body.words).map((key) => (
+                                                <React.Fragment key={key}>
+                                                    <span className={`text-3xl font-bold mb-2 ${analyzerResponse.body.words[key].class in colorWordClass ? colorWordClass[analyzerResponse.body.words[key].class] : 'text-white-300'}`}>
+                                                        {analyzerResponse.body.words[key].word}
+                                                    </span>
+                                                </React.Fragment>
+                                            ))
+                                        }</span>}
+                                    </div>
+                                    {/* // Words List */}
+                                    {isAnalyzeFailed ?
+                                        <div className="flex justify-center p-2">
+                                            <p>Error occured. Please try again later.</p>
+                                        </div> : <div className="row-span-7 lg:flex lg:flex-wrap overflow-y-auto no-scrollbar">
+                                            {Object.keys(analyzerResponse.body.words).map((key) => (
+                                                <React.Fragment key={key}>
+                                                    <div className='container lg:w-1/2 flex flex-col rounded-lg p-4 shadow-md lg:shadow-lg'>
+                                                        <span className={`text-3xl font-bold mb-2 ${analyzerResponse.body.words[key].class in colorWordClass ? colorWordClass[analyzerResponse.body.words[key].class] : 'text-white-300'}`}>
+                                                            {analyzerResponse.body.words[key].word}
+                                                        </span>
+                                                        <span className='text-lg '><b>Romaji</b>: {analyzerResponse.body.words[key].romaji}</span>
+                                                        <span className='text-lg '><b>Class</b>: {analyzerResponse.body.words[key].class}</span>
+                                                        <span className='text-lg '><b>Meaning</b>: {analyzerResponse.body.words[key].meaning}</span>
+                                                        <span className='text-lg '><b>Context</b>: {analyzerResponse.body.words[key].context}</span>
+                                                    </div>
+                                                </React.Fragment>
+                                            ))}
+                                        </div>}
                                 </div>
-                            <span className='font-bold text-3xl mr-4 p-2'>{
-                              Object.keys(analyzerResponse.body.words).map((key) => (
-                                <React.Fragment key={key}>
-                                  <span className={`text-3xl font-bold mb-2 ${analyzerResponse.body.words[key].class in colorWordClass ? colorWordClass[analyzerResponse.body.words[key].class] : 'text-white-300'}`}>
-                                    {analyzerResponse.body.words[key].word}
-                                  </span>
-                                </React.Fragment>
-                              ))
-                            }</span>
-                            </div>
-                            {/* // Words List */}
-                            <div className="row-span-7 lg:flex lg:flex-wrap overflow-auto">
-                              {Object.keys(analyzerResponse.body.words).map((key) => (
-                                <React.Fragment key={key}>
-                                  <div className='container lg:w-1/2 flex flex-col rounded-lg p-4 shadow-md lg:shadow-lg'>
-                                    <span className={`text-3xl font-bold mb-2 ${analyzerResponse.body.words[key].class in colorWordClass ? colorWordClass[analyzerResponse.body.words[key].class] : 'text-white-300'}`}>
-                                      {analyzerResponse.body.words[key].word}
-                                    </span>
-                                    <span className='text-lg '><b>Romaji</b>: {analyzerResponse.body.words[key].romaji}</span>
-                                    <span className='text-lg '><b>Class</b>: {analyzerResponse.body.words[key].class}</span>
-                                    <span className='text-lg '><b>Meaning</b>: {analyzerResponse.body.words[key].meaning}</span>
-                                    <span className='text-lg '><b>Context</b>: {analyzerResponse.body.words[key].context}</span>
-                                  </div>
-                                </React.Fragment>
-                              ))}
-                            </div>
-                          </div>
                             }
-                        </div> 
-                        : <div className="bg-gray-800 flex items-center justify-center h-full">
-                            <p className="p-2">Press the 'Analyze' button to generate a breakdown of the Japanese text.</p>
                         </div>
-                    }
-                </div>
+                        : <div className="bg-gray-800 flex items-center justify-center h-full">
+                            <p className="p-2">Press the 'Use Analyzer' button to generate a breakdown of the Japanese text.</p>
+                        </div>
+                }
+            </div>
         );
     }
 
