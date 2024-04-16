@@ -8,6 +8,7 @@ import { colorWordClass } from "@/utils/colors";
 import React from "react";
 import Image from "next/image";
 import ArrowBack from "/public/arrow_back.svg"
+import supabase from "@/utils/supabase";
 
 const defaultData = {
     status: 200,
@@ -64,9 +65,12 @@ export default function ChatAI() {
     const [isAnalyze, setIsAnalyze] = useState(false);
     const [isAnalyzeFailed, setIsAnalyzeFailed] = useState(false);
     const [analyzerResponse, setAnalyzerResponse] = useState<AnalyzerResponse>(defaultData);
+    const [isSaved, setIsSaved] = useState(false);
+    const [currentAnalyzed, setCurrentAnalyzed] = useState(0);
+    const [currentAnalyzedText, setCurrentAnalyzedText] = useState('');
 
     const handleOrientationChange = () => {
-        setIsPortrait((window.innerHeight > window.innerWidth - 180));
+        setIsPortrait((window.innerHeight > window.innerWidth - 400));
     };
 
 
@@ -100,6 +104,7 @@ export default function ChatAI() {
 
     const submitMessage = async () => {
         setIsAnalyzeFailed(false);
+        setIsSaved(false);
 
         var prevMessage: string[] = [];
         var prevHiragana: string[] = [];
@@ -156,6 +161,7 @@ export default function ChatAI() {
     }
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        
         event.preventDefault();
         if (inputText.length > 0) {
             submitMessage();
@@ -220,6 +226,33 @@ export default function ChatAI() {
         setIsLoading(false);
     }
 
+
+    async function save() {
+        
+        const savedData = {
+            japanese: currentAnalyzedText,
+            meaning: conversationEnglish[currentAnalyzed],
+            furigana: conversationHiragana[currentAnalyzed],
+            romaji: conversationEnglish[currentAnalyzed],
+            context: 'none',
+            words:JSON.stringify(analyzerResponse.body.words),
+          };
+        
+        const { data, error } = await supabase
+        .from('saved')
+        .insert([
+          { text: JSON.stringify(savedData)},
+        ]);
+    
+        if (error){
+          console.log('Failed!')
+        }else{
+          console.log('Saved!')
+          setIsSaved(true);
+
+        }
+    }
+
     const chatComponent = () => {
 
         return <div>
@@ -247,7 +280,11 @@ export default function ChatAI() {
                         <div className="flex justify-end p-2">
                             <button
                                 className="bg-orange-200 text-black p-1 pr-2 pl-2 rounded"
-                                onClick={() => { handleAnalyze(message) }}
+                                onClick={() => { 
+                                    handleAnalyze(message);
+                                    setCurrentAnalyzed(index); 
+                                    setCurrentAnalyzedText(message);
+                                }}
                             >
                                 Use Analyzer
                             </button>
@@ -265,7 +302,7 @@ export default function ChatAI() {
             <div className="grid grid-rows-8 h-full">
 
                 {/* // Header */}
-                <div className="row-span-1 bg-gray-900 p-1">
+                <div className="strict-content row-span-1 bg-gray-900 p-1">
                     <p className="text-xl font-bold pl-2">Roleplay: "Ordering a sushi at a sushi restaurant."</p>
                     <div className="flex justify-start text-xs pt-1">
 
@@ -415,11 +452,26 @@ export default function ChatAI() {
 
                                                 Words Breakdown
                                             </p>
+                                              
+                                                <div className="flex items-center">
+                                                    {
+                                                !isAnalyzeFailed && !isSaved && 
+                                                <button onClick={save}>
+                                                <span className="material-symbols-outlined">
+                                                star
+                                                </span>
+                                                </button>
+                                                    }
+                                                 {isSaved && <span className="text-amber-300">Saved</span>}
+                                                </div>
+                                            
+                                            
                                         </div>
-
+                                               
                                         {!isAnalyzeFailed && <span className='font-bold text-3xl mr-4 p-2'>{
                                             Object.keys(analyzerResponse.body.words).map((key) => (
                                                 <React.Fragment key={key}>
+                                                    
                                                     <span className={`text-3xl font-bold mb-2 ${analyzerResponse.body.words[key].class in colorWordClass ? colorWordClass[analyzerResponse.body.words[key].class] : 'text-white-300'}`}>
                                                         {analyzerResponse.body.words[key].word}
                                                     </span>

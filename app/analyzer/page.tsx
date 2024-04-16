@@ -34,7 +34,7 @@ export default function Analyzer() {
   const [inputValue, setInputValue] = useState<string>('');
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
+  const [isSaved, setIsSaved] = useState<boolean>(false);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
 
@@ -50,7 +50,7 @@ export default function Analyzer() {
     setIsFailed(false);
     setIsVisible(false);
     setIsLoading(true);
-
+    setIsSaved(false);
 
     const value = localStorage.getItem('sb-wrpppaehjcvmnwbcuxpa-auth-token');
     let parsedValue;
@@ -96,7 +96,33 @@ export default function Analyzer() {
     }
   }
 
+  async function save(){
+    
+    const savedData = {
+      japanese: inputValue,
+      meaning: responseJson.body.meaning,
+      furigana: responseJson.body.furigana,
+      romaji: responseJson.body.romaji,
+      context: responseJson.body.context,
+      words:JSON.stringify(responseJson.body.words),
+    };
 
+
+    const { data, error } = await supabase
+    .from('saved')
+    .insert([
+      { text: JSON.stringify(savedData)},
+    ]);
+
+    if (error){
+      console.log('Failed!')
+    }else{
+      console.log('Saved!')
+      setIsSaved(true);
+
+    }
+    
+  }
 
   return (
     <>
@@ -148,6 +174,17 @@ export default function Analyzer() {
             {!isFailed &&
               <div className={`transition-opacity transition-height duration-500 ease-in-out overflow-hidden ${isVisible ? 'opacity-100 max-h-full' : `${isLoading ? 'opacity-0 max-h-full' : 'opacity-0 max-h-0'}`}`}>
                 <div className='lg:drop-shadow-xl lg:mt-10'>
+                <div className="flex justify-start">
+                  {!isSaved ? <button
+                  onClick={save}
+                  >
+                   <span className="material-symbols-outlined">
+                    star
+                    </span>
+                  
+                </button> : <span className="text-amber-300">Saved</span>}
+                  
+                </div>
                   <span className='font-bold text-2xl mr-4 text-3xl'>Input: "{inputValue}"</span>
                   <hr className='h-px my-2 border-0 bg-gray-700' />
                   <div className='flex items-start justify-start p-2'>
