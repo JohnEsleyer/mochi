@@ -2,7 +2,7 @@
 import Template from "@/components/PageTemplate";
 import { useEffect, useState } from "react";
 
-interface HiraganaMap{
+interface HiraganaMap {
     hiragana: string;
     romaji: string;
 }
@@ -54,7 +54,7 @@ const hiraganaMap: HiraganaMap[] = [
     { hiragana: "わ", romaji: "wa" },
     { hiragana: "を", romaji: "wo" },
     { hiragana: "ん", romaji: "n" }
-  ];
+];
 
 const dakutenMap: HiraganaMap[] = [
     { hiragana: "が", romaji: "ga" },
@@ -83,7 +83,7 @@ const handakutenMap: HiraganaMap[] = [
 
 ];
 
-export default function Hiragana(){
+export default function Hiragana() {
     var heightWidth;
     if (typeof window == "undefined") {
         console.log('Server');
@@ -93,7 +93,7 @@ export default function Hiragana(){
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isPortrait, setIsPortrait] = useState(heightWidth);
-   
+
     const handleOrientationChange = () => {
         setIsPortrait((window.innerHeight > window.innerWidth - 180));
     };
@@ -108,37 +108,41 @@ export default function Hiragana(){
 
     return (
         <Template>
-            <div className={`h-full overflow-y-auto ${isPortrait ? 'p-2': 'p-5 pr-20 pl-20'}`}>
-            <h1 className="text-xl font-bold">Hiragana</h1>
-            <div className="grid grid-cols-5 gap-4 pb-5">
-            {hiraganaMap.map((item, index) => (
-                <div key={index} className="p-4 border border-gray-700 rounded-md flex flex-col items-center shadow-xl">
-                <div className="text-4xl font-bold text-yellow-300">{item.hiragana}</div>
-                <div className="mt-2">{item.romaji}</div>
+            <div className={`overflow-y-auto ${isPortrait ? 'p-2' : 'p-5 pr-20 pl-20'} bg-gray-800 h-full `}>
+               {/* h-10 fixes broken layout */}
+                <div className="h-10">
+                    <h1 className="text-xl font-bold">Hiragana</h1>
+                    <div className="grid grid-cols-5 gap-4 pb-5">
+                        {hiraganaMap.map((item, index) => (
+                            <div key={index} className="p-4 border border-gray-700 rounded-md flex flex-col items-center shadow-xl">
+                                <div className="text-4xl font-bold text-yellow-300">{item.hiragana}</div>
+                                <div className="mt-2">{item.romaji}</div>
+                            </div>
+                        ))}
+                    </div>
+
+                    <h1 className="text-xl font-bold">Dakuten</h1>
+                    <div className="grid grid-cols-5 gap-4 pb-5">
+                        {dakutenMap.map((item, index) => (
+                            <div key={index} className="p-4 border border-gray-700 rounded-md flex flex-col items-center shadow-xl">
+                                <div className="text-4xl font-bold text-yellow-300">{item.hiragana}</div>
+                                <div className="mt-2">{item.romaji}</div>
+                            </div>
+                        ))}
+                    </div>
+                    <h1 className="text-xl font-bold">Handakuten</h1>
+                    <div className="grid grid-cols-5 gap-4 pb-5">
+                        {handakutenMap.map((item, index) => (
+                            <div key={index} className="p-4 border border-gray-700 rounded-md flex flex-col items-center shadow-xl">
+                                <div className="text-4xl font-bold text-yellow-300">{item.hiragana}</div>
+                                <div className="mt-2">{item.romaji}</div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
-            ))}
+
             </div>
 
-            <h1 className="text-xl font-bold">Dakuten</h1>
-            <div className="grid grid-cols-5 gap-4 pb-5">
-            {dakutenMap.map((item, index) => (
-                <div key={index} className="p-4 border border-gray-700 rounded-md flex flex-col items-center shadow-xl">
-                <div className="text-4xl font-bold text-yellow-300">{item.hiragana}</div>
-                <div className="mt-2">{item.romaji}</div>
-                </div>
-            ))}
-            </div>
-            <h1 className="text-xl font-bold">Handakuten</h1>
-            <div className="grid grid-cols-5 gap-4 pb-5">
-            {handakutenMap.map((item, index) => (
-                <div key={index} className="p-4 border border-gray-700 rounded-md flex flex-col items-center shadow-xl">
-                <div className="text-4xl font-bold text-yellow-300">{item.hiragana}</div>
-                <div className="mt-2">{item.romaji}</div>
-                </div>
-            ))}
-            </div>
-            </div>
-
-            </Template>
-    );  
+        </Template>
+    );
 }
