@@ -99,12 +99,16 @@ export default function Analyser() {
   async function save(){
     
     const savedData = {
-      japanese: inputValue,
-      meaning: responseJson.body.meaning,
-      furigana: responseJson.body.furigana,
-      romaji: responseJson.body.romaji,
-      context: responseJson.body.context,
-      words:JSON.stringify(responseJson.body.words),
+      lang: 'jap',
+      body: {
+        japanese: inputValue,
+        meaning: responseJson.body.meaning,
+        furigana: responseJson.body.furigana,
+        romaji: responseJson.body.romaji,
+        context: responseJson.body.context,
+        words:JSON.stringify(responseJson.body.words),
+      }
+      
     };
 
 

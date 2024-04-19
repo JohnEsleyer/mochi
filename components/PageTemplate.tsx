@@ -66,7 +66,6 @@ const Template: React.FC<TemplateProps> = ({children}) => {
             <Link href="/analyser" className="text-orange-300 ">
               Analyser
             </Link>
-           
             <Link href="/saved" className="text-yellow-300">
               Saved
             </Link>
@@ -79,8 +78,8 @@ const Template: React.FC<TemplateProps> = ({children}) => {
             <Link href="/katakana" className="text-lime-300">
               Katakana
             </Link>
-            <Link href="/account" className="text-white-300 ">
-              Account
+            <Link href="/home" className="text-white-300 ">
+              Home
             </Link>
             <button className="text-red-300" onClick={signOutHandler}>
               Logout

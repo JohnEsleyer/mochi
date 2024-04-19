@@ -230,12 +230,15 @@ export default function ChatAI() {
     async function save() {
         
         const savedData = {
-            japanese: currentAnalyzedText,
-            meaning: conversationEnglish[currentAnalyzed],
-            furigana: conversationHiragana[currentAnalyzed],
-            romaji: conversationEnglish[currentAnalyzed],
-            context: 'none',
-            words:JSON.stringify(AnalyserResponse.body.words),
+            lang: 'jap',
+            body: {
+                japanese: currentAnalyzedText,
+                meaning: conversationEnglish[currentAnalyzed],
+                furigana: conversationHiragana[currentAnalyzed],
+                romaji: conversationEnglish[currentAnalyzed],
+                context: 'none',
+                words:JSON.stringify(AnalyserResponse.body.words),
+            }
           };
         
         const { data, error } = await supabase
