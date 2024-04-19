@@ -45,7 +45,7 @@ const Template: React.FC<TemplateProps> = ({ children }) => {
             <div className={` w-screen h-screen min-h-screen text-white font-sans`}>
               <div className="h-full flex flex-col">
                 {/* // Start of Navigation bar */}
-                <nav id='navbar' className="h-[9vh] pb-2 pt-2 pl-2 pr-2 bg-gray-900">
+                <nav id='navbar' className="h-12 pb-2 pt-2 pl-2 pr-2 bg-gray-900">
                   <div className="max-w-7xl mx-auto flex justify-between items-center">
                     <div className="p-1">
                       <a href="/analyzer" className="text-white text-xl font-bold">

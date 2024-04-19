@@ -302,11 +302,13 @@ export default function ChatAI() {
 
     const chatUI = () => {
         return (
-            <div className="grid grid-rows-8 h-full">
-
+            <div className="flex flex-col h-full">
                 {/* // Header */}
-                <div className="strict-content row-span-1 bg-gray-900 p-1">
-                    <p className="text-xl font-bold pl-2">Learn by chatting with AI</p>
+                <div className="h-32 strict-content bg-gray-900 p-1 pl-2 text-xs">
+                    <p className="text-xl font-bold  text-purple-300">Chat with Mochi</p>
+                    <p>- Learn Japanese by engaging in a conversation with AI.</p>
+                    <p>- If you're unsure how to reply in Japanese, you can also use English.</p>
+                    <p>- Remember to save unfamiliar phrases so you can review them later. You can do this by tapping the star icon in the analysis section.</p>
                     <div className="flex justify-start text-xs pt-1">
 
                         {/* // Toggle Furigana */}
@@ -389,13 +391,15 @@ export default function ChatAI() {
                 </div>
 
                 {/* // Chat */}
-                <div className="bg-gray-800 row-span-7 grid grid-rows-8 ">
+                <div className="flex flex-col h-full">
                     {/* // Chatbox */}
-                    <div className="row-span-7 overflow-y-auto no-scrollbar">
+                    <div className="flex-1 overflow-y-auto no-scrollbar">
+                    <div className="h-10 ">
                         {chatComponent()}
                     </div>
+                    </div>
                     {/* // User input */}
-                    <div className="row-span-1 ">
+                    <div className="h-14">
                         <form onSubmit={handleSubmit} className="grid grid-rows-1 grid-cols-8 grid-flow-col gap-2">
                             <div className="col-span-6 pl-1">
                                 <p className="text-xs">Max Character Limit: {inputText.length} / 100 </p>
@@ -514,7 +518,7 @@ export default function ChatAI() {
 
     const portraitDisplay = () => {
         return (
-            <div className="grid grid-rows-1 grid-cols-1 h-full ">
+            <div className="grid grid-cols-1 h-full ">
                 {isAnalyze ? AnalyserUI() : chatUI()}
             </div>
         );
@@ -522,7 +526,7 @@ export default function ChatAI() {
     const landscapeDisplay = () => {
         return (
 
-            <div className="grid grid-rows-1 grid-cols-2 h-full ">
+            <div className="grid grid-cols-2 h-full ">
                 {chatUI()}
                 {AnalyserUI()}
             </div>
@@ -532,9 +536,12 @@ export default function ChatAI() {
 
     return (
         <Template>
+            <div className="h-full">
+     
             {
                 isPortrait ? portraitDisplay() : landscapeDisplay()
             }
+            </div>
 
         </Template>
     );
