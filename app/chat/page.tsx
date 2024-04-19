@@ -439,7 +439,7 @@ export default function ChatAI() {
 
                             {isLoading ?
                                 <div></div> :
-                                <div className="mochiFade h-full grid grid-rows-9 opacity-100 transform transition-opacity duration-500 ease-in-out">
+                                <div className="mochiFade h-full flex flex-col opacity-100 transform transition-opacity duration-500 ease-in-out">
                                     {/* // Header */}
 
                                     <div className="row-span-3 bg-gray-900 shadow-2xl">
@@ -474,7 +474,7 @@ export default function ChatAI() {
                                             
                                             
                                         </div>
-                                               
+                                        <div className="h-28 overflow-y-auto no-scrollbar">
                                         {!isAnalyzeFailed && <span className='font-bold text-3xl mr-4 p-2'>{
                                             Object.keys(AnalyserResponse.body.words).map((key) => (
                                                 <React.Fragment key={key}>
@@ -485,12 +485,15 @@ export default function ChatAI() {
                                                 </React.Fragment>
                                             ))
                                         }</span>}
+                                        </div>
                                     </div>
+                                    <div className="flex-1 overflow-y-auto no-scrollbar">
+
                                     {/* // Words List */}
                                     {isAnalyzeFailed ?
                                         <div className="flex justify-center p-2">
                                             <p>Error occured. Please try again later.</p>
-                                        </div> : <div className="row-span-7 lg:flex lg:flex-wrap overflow-y-auto no-scrollbar">
+                                        </div> : <div className="h-80 lg:flex lg:flex-wrap">
                                             {Object.keys(AnalyserResponse.body.words).map((key) => (
                                                 <React.Fragment key={key}>
                                                     <div className='container lg:w-1/2 flex flex-col rounded-lg p-4 shadow-md lg:shadow-lg'>
@@ -505,6 +508,7 @@ export default function ChatAI() {
                                                 </React.Fragment>
                                             ))}
                                         </div>}
+                                        </div>
                                 </div>
                             }
                         </div>

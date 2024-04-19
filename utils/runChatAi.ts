@@ -52,7 +52,7 @@ export default async function runAi(text: Conversation) {
         "english": ""
       }"
       ).
-       Conversation: ${conversation.map((str, index) => `${str}`).join("@")} [Your turn to respond here]
+       Conversation: ${conversation.map((str, index) => `${str}`).join("@")} [Your turn to respond here] (Answer last question)
     `
  
         const parts = [
