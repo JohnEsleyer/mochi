@@ -133,7 +133,8 @@ export default function Analyser() {
       <Template>
           {/* // Body */}
       <div className={`${isLoading ? 'shimmer-effect' : ''} overflow-auto h-full w-full rounded-lg lg:rounded-lg`}>
-        <div className={`p-6 `}>
+        <div className='p-6 flex flex-col'>
+          <div className='h-10'>
           <div className='flex items-center justify-center'>
             {/* <Image src='/mochi.png' width={100} height={100} alt='mochi'/> */}
             <div className='flex items-center mb-6 grid'>
@@ -240,6 +241,7 @@ export default function Analyser() {
               </div>
             }
           </div>
+        </div>
         </div>
       </div>
  
