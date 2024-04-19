@@ -35,18 +35,18 @@ export default function ChatAI() {
 
     const [inputText, setInputText] = useState('');
     const [conversationKanji, setConversationKanji] = useState<string[]>([
-        "当店の寿司レストランへようこそ。ご注文はお決まりでしょうか、それともおすすめをお聞きになりますか？"
+        "こんにちは！話しましょう。"
     ]);
     const [conversationHiragana, setConversationHiragana] = useState<string[]>([
-        "とうてんのすしれすとらんへようこそ。ごちゅうもんはおきまりでしょうか、それともおすすめをおききになりますか?"
+        "こんにちは！はなしましょう。"
     ]);
 
     const [conversationRomaji, setConversationRomaji] = useState<string[]>([
-        "tōten no sushi resutoran e yōkoso. gochūmon wa okimari deshō ka, soretomo osusume o o-kiki ni narimasu ka?"
+        "Konnichiwa! Hanashimashou."
     ]);
 
     const [conversationEnglish, setConversationEnglish] = useState<string[]>([
-        "Welcome to our sushi restaurant. Have you decided on your order, or would you like to hear our recommendations?"
+        "Hello there! Let's talk."
     ]);
 
 
@@ -64,7 +64,7 @@ export default function ChatAI() {
     const [isPortrait, setIsPortrait] = useState(heightWidth);
     const [isAnalyze, setIsAnalyze] = useState(false);
     const [isAnalyzeFailed, setIsAnalyzeFailed] = useState(false);
-    const [analyzerResponse, setAnalyzerResponse] = useState<AnalyzerResponse>(defaultData);
+    const [AnalyserResponse, setAnalyserResponse] = useState<AnalyserResponse>(defaultData);
     const [isSaved, setIsSaved] = useState(false);
     const [currentAnalyzed, setCurrentAnalyzed] = useState(0);
     const [currentAnalyzedText, setCurrentAnalyzedText] = useState('');
@@ -141,7 +141,7 @@ export default function ChatAI() {
                 body: JSON.stringify(payload),
             });
             const { body, status } = await response.json();
-            if (status == "Failed") {
+            if (status !== 200) {
                 setIsAnalyzeFailed(true);
                 return
             }
@@ -207,7 +207,7 @@ export default function ChatAI() {
                 },
             });
 
-            const response: AnalyzerResponse = await res.json();
+            const response: AnalyserResponse = await res.json();
             console.log(response.status);
 
             const { status } = response;
@@ -217,7 +217,7 @@ export default function ChatAI() {
                 setIsAnalyzeFailed(true);
             } else {
                 setIsAnalyzeFailed(false);
-                setAnalyzerResponse(response);
+                setAnalyserResponse(response);
             }
         } catch (e) {
             setIsAnalyzeFailed(true);
@@ -235,7 +235,7 @@ export default function ChatAI() {
             furigana: conversationHiragana[currentAnalyzed],
             romaji: conversationEnglish[currentAnalyzed],
             context: 'none',
-            words:JSON.stringify(analyzerResponse.body.words),
+            words:JSON.stringify(AnalyserResponse.body.words),
           };
         
         const { data, error } = await supabase
@@ -275,7 +275,7 @@ export default function ChatAI() {
                         <div className="p-2">
                             {isFurigana && <p>Furigana: <span className="text-red-300">{conversationHiragana[index]}</span></p>}
                             {isRomaji && <p>Romaji: <span className="text-green-300">{conversationRomaji[index]}</span></p>}
-                            {isEnglishTranslate && <p>English: <span className="text-amber-200">{conversationEnglish[index]}</span></p>}
+                            {isEnglishTranslate && <p>Meaning: <span className="text-amber-200">{conversationEnglish[index]}</span></p>}
                         </div>
                         <div className="flex justify-end p-2">
                             <button
@@ -286,7 +286,7 @@ export default function ChatAI() {
                                     setCurrentAnalyzedText(message);
                                 }}
                             >
-                                Use Analyzer
+                                Use Analyser
                             </button>
                         </div>
 
@@ -303,7 +303,7 @@ export default function ChatAI() {
 
                 {/* // Header */}
                 <div className="strict-content row-span-1 bg-gray-900 p-1">
-                    <p className="text-xl font-bold pl-2">Roleplay: "Ordering a sushi at a sushi restaurant."</p>
+                    <p className="text-xl font-bold pl-2">Learn by chatting with AI</p>
                     <div className="flex justify-start text-xs pt-1">
 
                         {/* // Toggle Furigana */}
@@ -395,11 +395,11 @@ export default function ChatAI() {
                     <div className="row-span-1 ">
                         <form onSubmit={handleSubmit} className="grid grid-rows-1 grid-cols-8 grid-flow-col gap-2">
                             <div className="col-span-6 pl-1">
-                                <p className="text-xs">Max Character Limit: {inputText.length} / 50 </p>
+                                <p className="text-xs">Max Character Limit: {inputText.length} / 100 </p>
                                 <input
                                     type="text"
                                     value={inputText}
-                                    maxLength={50}
+                                    maxLength={100}
                                     onChange={handleChange}
                                     placeholder="Type your message here..."
                                     className="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -421,7 +421,7 @@ export default function ChatAI() {
     };
 
 
-    const analyzerUI = () => {
+    const AnalyserUI = () => {
         return (
             <div className={isPortrait ? "h-full" : "border-l-4 border-white h-full"}>
 
@@ -469,11 +469,11 @@ export default function ChatAI() {
                                         </div>
                                                
                                         {!isAnalyzeFailed && <span className='font-bold text-3xl mr-4 p-2'>{
-                                            Object.keys(analyzerResponse.body.words).map((key) => (
+                                            Object.keys(AnalyserResponse.body.words).map((key) => (
                                                 <React.Fragment key={key}>
                                                     
-                                                    <span className={`text-3xl font-bold mb-2 ${analyzerResponse.body.words[key].class in colorWordClass ? colorWordClass[analyzerResponse.body.words[key].class] : 'text-white-300'}`}>
-                                                        {analyzerResponse.body.words[key].word}
+                                                    <span className={`text-3xl font-bold mb-2 ${AnalyserResponse.body.words[key].class in colorWordClass ? colorWordClass[AnalyserResponse.body.words[key].class] : 'text-white-300'}`}>
+                                                        {AnalyserResponse.body.words[key].word}
                                                     </span>
                                                 </React.Fragment>
                                             ))
@@ -484,16 +484,16 @@ export default function ChatAI() {
                                         <div className="flex justify-center p-2">
                                             <p>Error occured. Please try again later.</p>
                                         </div> : <div className="row-span-7 lg:flex lg:flex-wrap overflow-y-auto no-scrollbar">
-                                            {Object.keys(analyzerResponse.body.words).map((key) => (
+                                            {Object.keys(AnalyserResponse.body.words).map((key) => (
                                                 <React.Fragment key={key}>
                                                     <div className='container lg:w-1/2 flex flex-col rounded-lg p-4 shadow-md lg:shadow-lg'>
-                                                        <span className={`text-3xl font-bold mb-2 ${analyzerResponse.body.words[key].class in colorWordClass ? colorWordClass[analyzerResponse.body.words[key].class] : 'text-white-300'}`}>
-                                                            {analyzerResponse.body.words[key].word}
+                                                        <span className={`text-3xl font-bold mb-2 ${AnalyserResponse.body.words[key].class in colorWordClass ? colorWordClass[AnalyserResponse.body.words[key].class] : 'text-white-300'}`}>
+                                                            {AnalyserResponse.body.words[key].word}
                                                         </span>
-                                                        <span className='text-lg '><b>Romaji</b>: {analyzerResponse.body.words[key].romaji}</span>
-                                                        <span className='text-lg '><b>Class</b>: {analyzerResponse.body.words[key].class}</span>
-                                                        <span className='text-lg '><b>Meaning</b>: {analyzerResponse.body.words[key].meaning}</span>
-                                                        <span className='text-lg '><b>Context</b>: {analyzerResponse.body.words[key].context}</span>
+                                                        <span className='text-lg '><b>Romaji</b>: {AnalyserResponse.body.words[key].romaji}</span>
+                                                        <span className='text-lg '><b>Class</b>: {AnalyserResponse.body.words[key].class}</span>
+                                                        <span className='text-lg '><b>Meaning</b>: {AnalyserResponse.body.words[key].meaning}</span>
+                                                        <span className='text-lg '><b>Context</b>: {AnalyserResponse.body.words[key].context}</span>
                                                     </div>
                                                 </React.Fragment>
                                             ))}
@@ -502,7 +502,7 @@ export default function ChatAI() {
                             }
                         </div>
                         : <div className="bg-gray-800 flex items-center justify-center h-full">
-                            <p className="p-2">Press the 'Use Analyzer' button to generate a breakdown of the Japanese text.</p>
+                            <p className="p-2">Press the 'Use Analyser' button to generate a breakdown of the Japanese text.</p>
                         </div>
                 }
             </div>
@@ -512,7 +512,7 @@ export default function ChatAI() {
     const portraitDisplay = () => {
         return (
             <div className="grid grid-rows-1 grid-cols-1 h-full ">
-                {isAnalyze ? analyzerUI() : chatUI()}
+                {isAnalyze ? AnalyserUI() : chatUI()}
             </div>
         );
     }
@@ -521,7 +521,7 @@ export default function ChatAI() {
 
             <div className="grid grid-rows-1 grid-cols-2 h-full ">
                 {chatUI()}
-                {analyzerUI()}
+                {AnalyserUI()}
             </div>
         );
     };

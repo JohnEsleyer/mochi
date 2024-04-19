@@ -61,14 +61,12 @@ const Template: React.FC<TemplateProps> = ({children}) => {
           </div>
           <div className="hidden md:flex space-x-4">
             <Link href="/chat" className="text-purple-300 ">
-              Roleplay with AI
+              Chat AI
             </Link>
-            <Link href="/analyzer" className="text-orange-300 ">
-              Analyzer
+            <Link href="/analyser" className="text-orange-300 ">
+              Analyser
             </Link>
-            <Link href="/learn" className="text-green-300 ">
-              Learn
-            </Link>
+           
             <Link href="/saved" className="text-yellow-300">
               Saved
             </Link>

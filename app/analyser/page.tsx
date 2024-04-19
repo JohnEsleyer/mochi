@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import supabase from '@/utils/supabase';
 
 
-export default function Analyzer() {
+export default function Analyser() {
   const defaultData = {
     status: 200,
     body: {
@@ -29,7 +29,7 @@ export default function Analyzer() {
   };
 
   
-  const [responseJson, setJsonResponse] = useState<AnalyzerResponse>(defaultData);
+  const [responseJson, setJsonResponse] = useState<AnalyserResponse>(defaultData);
   const [isFailed, setIsFailed] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>('');
   const [isVisible, setIsVisible] = useState<boolean>(false);
@@ -73,7 +73,7 @@ export default function Analyzer() {
           },
       });
   
-      const response: AnalyzerResponse = await res.json();
+      const response: AnalyserResponse = await res.json();
       console.log(response.status);
   
       const { status } = response;
@@ -134,7 +134,7 @@ export default function Analyzer() {
             {/* <Image src='/mochi.png' width={100} height={100} alt='mochi'/> */}
             <div className='flex items-center mb-6 grid'>
               <h1 className='text-4xl font-bold mt-4'>
-                <span className='text-green-300'>Analyzer</span>
+                <span className='text-green-300'>Analyser</span>
               </h1>
               <span className='text-sm'>Analyze Japanese Text with AI</span>
             </div>
@@ -204,7 +204,7 @@ export default function Analyzer() {
                     <span className='text-lg'>{responseJson.body.context}</span>
                   </div>
                 </div>
-                {/* // Analyzer Output */}
+                {/* // Analyser Output */}
                 <div className="overflow-auto">
                   <p className='font-bold text-3xl mr-4 p-2 mt-1'>Words Breakdown</p>
                   <span className='font-bold text-3xl mr-4 p-2'>{

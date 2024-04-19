@@ -20,7 +20,7 @@ export default function SignUp() {
 
   useEffect(() => {
     if (isLoggedIn){
-      router.push('/analyzer');
+      router.push('/analyser');
     }
   }, [isLoggedIn]);
   
