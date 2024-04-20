@@ -6,6 +6,7 @@ import supabase from "@/utils/supabase";
 interface SavedTextPreviewProps {
     text: string;
     meaning: string;
+    key: number;
 }
 
 interface Words{
@@ -31,9 +32,9 @@ interface JsonData {
 }
 
 
-const SavedTextPreview: React.FC<SavedTextPreviewProps> = ({ text, meaning }) => {
+const SavedTextPreview: React.FC<SavedTextPreviewProps> = ({ text, meaning, key }) => {
     return (
-        <div className="border border-white ">
+        <div id={key.toString()} className="border border-white ">
             <p>{text}</p>
             <p>{meaning}</p>
         </div>
@@ -93,9 +94,6 @@ export default function Katakana() {
 
             setUserJsonData(temp);
 
-        
-          
-
         } catch (e) {
             console.log(e);
             setIsError(true);
@@ -118,11 +116,10 @@ export default function Katakana() {
                 <div className="col-span-4 lg:col-span-5 p-5">
                     <p className="text-2xl font-bold">Recent</p>
                     <div className="flex-1 grid grid-cols-3">
-                        <SavedTextPreview text="こんにちは" meaning="Hello" />
                         {
                             userJsonData.map((value, index) => (
                                
-                                <SavedTextPreview text={value.body.japanese} meaning={value.body.meaning} />
+                                <SavedTextPreview key={index} text={value.body.japanese} meaning={value.body.meaning} />
                             ))
                         }
                     </div>
