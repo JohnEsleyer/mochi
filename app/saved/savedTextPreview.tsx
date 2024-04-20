@@ -1,14 +1,9 @@
 'use client'
 
 import supabase from "@/utils/supabase";
+import { group } from "console";
 import { useEffect, useState } from "react";
 
-interface SavedTextPreviewProps {
-    text: string;
-    meaning: string;
-    key: number;
-    id: number;
-}
 
 interface Words {
     word: string;
@@ -35,23 +30,10 @@ interface SaveData {
     group_id: number;
 }
 
-
-const SavedTextPreview: React.FC<SavedTextPreviewProps> = ({ text, meaning, id }) => {
-    // Executes when user has no saved texts
-    if (id == null) {
-        return <div></div>;
-    }
-
-    return (
-        <div id={id.toString()} className="border border-white">
-            <p>{text}</p>
-            <p>{meaning}</p>
-        </div>
-    );
-};
-
 function AllSavedText() {
     const [savedJsonData, setSavedJsonData] = useState<JsonData[]>([]);
+ 
+
     useEffect(() => {
         const fetchSavedData = async () => {
             try {
@@ -82,9 +64,12 @@ function AllSavedText() {
     return (
         <div className="flex flex-row">
             {
-               savedJsonData.map(saved => (
-                <p className="border border-white">{saved.japanese}</p>
-               ))
+               savedJsonData.map((value, index) => (
+                <div className="border border-white ">
+                <p key={index} className="">{value.japanese}</p>
+                <p key={index} className="">{value.meaning}</p>
+                </div>
+            ))
             }
         </div>
     );
