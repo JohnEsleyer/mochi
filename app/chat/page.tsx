@@ -10,6 +10,8 @@ import Image from "next/image";
 import ArrowBack from "/public/arrow_back.svg"
 import supabase from "@/utils/supabase";
 
+
+
 const defaultData = {
     status: 200,
     body: {
@@ -161,7 +163,7 @@ export default function ChatAI() {
     }
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        
+
         event.preventDefault();
         if (inputText.length > 0) {
             submitMessage();
@@ -228,30 +230,30 @@ export default function ChatAI() {
 
 
     async function save() {
-        
+
         const savedData = {
-            lang: 'jap',
-            body: {
-                japanese: currentAnalyzedText,
-                meaning: conversationEnglish[currentAnalyzed],
-                furigana: conversationHiragana[currentAnalyzed],
-                romaji: conversationEnglish[currentAnalyzed],
-                context: 'none',
-                words:JSON.stringify(AnalyserResponse.body.words),
-            }
-          };
-        
+            japanese: currentAnalyzedText,
+            meaning: conversationEnglish[currentAnalyzed],
+            furigana: conversationHiragana[currentAnalyzed],
+            romaji: conversationEnglish[currentAnalyzed],
+            context: 'none',
+            words: JSON.stringify(AnalyserResponse.body.words),
+        };
+
         const { data, error } = await supabase
-        .from('saved')
-        .insert([
-          { text: JSON.stringify(savedData)},
-        ]);
-    
-        if (error){
-          console.log('Failed!')
-        }else{
-          console.log('Saved!')
-          setIsSaved(true);
+            .from('saved')
+            .insert([
+                { 
+                    text: JSON.stringify(savedData),
+                    language: 'japanese',
+                },
+            ]);
+
+        if (error) {
+            console.log('Failed!')
+        } else {
+            console.log('Saved!')
+            setIsSaved(true);
 
         }
     }
@@ -283,9 +285,9 @@ export default function ChatAI() {
                         <div className="flex justify-end p-2">
                             <button
                                 className="bg-orange-200 text-black p-1 pr-2 pl-2 rounded"
-                                onClick={() => { 
+                                onClick={() => {
                                     handleAnalyze(message);
-                                    setCurrentAnalyzed(index); 
+                                    setCurrentAnalyzed(index);
                                     setCurrentAnalyzedText(message);
                                 }}
                             >
@@ -394,9 +396,9 @@ export default function ChatAI() {
                 <div className="flex flex-col h-full">
                     {/* // Chatbox */}
                     <div className="flex-1 overflow-y-auto no-scrollbar">
-                    <div className="h-10 ">
-                        {chatComponent()}
-                    </div>
+                        <div className="h-10 ">
+                            {chatComponent()}
+                        </div>
                     </div>
                     {/* // User input */}
                     <div className="h-14">
@@ -459,56 +461,56 @@ export default function ChatAI() {
 
                                                 Words Breakdown
                                             </p>
-                                              
-                                                <div className="flex items-center">
-                                                    {
-                                                !isAnalyzeFailed && !isSaved && 
-                                                <button onClick={save}>
-                                                <span className="material-symbols-outlined">
-                                                star
-                                                </span>
-                                                </button>
-                                                    }
-                                                 {isSaved && <span className="text-amber-300">Saved</span>}
-                                                </div>
-                                            
-                                            
+
+                                            <div className="flex items-center">
+                                                {
+                                                    !isAnalyzeFailed && !isSaved &&
+                                                    <button onClick={save}>
+                                                        <span className="material-symbols-outlined">
+                                                            star
+                                                        </span>
+                                                    </button>
+                                                }
+                                                {isSaved && <span className="text-amber-300">Saved</span>}
+                                            </div>
+
+
                                         </div>
                                         <div className="h-28 overflow-y-auto no-scrollbar">
-                                        {!isAnalyzeFailed && <span className='font-bold text-3xl mr-4 p-2'>{
-                                            Object.keys(AnalyserResponse.body.words).map((key) => (
-                                                <React.Fragment key={key}>
-                                                    
-                                                    <span className={`text-3xl font-bold mb-2 ${AnalyserResponse.body.words[key].class in colorWordClass ? colorWordClass[AnalyserResponse.body.words[key].class] : 'text-white-300'}`}>
-                                                        {AnalyserResponse.body.words[key].word}
-                                                    </span>
-                                                </React.Fragment>
-                                            ))
-                                        }</span>}
+                                            {!isAnalyzeFailed && <span className='font-bold text-3xl mr-4 p-2'>{
+                                                Object.keys(AnalyserResponse.body.words).map((key) => (
+                                                    <React.Fragment key={key}>
+
+                                                        <span className={`text-3xl font-bold mb-2 ${AnalyserResponse.body.words[key].class in colorWordClass ? colorWordClass[AnalyserResponse.body.words[key].class] : 'text-white-300'}`}>
+                                                            {AnalyserResponse.body.words[key].word}
+                                                        </span>
+                                                    </React.Fragment>
+                                                ))
+                                            }</span>}
                                         </div>
                                     </div>
                                     <div className="flex-1 overflow-y-auto no-scrollbar">
 
-                                    {/* // Words List */}
-                                    {isAnalyzeFailed ?
-                                        <div className="flex justify-center p-2">
-                                            <p>Error occured. Please try again later.</p>
-                                        </div> : <div className="h-80 lg:flex lg:flex-wrap">
-                                            {Object.keys(AnalyserResponse.body.words).map((key) => (
-                                                <React.Fragment key={key}>
-                                                    <div className='container lg:w-1/2 flex flex-col rounded-lg p-4 shadow-md lg:shadow-lg'>
-                                                        <span className={`text-3xl font-bold mb-2 ${AnalyserResponse.body.words[key].class in colorWordClass ? colorWordClass[AnalyserResponse.body.words[key].class] : 'text-white-300'}`}>
-                                                            {AnalyserResponse.body.words[key].word}
-                                                        </span>
-                                                        <span className='text-lg '><b>Romaji</b>: {AnalyserResponse.body.words[key].romaji}</span>
-                                                        <span className='text-lg '><b>Class</b>: {AnalyserResponse.body.words[key].class}</span>
-                                                        <span className='text-lg '><b>Meaning</b>: {AnalyserResponse.body.words[key].meaning}</span>
-                                                        <span className='text-lg '><b>Context</b>: {AnalyserResponse.body.words[key].context}</span>
-                                                    </div>
-                                                </React.Fragment>
-                                            ))}
-                                        </div>}
-                                        </div>
+                                        {/* // Words List */}
+                                        {isAnalyzeFailed ?
+                                            <div className="flex justify-center p-2">
+                                                <p>Error occured. Please try again later.</p>
+                                            </div> : <div className="h-80 lg:flex lg:flex-wrap">
+                                                {Object.keys(AnalyserResponse.body.words).map((key) => (
+                                                    <React.Fragment key={key}>
+                                                        <div className='container lg:w-1/2 flex flex-col rounded-lg p-4 shadow-md lg:shadow-lg'>
+                                                            <span className={`text-3xl font-bold mb-2 ${AnalyserResponse.body.words[key].class in colorWordClass ? colorWordClass[AnalyserResponse.body.words[key].class] : 'text-white-300'}`}>
+                                                                {AnalyserResponse.body.words[key].word}
+                                                            </span>
+                                                            <span className='text-lg '><b>Romaji</b>: {AnalyserResponse.body.words[key].romaji}</span>
+                                                            <span className='text-lg '><b>Class</b>: {AnalyserResponse.body.words[key].class}</span>
+                                                            <span className='text-lg '><b>Meaning</b>: {AnalyserResponse.body.words[key].meaning}</span>
+                                                            <span className='text-lg '><b>Context</b>: {AnalyserResponse.body.words[key].context}</span>
+                                                        </div>
+                                                    </React.Fragment>
+                                                ))}
+                                            </div>}
+                                    </div>
                                 </div>
                             }
                         </div>
@@ -541,10 +543,10 @@ export default function ChatAI() {
     return (
         <Template>
             <div className="h-full">
-     
-            {
-                isPortrait ? portraitDisplay() : landscapeDisplay()
-            }
+
+                {
+                    isPortrait ? portraitDisplay() : landscapeDisplay()
+                }
             </div>
 
         </Template>

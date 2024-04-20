@@ -7,6 +7,7 @@ interface SavedTextPreviewProps {
     text: string;
     meaning: string;
     key: number;
+    id: number;
 }
 
 interface Words{
@@ -17,7 +18,7 @@ interface Words{
     context: string;
 }
 
-interface Body {
+interface JsonData {
     japanese: string;
     meaning: string;
     furigana: string;
@@ -26,25 +27,12 @@ interface Body {
     words: Record<string, Words>;
 }
 
-interface JsonData {
-    lang: string;
-    body: Body;
-}
-
-
-const SavedTextPreview: React.FC<SavedTextPreviewProps> = ({ text, meaning, key }) => {
-    return (
-        <div id={key.toString()} className="border border-white ">
-            <p>{text}</p>
-            <p>{meaning}</p>
-        </div>
-    );
-}
 
 interface SaveData {
     created_at: string;
     id: number;
     text: string
+    group_id: number;
 }
 
 async function getSavedData() {
@@ -54,17 +42,37 @@ async function getSavedData() {
         .select('*')
 
     const saveData = data as SaveData[];
-    if (error) {
-        console.log(error);
-        throw error;
-    }
-    
-    console.log(saveData[0].text);
     
     
     return saveData;
 }
 
+
+const SavedTextPreview: React.FC<SavedTextPreviewProps> = ({ text, meaning, id }) => {
+    // Executes when user has no saved texts
+    if (id == null) {
+        return <div></div>;
+    }
+
+    return (
+        <div id={id.toString()} className="border border-white">
+            <p>{text}</p>
+            <p>{meaning}</p>
+        </div>
+    );
+};
+
+async function newGroup() {
+    
+    const { data, error } = await supabase
+    .from('groups')
+    .insert([
+    { group_name: 'someValue'},
+    ])
+    .select()
+  
+    
+};
 
 export default function Katakana() {
 
@@ -78,7 +86,7 @@ export default function Katakana() {
         try {
 
             const savedData = getSavedData();
-
+            
             if (savedData !== null) {
                 console.log(savedData.then((value) => {
                     setUserSavedData(value);
@@ -101,31 +109,39 @@ export default function Katakana() {
 
     }, []);
 
+    
+
     return (
         <Template>
             <div className="h-full grid grid-cols-6">
                 <div className="col-span-2 lg:col-span-1 bg-gray-900 p-2 pt-4">
                     <p>Groups</p>
-                    <div className="grid grid-cols-3 p-2 bg-orange-200 text-black rounded">
+           
+                    <div className="bg-orange-200 text-black rounded">
+                        <button 
+                        className="grid grid-cols-3 p-2 w-full"
+                        onClick={newGroup}
+                        >
                         <p className="col-span-2">New group</p>
                         <span className="col-span-1 material-symbols-outlined flex justify-end">
                             add_box
                         </span>
+                        </button>
                     </div>
+               
                 </div>
                 <div className="col-span-4 lg:col-span-5 p-5">
                     <p className="text-2xl font-bold">Recent</p>
                     <div className="flex-1 grid grid-cols-3">
                         {
+                            
                             userJsonData.map((value, index) => (
-                               
-                                <SavedTextPreview key={index} text={value.body.japanese} meaning={value.body.meaning} />
+                                <SavedTextPreview key={index} id={index} text={value.japanese} meaning={value.meaning} />
                             ))
+                            
                         }
                     </div>
-
                 </div>
-
             </div>
 
         </Template>
