@@ -154,7 +154,7 @@ export default function Analyser() {
                       maxLength={100}
                       onChange={handleInputChange}
                       placeholder='Type a word or phrase'
-                      className='w-full lg:w-[32rem] lg:h-14 p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50  focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+                      className='w-full lg:w-[32rem] lg:h-14 p-4 text-white border border-gray-300 rounded-lg bg-gray-800  focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
                     />
                     <p className="text-xs p-2">{inputValue.length} / 100</p>
                   </div>

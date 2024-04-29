@@ -122,8 +122,7 @@ function AllSavedText() {
 
     return (
         <div className="col-span-3 h-10">
-            <p>
-                Group: {currentGroupData.id}</p>
+           
             <div className="flex flex-row flex-wrap">
                 {
                     savedJsonData.map((value, index) => (

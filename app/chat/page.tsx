@@ -322,6 +322,7 @@ export default function ChatAI() {
                                     className="hidden"
                                     checked={!isFurigana}
                                     onChange={toggleFurigana}
+                                    
                                 />
                                 <label
                                     htmlFor="toggleFurigana"
@@ -410,7 +411,7 @@ export default function ChatAI() {
                                     maxLength={100}
                                     onChange={handleChange}
                                     placeholder="Type your message here..."
-                                    className="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    className="w-full p-1 text-white border border-white rounded-lg bg-gray-800 "
                                 />
                             </div>
                             <div className="col-span-2 flex items-end ">
