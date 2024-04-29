@@ -14,6 +14,7 @@ interface Words {
 }
 
 interface JsonData {
+    id: number;
     japanese: string;
     meaning: string;
     furigana: string;
@@ -33,7 +34,7 @@ function AllSavedText() {
     const { currentGroupData } = useContext(GroupContext)!;
 
     const [savedJsonData, setSavedJsonData] = useState<JsonData[]>([]);
-
+    const [savedData, setSavedData] = useState<SaveData[]>([]);
 
     useEffect(() => {
         const fetchSavedData = async () => {
@@ -46,7 +47,12 @@ function AllSavedText() {
 
                 let temp: JsonData[] = [];
                 saveData.map((value) => {
-                    temp.push(JSON.parse(value.text) as JsonData);
+
+                    // Add id to the savedData object
+                    let jsonDataObj = JSON.parse(value.text) as JsonData;
+                    jsonDataObj.id = value.id;
+
+                    temp.push(jsonDataObj);
                 });
                 if (error) {
                     throw error;
@@ -103,6 +109,15 @@ function AllSavedText() {
     }, [currentGroupData.id]);
 
 
+    const handleDelete = async (id: number) => {
+
+        const { error } = await supabase
+            .from('groups')
+            .delete()
+            .eq('id', id);
+                
+    }
+
     const items = Array.from({ length: 20 }, (_, index) => index); // Create an array [0, 1, 2, ..., 19]
 
     return (
@@ -115,6 +130,7 @@ function AllSavedText() {
                         <div key={index} className="border shadow-xl rounded border-gray-700 p-5 m-2">
                             <p key={index} className="">{value.japanese}</p>
                             <p key={index} className="">{value.meaning}</p>
+                            
                         </div>
                     ))
                 }
