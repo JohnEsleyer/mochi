@@ -8,6 +8,18 @@ import Groups from "./groups";
 import { GroupContext } from "./groupContext";
 import Loading from '/public/loading.svg';
 import Image from "next/image";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+  } from "@/components/ui/alert-dialog"
+  
 
 export default function Saved() {
     const [currentGroupData, setCurrentGroupData] = useState({
@@ -15,7 +27,7 @@ export default function Saved() {
         group_name: 'All',
     });
     const [showGroups, setShowGroups] = useState(true);
-
+    const [renameValue, setRenameValue] = useState('');
 
 
     const newGroup = async () =>  {
@@ -47,6 +59,17 @@ export default function Saved() {
                 
     };
 
+    const handleRenameGroup = async () => {
+        setShowGroups(false);
+        const { data, error } = await supabase
+        .from('groups')
+        .update({ group_name: renameValue })
+        .eq('id', currentGroupData.id);
+
+        setShowGroups(true);
+                
+    }
+
     
     return (
         <Template>
@@ -77,15 +100,54 @@ export default function Saved() {
                     </div>
                     <div className="col-span-4 overflow-y-scroll lg:col-span-5 p-5">
                         <div className="h-10">
-                            <p className="text-2xl font-bold">
-                                <button onClick={handleDeleteGroup}>
-                                <span className="material-symbols-outlined ">
+                            
+                                {currentGroupData.id == -1 ? <div></div>: <div><button onClick={handleDeleteGroup}>
+                                
+                                </button>
+                                <AlertDialog>
+                                <AlertDialogTrigger>
+                                <span className="material-symbols-outlined hover:text-red-500">
                                     delete
                                 </span>
-                                </button>
-                                <span className="material-symbols-outlined">
-                                    edit
-                                </span>{currentGroupData.group_name}</p>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent className="bg-gray-900 text-white">
+                                    <AlertDialogHeader>
+                                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        This action cannot be undone.
+                                    </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                    <AlertDialogCancel className="text-black">Cancel</AlertDialogCancel>
+                                    <AlertDialogAction className="bg-red-500 hover:bg-red-500 hover:text-white" onClick={handleDeleteGroup}>Continue</AlertDialogAction>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                                </AlertDialog>
+                                
+                                <AlertDialog>
+                                <AlertDialogTrigger><span className="material-symbols-outlined hover:text-green-500">
+                                                                    edit
+                                                                </span></AlertDialogTrigger>
+                                <AlertDialogContent className="bg-gray-900 text-white">
+                                    <AlertDialogHeader>
+                                    <AlertDialogTitle className="flex justify-center">Rename Group</AlertDialogTitle>
+                                    <AlertDialogDescription className="flex justify-center">
+                                        <input className="w-64 h-8 rounded text-black"
+                                            placeholder="Group 1"
+                                            onChange={(event) => {
+                                            setRenameValue(event.target.value);
+                                        }}>
+                                        </input>
+                                    </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                    <AlertDialogCancel className="text-black">Cancel</AlertDialogCancel>
+                                    <AlertDialogAction onClick={handleRenameGroup}className="bg-green-500 hover:bg-green-500">Rename</AlertDialogAction>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                                </AlertDialog> </div> }
+                               
+                                {showGroups ? <p className="text-2xl font-bold">{currentGroupData.group_name}</p> : <div>...</div>}
                             <div className="flex-1 grid grid-cols-3 ">
                                 <AllSavedText />
 
