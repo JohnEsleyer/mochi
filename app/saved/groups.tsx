@@ -1,7 +1,7 @@
 import supabase from "@/utils/supabase";
 import error from "next/error";
 import { useContext, useEffect, useState } from "react";
-import { GroupContext } from "./GroupContext";
+import { GroupContext } from "./groupContext";
 
 interface GroupsJsonData {
     id: number;

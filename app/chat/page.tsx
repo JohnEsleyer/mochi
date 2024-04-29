@@ -2,7 +2,6 @@
 import Template from "@/components/PageTemplate";
 import Typewriter from "@/components/typewriter";
 import { useEffect, useState } from "react";
-import Kanji from "../kanji/page";
 import Link from "next/link";
 import { colorWordClass } from "@/utils/colors";
 import React from "react";

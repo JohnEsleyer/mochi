@@ -5,7 +5,7 @@ import supabase from "@/utils/supabase";
 import SavedTextPreview from "./savedTextPreview";
 import AllSavedText from "./savedTextPreview";
 import Groups from "./groups";
-import { GroupContext } from "./GroupContext";
+import { GroupContext } from "./groupContext";
 
 
 async function newGroup() {
@@ -47,7 +47,9 @@ export default function Saved() {
                     </div>
                     <div className="col-span-4 overflow-y-scroll lg:col-span-5 p-5">
                         <div className="h-10">
-                            <p className="text-2xl font-bold">{currentGroupData.group_name}</p>
+                            <p className="text-2xl font-bold"><span className="material-symbols-outlined">
+                    edit
+                </span> {currentGroupData.group_name}</p>
                             <div className="flex-1 grid grid-cols-3 ">
                                 <AllSavedText />
 

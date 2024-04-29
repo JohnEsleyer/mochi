@@ -3,7 +3,7 @@
 import supabase from "@/utils/supabase";
 import { group } from "console";
 import { useContext, useEffect, useState } from "react";
-import { GroupContext } from "./GroupContext";
+import { GroupContext } from "./groupContext";
 
 interface Words {
     word: string;
@@ -29,11 +29,11 @@ interface SaveData {
     group_id: number;
 }
 
-function AllSavedText() {  
-    const {currentGroupData} = useContext(GroupContext)!;
+function AllSavedText() {
+    const { currentGroupData } = useContext(GroupContext)!;
 
     const [savedJsonData, setSavedJsonData] = useState<JsonData[]>([]);
-    
+
 
     useEffect(() => {
         const fetchSavedData = async () => {
@@ -66,21 +66,21 @@ function AllSavedText() {
         const fetchSavedData = async () => {
             try {
                 let savedData, e;
-                if (currentGroupData.id == -1){
+                if (currentGroupData.id == -1) {
                     const { data, error } = await supabase
-                    .from('saved')
-                    .select('*');
+                        .from('saved')
+                        .select('*');
                     savedData = data;
                     e = error;
-                }else{
+                } else {
                     const { data, error } = await supabase
-                    .from('saved')
-                    .select('*')
-                    .eq('group_id', currentGroupData.id);
+                        .from('saved')
+                        .select('*')
+                        .eq('group_id', currentGroupData.id);
                     savedData = data;
                     e = error;
                 }
-                
+
 
                 const saveData = savedData as SaveData[];
 
@@ -107,19 +107,20 @@ function AllSavedText() {
 
     return (
         <div className="col-span-3 h-10">
-            <p>Group: {currentGroupData.id}</p>
+            <p>
+                Group: {currentGroupData.id}</p>
             <div className="flex flex-row flex-wrap">
-            {
-               savedJsonData.map((value, index) => (
-                <div key={index} className="border shadow-xl rounded border-gray-700 p-5 m-2">
-                <p key={index} className="">{value.japanese}</p>
-                <p key={index} className="">{value.meaning}</p>
-                </div>
-            ))
-            }
-           
+                {
+                    savedJsonData.map((value, index) => (
+                        <div key={index} className="border shadow-xl rounded border-gray-700 p-5 m-2">
+                            <p key={index} className="">{value.japanese}</p>
+                            <p key={index} className="">{value.meaning}</p>
+                        </div>
+                    ))
+                }
+
             </div>
-             
+
         </div>
     );
 }

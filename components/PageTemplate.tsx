@@ -69,9 +69,6 @@ const Template: React.FC<TemplateProps> = ({ children }) => {
                       <Link href="/saved" className="text-yellow-300">
                         Saved
                       </Link>
-                      <Link href="/kanji" className="text-pink-300 ">
-                        Kanji
-                      </Link>
                       <Link href="/hiragana" className="text-amber-300">
                         Hiragana
                       </Link>
