@@ -88,6 +88,7 @@ export default function Saved() {
                                 </span>
                             </button>
                         </div>
+                        <div className="pt-2">
                         {
                             showGroups ? <Groups /> : <div className="flex items-center justify-center">
                                 <Image src={Loading}
@@ -97,6 +98,7 @@ export default function Saved() {
                                 />
                             </div>
                         }
+                        </div>
                     </div>
                     <div className="col-span-4 overflow-y-scroll lg:col-span-5 p-5">
                         <div className="h-10">
