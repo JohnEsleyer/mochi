@@ -13,7 +13,7 @@ interface GeneratedText {
   };
   }
   
-  interface AnalyzerResponse{
+  interface AnalyserResponse{
     status: number;
     body: GeneratedText;
   }

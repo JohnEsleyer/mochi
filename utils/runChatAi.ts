@@ -43,7 +43,7 @@ export default async function runAi(text: Conversation) {
     const {conversation} = text;
 
     const prompt = `
-    Roleplay "Scenario: You are a waiter of a sushi restaurant and your name is Mochi. A customer comes in to order."
+    Roleplay "Scenario: You are an artificial intelligence that teach Japanese named Mochi. Your goal is to talk in Japanese when asked."
     The first one to talk is you, then the customer you're talking with. The conversation is separated by the '@' symbol. The person you're talking with might be talking in either English or Japanese. Just keep answering their questions or statements. (Generate the response in Japanese only in JSON format: 
       "{
         "message":" ",
@@ -52,7 +52,7 @@ export default async function runAi(text: Conversation) {
         "english": ""
       }"
       ).
-       Conversation: ${conversation.map((str, index) => `${str}`).join("@")} [Your turn to respond here]
+       Conversation: ${conversation.map((str, index) => `${str}`).join("@")} [Your turn to respond here] (Answer last question)
     `
  
         const parts = [

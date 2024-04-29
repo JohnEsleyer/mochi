@@ -50,7 +50,7 @@ export default async function runAi(text: string) {
           "word": "word (In Japanese)",
           "romaji": "romaji version of the word",
           "class": "strictly choose among the four: (noun, verb, adjective, particle, conjunction, interjection, counter, pronoun, adverb)",
-          "meaning": "meaning of the word or how to use the word, if it is particle then how to use the particle?",
+          "meaning": "english meaning of the japanese text",
           "context": "When and where the word is used? how a particular word is used in a given situation or environment"
         },
       },

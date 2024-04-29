@@ -113,7 +113,9 @@ export default function Katakana(){
 
     return (
         <Template>
-            <div className={`h-full overflow-y-auto ${isPortrait ? 'p-2': 'p-5 pr-20 pl-20'}`}>
+            <div className={`h-full overflow-y-auto ${isPortrait ? 'p-2': 'p-5 pr-20 pl-20'} bg-gray-800`}>
+            {/* h-10 fixes broken layout */}
+            <div className="h-10">
             <h1 className="text-xl font-bold">Basic Katakana</h1>
             <div className="grid grid-cols-5 gap-4 pb-5">
             {katakanaMap.map((item, index) => (
@@ -141,6 +143,7 @@ export default function Katakana(){
                 <div className="mt-2">{item.romaji}</div>
                 </div>
             ))}
+            </div>
             </div>
             </div>
 

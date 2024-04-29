@@ -2,12 +2,14 @@
 import Template from "@/components/PageTemplate";
 import Typewriter from "@/components/typewriter";
 import { useEffect, useState } from "react";
-import Kanji from "../kanji/page";
 import Link from "next/link";
 import { colorWordClass } from "@/utils/colors";
 import React from "react";
 import Image from "next/image";
 import ArrowBack from "/public/arrow_back.svg"
+import supabase from "@/utils/supabase";
+
+
 
 const defaultData = {
     status: 200,
@@ -34,18 +36,18 @@ export default function ChatAI() {
 
     const [inputText, setInputText] = useState('');
     const [conversationKanji, setConversationKanji] = useState<string[]>([
-        "当店の寿司レストランへようこそ。ご注文はお決まりでしょうか、それともおすすめをお聞きになりますか？"
+        "こんにちは！話しましょう。"
     ]);
     const [conversationHiragana, setConversationHiragana] = useState<string[]>([
-        "とうてんのすしれすとらんへようこそ。ごちゅうもんはおきまりでしょうか、それともおすすめをおききになりますか?"
+        "こんにちは！はなしましょう。"
     ]);
 
     const [conversationRomaji, setConversationRomaji] = useState<string[]>([
-        "tōten no sushi resutoran e yōkoso. gochūmon wa okimari deshō ka, soretomo osusume o o-kiki ni narimasu ka?"
+        "Konnichiwa! Hanashimashou."
     ]);
 
     const [conversationEnglish, setConversationEnglish] = useState<string[]>([
-        "Welcome to our sushi restaurant. Have you decided on your order, or would you like to hear our recommendations?"
+        "Hello there! Let's talk."
     ]);
 
 
@@ -63,10 +65,13 @@ export default function ChatAI() {
     const [isPortrait, setIsPortrait] = useState(heightWidth);
     const [isAnalyze, setIsAnalyze] = useState(false);
     const [isAnalyzeFailed, setIsAnalyzeFailed] = useState(false);
-    const [analyzerResponse, setAnalyzerResponse] = useState<AnalyzerResponse>(defaultData);
+    const [AnalyserResponse, setAnalyserResponse] = useState<AnalyserResponse>(defaultData);
+    const [isSaved, setIsSaved] = useState(false);
+    const [currentAnalyzed, setCurrentAnalyzed] = useState(0);
+    const [currentAnalyzedText, setCurrentAnalyzedText] = useState('');
 
     const handleOrientationChange = () => {
-        setIsPortrait((window.innerHeight > window.innerWidth - 180));
+        setIsPortrait((window.innerHeight > window.innerWidth - 400));
     };
 
 
@@ -100,6 +105,7 @@ export default function ChatAI() {
 
     const submitMessage = async () => {
         setIsAnalyzeFailed(false);
+        setIsSaved(false);
 
         var prevMessage: string[] = [];
         var prevHiragana: string[] = [];
@@ -136,7 +142,7 @@ export default function ChatAI() {
                 body: JSON.stringify(payload),
             });
             const { body, status } = await response.json();
-            if (status == "Failed") {
+            if (status !== 200) {
                 setIsAnalyzeFailed(true);
                 return
             }
@@ -156,6 +162,7 @@ export default function ChatAI() {
     }
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+
         event.preventDefault();
         if (inputText.length > 0) {
             submitMessage();
@@ -201,7 +208,7 @@ export default function ChatAI() {
                 },
             });
 
-            const response: AnalyzerResponse = await res.json();
+            const response: AnalyserResponse = await res.json();
             console.log(response.status);
 
             const { status } = response;
@@ -211,13 +218,43 @@ export default function ChatAI() {
                 setIsAnalyzeFailed(true);
             } else {
                 setIsAnalyzeFailed(false);
-                setAnalyzerResponse(response);
+                setAnalyserResponse(response);
             }
         } catch (e) {
             setIsAnalyzeFailed(true);
         }
 
         setIsLoading(false);
+    }
+
+
+    async function save() {
+
+        const savedData = {
+            japanese: currentAnalyzedText,
+            meaning: conversationEnglish[currentAnalyzed],
+            furigana: conversationHiragana[currentAnalyzed],
+            romaji: conversationEnglish[currentAnalyzed],
+            context: 'none',
+            words: JSON.stringify(AnalyserResponse.body.words),
+        };
+
+        const { data, error } = await supabase
+            .from('saved')
+            .insert([
+                { 
+                    text: JSON.stringify(savedData),
+                    language: 'japanese',
+                },
+            ]);
+
+        if (error) {
+            console.log('Failed!')
+        } else {
+            console.log('Saved!')
+            setIsSaved(true);
+
+        }
     }
 
     const chatComponent = () => {
@@ -242,14 +279,18 @@ export default function ChatAI() {
                         <div className="p-2">
                             {isFurigana && <p>Furigana: <span className="text-red-300">{conversationHiragana[index]}</span></p>}
                             {isRomaji && <p>Romaji: <span className="text-green-300">{conversationRomaji[index]}</span></p>}
-                            {isEnglishTranslate && <p>English: <span className="text-amber-200">{conversationEnglish[index]}</span></p>}
+                            {isEnglishTranslate && <p>Meaning: <span className="text-amber-200">{conversationEnglish[index]}</span></p>}
                         </div>
                         <div className="flex justify-end p-2">
                             <button
                                 className="bg-orange-200 text-black p-1 pr-2 pl-2 rounded"
-                                onClick={() => { handleAnalyze(message) }}
+                                onClick={() => {
+                                    handleAnalyze(message);
+                                    setCurrentAnalyzed(index);
+                                    setCurrentAnalyzedText(message);
+                                }}
                             >
-                                Use Analyzer
+                                Use Analyser
                             </button>
                         </div>
 
@@ -262,11 +303,13 @@ export default function ChatAI() {
 
     const chatUI = () => {
         return (
-            <div className="grid grid-rows-8 h-full">
-
+            <div className="flex flex-col h-full">
                 {/* // Header */}
-                <div className="row-span-1 bg-gray-900 p-1">
-                    <p className="text-xl font-bold pl-2">Roleplay: "Ordering a sushi at a sushi restaurant."</p>
+                <div className="h-32 strict-content bg-gray-900 p-1 pl-2 text-xs">
+                    <p className="text-xl font-bold  text-purple-300">Chat with Mochi</p>
+                    <p>- Learn Japanese by engaging in a conversation with AI.</p>
+                    <p>- If you're unsure how to reply in Japanese, you can also use English.</p>
+                    <p>- Remember to save unfamiliar phrases so you can review them later. You can do this by tapping the star icon in the analysis section.</p>
                     <div className="flex justify-start text-xs pt-1">
 
                         {/* // Toggle Furigana */}
@@ -279,6 +322,7 @@ export default function ChatAI() {
                                     className="hidden"
                                     checked={!isFurigana}
                                     onChange={toggleFurigana}
+                                    
                                 />
                                 <label
                                     htmlFor="toggleFurigana"
@@ -349,23 +393,25 @@ export default function ChatAI() {
                 </div>
 
                 {/* // Chat */}
-                <div className="bg-gray-800 row-span-7 grid grid-rows-8 ">
+                <div className="flex flex-col h-full">
                     {/* // Chatbox */}
-                    <div className="row-span-7 overflow-y-auto no-scrollbar">
-                        {chatComponent()}
+                    <div className="flex-1 overflow-y-auto no-scrollbar">
+                        <div className="h-10 ">
+                            {chatComponent()}
+                        </div>
                     </div>
                     {/* // User input */}
-                    <div className="row-span-1 ">
+                    <div className="h-14">
                         <form onSubmit={handleSubmit} className="grid grid-rows-1 grid-cols-8 grid-flow-col gap-2">
                             <div className="col-span-6 pl-1">
-                                <p className="text-xs">Max Character Limit: {inputText.length} / 50 </p>
+                                <p className="text-xs">Max Character Limit: {inputText.length} / 100 </p>
                                 <input
                                     type="text"
                                     value={inputText}
-                                    maxLength={50}
+                                    maxLength={100}
                                     onChange={handleChange}
                                     placeholder="Type your message here..."
-                                    className="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    className="w-full p-1 text-white border border-white rounded-lg bg-gray-800 "
                                 />
                             </div>
                             <div className="col-span-2 flex items-end ">
@@ -384,7 +430,7 @@ export default function ChatAI() {
     };
 
 
-    const analyzerUI = () => {
+    const AnalyserUI = () => {
         return (
             <div className={isPortrait ? "h-full" : "border-l-4 border-white h-full"}>
 
@@ -395,7 +441,7 @@ export default function ChatAI() {
 
                             {isLoading ?
                                 <div></div> :
-                                <div className="mochiFade h-full grid grid-rows-9 opacity-100 transform transition-opacity duration-500 ease-in-out">
+                                <div className="mochiFade h-full flex flex-col opacity-100 transform transition-opacity duration-500 ease-in-out">
                                     {/* // Header */}
 
                                     <div className="row-span-3 bg-gray-900 shadow-2xl">
@@ -415,42 +461,61 @@ export default function ChatAI() {
 
                                                 Words Breakdown
                                             </p>
-                                        </div>
 
-                                        {!isAnalyzeFailed && <span className='font-bold text-3xl mr-4 p-2'>{
-                                            Object.keys(analyzerResponse.body.words).map((key) => (
-                                                <React.Fragment key={key}>
-                                                    <span className={`text-3xl font-bold mb-2 ${analyzerResponse.body.words[key].class in colorWordClass ? colorWordClass[analyzerResponse.body.words[key].class] : 'text-white-300'}`}>
-                                                        {analyzerResponse.body.words[key].word}
-                                                    </span>
-                                                </React.Fragment>
-                                            ))
-                                        }</span>}
-                                    </div>
-                                    {/* // Words List */}
-                                    {isAnalyzeFailed ?
-                                        <div className="flex justify-center p-2">
-                                            <p>Error occured. Please try again later.</p>
-                                        </div> : <div className="row-span-7 lg:flex lg:flex-wrap overflow-y-auto no-scrollbar">
-                                            {Object.keys(analyzerResponse.body.words).map((key) => (
-                                                <React.Fragment key={key}>
-                                                    <div className='container lg:w-1/2 flex flex-col rounded-lg p-4 shadow-md lg:shadow-lg'>
-                                                        <span className={`text-3xl font-bold mb-2 ${analyzerResponse.body.words[key].class in colorWordClass ? colorWordClass[analyzerResponse.body.words[key].class] : 'text-white-300'}`}>
-                                                            {analyzerResponse.body.words[key].word}
+                                            <div className="flex items-center">
+                                                {
+                                                    !isAnalyzeFailed && !isSaved &&
+                                                    <button onClick={save}>
+                                                        <span className="material-symbols-outlined">
+                                                            star
                                                         </span>
-                                                        <span className='text-lg '><b>Romaji</b>: {analyzerResponse.body.words[key].romaji}</span>
-                                                        <span className='text-lg '><b>Class</b>: {analyzerResponse.body.words[key].class}</span>
-                                                        <span className='text-lg '><b>Meaning</b>: {analyzerResponse.body.words[key].meaning}</span>
-                                                        <span className='text-lg '><b>Context</b>: {analyzerResponse.body.words[key].context}</span>
-                                                    </div>
-                                                </React.Fragment>
-                                            ))}
-                                        </div>}
+                                                    </button>
+                                                }
+                                                {isSaved && <span className="text-amber-300">Saved</span>}
+                                            </div>
+
+
+                                        </div>
+                                        <div className="h-28 overflow-y-auto no-scrollbar">
+                                            {!isAnalyzeFailed && <span className='font-bold text-3xl mr-4 p-2'>{
+                                                Object.keys(AnalyserResponse.body.words).map((key) => (
+                                                    <React.Fragment key={key}>
+
+                                                        <span className={`text-3xl font-bold mb-2 ${AnalyserResponse.body.words[key].class in colorWordClass ? colorWordClass[AnalyserResponse.body.words[key].class] : 'text-white-300'}`}>
+                                                            {AnalyserResponse.body.words[key].word}
+                                                        </span>
+                                                    </React.Fragment>
+                                                ))
+                                            }</span>}
+                                        </div>
+                                    </div>
+                                    <div className="flex-1 overflow-y-auto no-scrollbar">
+
+                                        {/* // Words List */}
+                                        {isAnalyzeFailed ?
+                                            <div className="flex justify-center p-2">
+                                                <p>Error occured. Please try again later.</p>
+                                            </div> : <div className="h-80 lg:flex lg:flex-wrap">
+                                                {Object.keys(AnalyserResponse.body.words).map((key) => (
+                                                    <React.Fragment key={key}>
+                                                        <div className='container lg:w-1/2 flex flex-col rounded-lg p-4 shadow-md lg:shadow-lg'>
+                                                            <span className={`text-3xl font-bold mb-2 ${AnalyserResponse.body.words[key].class in colorWordClass ? colorWordClass[AnalyserResponse.body.words[key].class] : 'text-white-300'}`}>
+                                                                {AnalyserResponse.body.words[key].word}
+                                                            </span>
+                                                            <span className='text-lg '><b>Romaji</b>: {AnalyserResponse.body.words[key].romaji}</span>
+                                                            <span className='text-lg '><b>Class</b>: {AnalyserResponse.body.words[key].class}</span>
+                                                            <span className='text-lg '><b>Meaning</b>: {AnalyserResponse.body.words[key].meaning}</span>
+                                                            <span className='text-lg '><b>Context</b>: {AnalyserResponse.body.words[key].context}</span>
+                                                        </div>
+                                                    </React.Fragment>
+                                                ))}
+                                            </div>}
+                                    </div>
                                 </div>
                             }
                         </div>
                         : <div className="bg-gray-800 flex items-center justify-center h-full">
-                            <p className="p-2">Press the 'Use Analyzer' button to generate a breakdown of the Japanese text.</p>
+                            <p className="p-2">Press the 'Use Analyser' button to generate a breakdown of the Japanese text.</p>
                         </div>
                 }
             </div>
@@ -459,17 +524,17 @@ export default function ChatAI() {
 
     const portraitDisplay = () => {
         return (
-            <div className="grid grid-rows-1 grid-cols-1 h-full ">
-                {isAnalyze ? analyzerUI() : chatUI()}
+            <div className="grid grid-cols-1 h-full ">
+                {isAnalyze ? AnalyserUI() : chatUI()}
             </div>
         );
     }
     const landscapeDisplay = () => {
         return (
 
-            <div className="grid grid-rows-1 grid-cols-2 h-full ">
+            <div className="grid grid-cols-2 h-full ">
                 {chatUI()}
-                {analyzerUI()}
+                {AnalyserUI()}
             </div>
         );
     };
@@ -477,9 +542,12 @@ export default function ChatAI() {
 
     return (
         <Template>
-            {
-                isPortrait ? portraitDisplay() : landscapeDisplay()
-            }
+            <div className="h-full">
+
+                {
+                    isPortrait ? portraitDisplay() : landscapeDisplay()
+                }
+            </div>
 
         </Template>
     );
