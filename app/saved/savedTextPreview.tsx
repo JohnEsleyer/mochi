@@ -53,10 +53,6 @@ function AllSavedText() {
     const [isAnalyze, setIsAnalyze] = useState(false);
 
 
-    const handleOrientationChange = () => {
-        setIsPortrait((window.innerHeight > window.innerWidth - 400));
-    };
-
 
     useEffect(() => {
         const fetchSavedData = async () => {
@@ -135,6 +131,10 @@ function AllSavedText() {
     }, [currentGroupData.id]);
 
 
+    useEffect(() => {
+        setIsShowAnalysis(false);
+    }, [currentGroupData]);
+
     const handleDelete = async (id: number) => {
 
         const { error } = await supabase
@@ -146,11 +146,11 @@ function AllSavedText() {
 
     const items = Array.from({ length: 20 }, (_, index) => index); // Create an array [0, 1, 2, ..., 19]
 
+    
+
     return (
         <div className="col-span-3 h-10">
             {isShowAnalysis ? <div className="h-full ">
-
-
                 {
                 
                         <div className='h-full'>

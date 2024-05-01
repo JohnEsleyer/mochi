@@ -8,6 +8,7 @@ interface GroupDataType {
 interface GroupContextType {
     currentGroupData: GroupDataType;
     setCurrentGroupData: React.Dispatch<React.SetStateAction<GroupDataType>>;
+
 }
 
 export const GroupContext = createContext<GroupContextType | undefined>(undefined);
