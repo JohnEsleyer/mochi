@@ -25,7 +25,7 @@ import {
 export default function Saved() {
     const [currentGroupData, setCurrentGroupData] = useState({
         id: -1, // -1 value for no group
-        group_name: 'All',
+        group_name: 'Default',
     });
     const [showGroups, setShowGroups] = useState(true);
     const [renameValue, setRenameValue] = useState('');

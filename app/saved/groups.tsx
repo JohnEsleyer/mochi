@@ -42,10 +42,10 @@ function Groups() {
             <button className={`hover:bg-orange-200 rounded w-full hover:text-black ${currentGroupData.id == -1 ? 'bg-orange-200 text-black' : ''}`} onClick={() => {
                             setCurrentGroupData({
                                 id:-1,
-                                group_name: 'All'
+                                group_name: 'Default'
                             });
                         }}>
-                        All
+                        Default
                         </button>
             {
                 groups.map((value, index) => (
