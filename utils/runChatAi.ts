@@ -37,9 +37,7 @@ export default async function runAi(text: Conversation) {
       },
     ];
   
-    // const allKanji = filterJapanese(text);
-    // console.log("Filtered Japanese:" + JSON.stringify(allKanji));
-    
+
     const {conversation} = text;
 
     const prompt = `

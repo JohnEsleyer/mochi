@@ -8,6 +8,7 @@ import Groups from "./groups";
 import { GroupContext } from "./groupContext";
 import Loading from '/public/loading.svg';
 import Image from "next/image";
+
 import {
     AlertDialog,
     AlertDialogAction,
@@ -24,11 +25,10 @@ import {
 export default function Saved() {
     const [currentGroupData, setCurrentGroupData] = useState({
         id: -1, // -1 value for no group
-        group_name: 'All',
+        group_name: 'Default',
     });
     const [showGroups, setShowGroups] = useState(true);
     const [renameValue, setRenameValue] = useState('');
-
 
     const newGroup = async () =>  {
         setShowGroups(false);
@@ -70,7 +70,6 @@ export default function Saved() {
                 
     }
 
-    
     return (
         <Template>
             <GroupContext.Provider value={{ currentGroupData, setCurrentGroupData }}>
@@ -88,6 +87,7 @@ export default function Saved() {
                                 </span>
                             </button>
                         </div>
+      
                         <div className="pt-2">
                         {
                             showGroups ? <Groups /> : <div className="flex items-center justify-center">
@@ -99,9 +99,11 @@ export default function Saved() {
                             </div>
                         }
                         </div>
+                        
                     </div>
                     <div className="col-span-4 overflow-y-scroll lg:col-span-5 p-5">
-                        <div className="h-10">
+                      
+                            <div className="h-10">
                             
                                 {currentGroupData.id == -1 ? <div></div>: <div><button onClick={handleDeleteGroup}>
                                 

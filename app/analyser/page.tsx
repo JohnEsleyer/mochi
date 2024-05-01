@@ -6,7 +6,8 @@ import { colorWordClass } from '../../utils/colors';
 import Template from '@/components/PageTemplate';
 import { useEffect } from 'react';
 import supabase from '@/utils/supabase';
-
+import Loading from "/public/loading.svg"
+import Image from "next/image";
 
 export default function Analyser() {
   const defaultData = {
@@ -105,7 +106,13 @@ export default function Analyser() {
       furigana: responseJson.body.furigana,
       romaji: responseJson.body.romaji,
       context: responseJson.body.context,
-      words: JSON.stringify(responseJson.body.words),
+      words: Object.keys(responseJson.body.words).map((key) => (
+
+        responseJson.body.words[key]
+
+      )),
+
+
 
     };
 
@@ -133,7 +140,7 @@ export default function Analyser() {
     <>
       <Template>
         {/* // Body */}
-        <div className={`${isLoading ? 'shimmer-effect' : ''} overflow-auto h-full w-full rounded-lg lg:rounded-lg`}>
+        <div className='overflow-auto h-full w-full rounded-lg lg:rounded-lg'>
           <div className='p-6 flex flex-col'>
             <div className='h-10'>
               <div className='flex items-center justify-center'>
@@ -159,7 +166,13 @@ export default function Analyser() {
                     <p className="text-xs p-2">{inputValue.length} / 100</p>
                   </div>
                 </div>
-                {isLoading ? <p></p> :
+                {isLoading ? <div className="flex justify-center items-center">
+                  <Image
+                    src={Loading}
+                    height={50}
+                    width={50}
+                    alt={""} />
+                </div> :
                   <div className='flex justify-center items-center'>
                     <button
                       onClick={handleClick}
