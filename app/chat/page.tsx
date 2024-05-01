@@ -105,7 +105,7 @@ export default function ChatAI() {
 
     const submitMessage = async () => {
         setIsChatFailed(false);
-        setIsSaved(false);
+        
 
 
         var prevMessage: string[] = [];
@@ -185,6 +185,7 @@ export default function ChatAI() {
     const handleAnalyze = async (message: string) => {
         setIsLoading(true);
         setIsAnalyze(true);
+        setIsSaved(false);
 
 
         // Fetch access token stored from local storage.

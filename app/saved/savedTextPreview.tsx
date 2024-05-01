@@ -27,7 +27,7 @@ interface JsonData {
     words: Word[];
 }
 
-interface SaveData {
+interface SavedData {
     created_at: string;
     id: number;
     text: string
@@ -44,14 +44,12 @@ function AllSavedText() {
         heightWidth = window.innerHeight > window.innerWidth;
     }
 
-    const [isPortrait, setIsPortrait] = useState(heightWidth);
+    const [isLoading, setIsLoading] = useState(false);
     const [savedJsonData, setSavedJsonData] = useState<JsonData[]>([]);
-    const [savedTableData, setSavedTableData] = useState<SaveData[]>([]);
-    const [savedJsonWords, setJsonWords] = useState<Word[]>([]);
+    const [savedData, setSavedData] = useState<SavedData[]>([]);
+    const [toDeleteId, setToDeleteId] = useState(0);
     const [isShowAnalysis, setIsShowAnalysis] = useState(false);
     const [currentAnalysisIndex, setCurrentAnalysisIndex] = useState(24);
-    const [isAnalyze, setIsAnalyze] = useState(false);
-
 
 
     useEffect(() => {
@@ -61,9 +59,8 @@ function AllSavedText() {
                     .from('saved')
                     .select('*')
 
-                const saveData = data as SaveData[];
-                setSavedTableData(saveData);
-                console.log('saveData[]:'+ saveData);
+                const saveData = data as SavedData[];
+                setSavedData(saveData);
                 let temp: JsonData[] = [];
                 saveData.map((value) => {
                     console.log('map:' + value.id);
@@ -90,6 +87,8 @@ function AllSavedText() {
 
     }, []);
 
+
+
     useEffect(() => {
         const fetchSavedData = async () => {
             try {
@@ -110,7 +109,7 @@ function AllSavedText() {
                 }
 
 
-                const saveData = savedData as SaveData[];
+                const saveData = savedData as SavedData[];
 
                 let temp: JsonData[] = [];
                 saveData.map((value) => {
@@ -132,21 +131,46 @@ function AllSavedText() {
 
 
     useEffect(() => {
+        console.log('load useEffect executed!');
         setIsShowAnalysis(false);
+
+        const wait2Seconds = async () => {
+            await new Promise(resolve => setTimeout(resolve, 2000)); // Wait for 2 seconds
+            setIsLoading(false);
+        }
+
+        setIsLoading(true);
+        wait2Seconds();
+        
     }, [currentGroupData]);
 
-    const handleDelete = async (id: number) => {
-
+    const handleDelete = async () => {
+        setIsLoading(true);
+        console.log("toDelete:" + toDeleteId);
         const { error } = await supabase
-            .from('groups')
-            .delete()
-            .eq('id', id);
-
-    }
+        .from('saved')
+        .delete()
+        .eq('id', savedData[currentAnalysisIndex].id);
+        if (error){
+            console.log(error);
+        }
+        setIsLoading(false);
+        setIsShowAnalysis(false);
+    };
 
     const items = Array.from({ length: 20 }, (_, index) => index); // Create an array [0, 1, 2, ..., 19]
 
     
+    if (isLoading) {
+        console.log('isLoading executed');
+        return (<div className="h-full col-span-3 flex items-center justify-center">
+        <Image src={Loading}
+            width={50}
+            height={50}
+            alt="Loading"
+        />
+    </div>);
+    }
 
     return (
         <div className="col-span-3 h-10">
@@ -179,9 +203,12 @@ function AllSavedText() {
                                         <div className="flex items-center">
 
                                             <span>
-                                                <span className="material-symbols-outlined">
+                                            <button onClick={handleDelete}>
+                                                <span className="hover:text-red-500 material-symbols-outlined">
                                                         delete
                                                 </span>
+                                                </button>
+                                                
                                                
                                             </span>
 
@@ -237,14 +264,7 @@ function AllSavedText() {
                             <button key={index} onClick={() => {
                                 setCurrentAnalysisIndex(index);
                                 setIsShowAnalysis(true);
-                                // console.log('button = id:' + savedTableData[index].id);
                                 
-                                // for (const key in savedJsonData[0].words){
-                                //     console.log("key: ", key);
-                                // }
-                                // console.log(savedJsonData[currentAnalysisIndex].words);
-                                
-                                console.log(savedJsonData[0].words[1].class);
                             }}>
                                 <div className="border hover:bg-gray-900 shadow-xl rounded border-gray-700 p-5 m-2">
                                     <p className="">{value.japanese}</p>
