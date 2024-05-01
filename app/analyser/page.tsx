@@ -106,7 +106,13 @@ export default function Analyser() {
       furigana: responseJson.body.furigana,
       romaji: responseJson.body.romaji,
       context: responseJson.body.context,
-      words: JSON.stringify(responseJson.body.words),
+      words: Object.keys(responseJson.body.words).map((key) => (
+
+        responseJson.body.words[key]
+
+      )),
+
+
 
     };
 
@@ -161,12 +167,12 @@ export default function Analyser() {
                   </div>
                 </div>
                 {isLoading ? <div className="flex justify-center items-center">
-                                    <Image
-                                        src={Loading}
-                                        height={50}
-                                        width={50} 
-                                        alt={""}                                    />
-                                </div> :
+                  <Image
+                    src={Loading}
+                    height={50}
+                    width={50}
+                    alt={""} />
+                </div> :
                   <div className='flex justify-center items-center'>
                     <button
                       onClick={handleClick}

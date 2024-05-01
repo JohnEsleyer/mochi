@@ -39,7 +39,7 @@ function Groups() {
 
     return (
         <div>
-            <button className={`hover:bg-white w-full hover:text-black ${currentGroupData.id == -1 ? 'bg-white text-black' : ''}`} onClick={() => {
+            <button className={`hover:bg-orange-200 rounded w-full hover:text-black ${currentGroupData.id == -1 ? 'bg-orange-200 text-black' : ''}`} onClick={() => {
                             setCurrentGroupData({
                                 id:-1,
                                 group_name: 'All'
@@ -50,7 +50,7 @@ function Groups() {
             {
                 groups.map((value, index) => (
                     <div key={index}>
-                        <button className={`hover:bg-white w-full hover:text-black ${currentGroupData.id == value.id ? 'bg-white text-black' : ''}`} onClick={() => {
+                        <button className={`hover:bg-orange-200 rounded w-full hover:text-black ${currentGroupData.id == value.id ? 'bg-orange-200 text-black' : ''}`} onClick={() => {
                             setCurrentGroupData({
                                 id: value.id,
                                 group_name: value.group_name,

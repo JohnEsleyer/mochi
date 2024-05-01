@@ -1,6 +1,5 @@
 'use client'
 import Template from "@/components/PageTemplate";
-import Typewriter from "@/components/typewriter";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { colorWordClass } from "@/utils/colors";
@@ -232,19 +231,26 @@ export default function ChatAI() {
 
     async function save() {
 
+
         const savedData = {
             japanese: currentAnalyzedText,
             meaning: conversationEnglish[currentAnalyzed],
             furigana: conversationHiragana[currentAnalyzed],
             romaji: conversationEnglish[currentAnalyzed],
             context: 'none',
-            words: JSON.stringify(AnalyserResponse.body.words),
+            words: 
+                Object.keys(AnalyserResponse.body.words).map((key) => (
+
+
+                    AnalyserResponse.body.words[key]
+
+                )),
         };
 
         const { data, error } = await supabase
             .from('saved')
             .insert([
-                { 
+                {
                     text: JSON.stringify(savedData),
                     language: 'japanese',
                 },
@@ -324,7 +330,7 @@ export default function ChatAI() {
                                     className="hidden"
                                     checked={!isFurigana}
                                     onChange={toggleFurigana}
-                                    
+
                                 />
                                 <label
                                     htmlFor="toggleFurigana"
@@ -393,7 +399,7 @@ export default function ChatAI() {
 
                     </div>
                 </div>
-                
+
 
                 {/* // Chat */}
                 <div className="flex flex-col h-full">
@@ -401,13 +407,13 @@ export default function ChatAI() {
                     <div className="flex-1 overflow-y-auto no-scrollbar">
                         <div className="h-10 ">
                             {chatComponent()}
-                           {isChatFailed &&  <div className="text-red-500">
-                            Server error, please try again after a few seconds.
-                        </div>}
+                            {isChatFailed && <div className="text-red-500">
+                                Server error, please try again after a few seconds.
+                            </div>}
                         </div>
-                        
+
                     </div>
-                    
+
                     {/* // User input */}
                     <div className="h-14">
                         <form onSubmit={handleSubmit} className="grid grid-rows-1 grid-cols-8 grid-flow-col gap-2">
@@ -433,7 +439,7 @@ export default function ChatAI() {
                         </form>
                     </div>
                 </div>
-                
+
             </div>
         );
     };
@@ -453,8 +459,8 @@ export default function ChatAI() {
                                     <Image
                                         src={Loading}
                                         height={50}
-                                        width={50} 
-                                        alt={""}                                    />
+                                        width={50}
+                                        alt={""} />
                                 </div> :
                                 <div className="mochiFade h-full flex flex-col opacity-100 transform transition-opacity duration-500 ease-in-out">
                                     {/* // Header */}
