@@ -8,10 +8,17 @@ function LandingPage() {
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center">
             <a href="#" className="text-white text-xl font-bold">
-              mochi
+              <h1 className='text-s font-bold'>
+                <span className='text-pink-300'>M</span>
+                <span className='text-grey-200'>o</span>
+                <span className='text-green-300'>c</span>
+                <span className='text-yellow-200'>h</span>
+                <span className='text-orange-300'>i</span>
+                <span> AI</span>
+              </h1>
             </a>
           </div>
-          <div className="hidden md:flex space-x-4">
+          <div className="flex space-x-4">
             <Link href="/signup" className="text-white hover:text-gray-300">
               Sign Up
             </Link>
@@ -22,27 +29,11 @@ function LandingPage() {
               About
             </Link>
           </div>
-          <div className="md:hidden">
-            <button className="text-white">
-              <svg
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 6h16M4 12h16m-7 6h7"
-                />
-              </svg>
-            </button>
-          </div>
+
         </div>
       </nav>
       <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-        <h1 className="text-3xl font-bold text-white">Welcome to Mochi</h1>
+        <h1 className="text-3xl font-bold text-white">Learn </h1>
         <p className="text-white mt-4">
           Description
         </p>

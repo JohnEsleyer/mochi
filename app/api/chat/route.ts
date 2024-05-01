@@ -16,14 +16,14 @@ export async function POST(request: Request) {
    
     console.log("Failed");
     return NextResponse.json({
-      status: 401,
+      status: 500,
       body: ""
     });
   }else{
     console.log("Success");
     const maxAttempts = 1; // Set the maximum number of attempts
     
-    const conversation = await 
+
 
     console.log("Received Requests:" + JSON.stringify(message));
     let attempt = 1;
@@ -47,7 +47,7 @@ export async function POST(request: Request) {
       console.error(`Failed to parse JSON after ${maxAttempts} attempts. Check the JSON format.`);
       
       return Response.json({
-        status: 401,
+        status: 500,
         body: {
           
         },

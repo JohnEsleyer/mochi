@@ -8,7 +8,7 @@ import React from "react";
 import Image from "next/image";
 import ArrowBack from "/public/arrow_back.svg"
 import supabase from "@/utils/supabase";
-
+import Loading from "/public/loading.svg"
 
 
 const defaultData = {
@@ -36,18 +36,18 @@ export default function ChatAI() {
 
     const [inputText, setInputText] = useState('');
     const [conversationKanji, setConversationKanji] = useState<string[]>([
-        "こんにちは！話しましょう。"
+        "こんにちは、私はモチです。あなたの言語学習アシスタントです。何でも聞いてください。"
     ]);
     const [conversationHiragana, setConversationHiragana] = useState<string[]>([
-        "こんにちは！はなしましょう。"
+        "こんにちは、わたしはもちです。あなたのげんごがくしゅうアシスタントです。なにでもきいてください。"
     ]);
 
     const [conversationRomaji, setConversationRomaji] = useState<string[]>([
-        "Konnichiwa! Hanashimashou."
+        "Konnichiwa, watashi wa Mochi desu. Anata no gengo gakushū ashisutanto desu. Nani demo kiite kudasai."
     ]);
 
     const [conversationEnglish, setConversationEnglish] = useState<string[]>([
-        "Hello there! Let's talk."
+        "Hi I am Mochi, your language learning assistant. Feel free to ask me anything."
     ]);
 
 
@@ -69,6 +69,7 @@ export default function ChatAI() {
     const [isSaved, setIsSaved] = useState(false);
     const [currentAnalyzed, setCurrentAnalyzed] = useState(0);
     const [currentAnalyzedText, setCurrentAnalyzedText] = useState('');
+    const [isChatFailed, setIsChatFailed] = useState(false);
 
     const handleOrientationChange = () => {
         setIsPortrait((window.innerHeight > window.innerWidth - 400));
@@ -104,8 +105,9 @@ export default function ChatAI() {
     };
 
     const submitMessage = async () => {
-        setIsAnalyzeFailed(false);
+        setIsChatFailed(false);
         setIsSaved(false);
+
 
         var prevMessage: string[] = [];
         var prevHiragana: string[] = [];
@@ -142,8 +144,8 @@ export default function ChatAI() {
                 body: JSON.stringify(payload),
             });
             const { body, status } = await response.json();
-            if (status !== 200) {
-                setIsAnalyzeFailed(true);
+            if (status == 500) {
+                setIsChatFailed(true);
                 return
             }
             setTimeout(() => {
@@ -213,7 +215,7 @@ export default function ChatAI() {
 
             const { status } = response;
 
-            if (status === 401) {
+            if (status === 500) {
                 console.log('Analyze Failed');
                 setIsAnalyzeFailed(true);
             } else {
@@ -391,6 +393,7 @@ export default function ChatAI() {
 
                     </div>
                 </div>
+                
 
                 {/* // Chat */}
                 <div className="flex flex-col h-full">
@@ -398,8 +401,13 @@ export default function ChatAI() {
                     <div className="flex-1 overflow-y-auto no-scrollbar">
                         <div className="h-10 ">
                             {chatComponent()}
+                           {isChatFailed &&  <div className="text-red-500">
+                            Server error, please try again after a few seconds.
+                        </div>}
                         </div>
+                        
                     </div>
+                    
                     {/* // User input */}
                     <div className="h-14">
                         <form onSubmit={handleSubmit} className="grid grid-rows-1 grid-cols-8 grid-flow-col gap-2">
@@ -411,7 +419,7 @@ export default function ChatAI() {
                                     maxLength={100}
                                     onChange={handleChange}
                                     placeholder="Type your message here..."
-                                    className="w-full p-1 text-white border border-white rounded-lg bg-gray-800 "
+                                    className="w-full p-1 text-white border border-white rounded-lg bg-gray-800"
                                 />
                             </div>
                             <div className="col-span-2 flex items-end ">
@@ -425,6 +433,7 @@ export default function ChatAI() {
                         </form>
                     </div>
                 </div>
+                
             </div>
         );
     };
@@ -437,10 +446,16 @@ export default function ChatAI() {
 
                 {
                     isAnalyze ?
-                        <div className={`${isLoading ? 'shimmer-effect' : ''} h-full`}>
+                        <div className='h-full'>
 
                             {isLoading ?
-                                <div></div> :
+                                <div className="h-full flex justify-center items-center">
+                                    <Image
+                                        src={Loading}
+                                        height={50}
+                                        width={50} 
+                                        alt={""}                                    />
+                                </div> :
                                 <div className="mochiFade h-full flex flex-col opacity-100 transform transition-opacity duration-500 ease-in-out">
                                     {/* // Header */}
 
