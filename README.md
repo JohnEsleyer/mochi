@@ -1,6 +1,9 @@
 # Mochi
 A full-stack web application for learning and practicing the Japanese language through the use of AI chatbot which is powered by Google's Gemini. 
 
+![ezgif-7-7f2e203f03](https://github.com/JohnEsleyer/mochi/assets/66754038/2432e107-9467-4783-be90-4239b116796d)
+
+
 #### My reasons for building this web app
 The purpose of creating this web application is to aid in my Japanese language learning journey. It involves developing a chatbot specifically designed for my preferred language learning method, which focuses on real conversations. 
 
