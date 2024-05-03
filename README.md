@@ -1,19 +1,23 @@
 # Mochi
-A full-stack web application for learning languages through a conversation with AI. 
+A full-stack web application for learning and practicing the Japanese language through the use of AI chatbot which is powered by Google's Gemini. 
 
 #### My reasons for building this web app
 The purpose of creating this web application is to aid in my Japanese language learning journey. It involves developing a chatbot specifically designed for my preferred language learning method, which focuses on real conversations. 
 
-### Supported Languages:
-- [x] Japanese
-- [ ] Filipino (Coming soon)
-- [ ] Korean (Coming soon)
 
 ### Tech Stack:
 - NextJS
 - Supabase 
 - TypeScript
 - Tailwind
+
+### Environment Variables
+Create an environment file (env.local):
+```
+GEMINI_API_KEY=API_KEY
+NEXT_PUBLIC_SUPABASE_URL=SUPABASE_URL
+NEXT_PUBLIC_SUPABASE_KEY=SUPABASE_KEY
+```
 
 ### Setup
 1. Clone the repository using the following git command:
