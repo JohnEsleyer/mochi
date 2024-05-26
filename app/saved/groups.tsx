@@ -89,7 +89,10 @@ function Groups() {
                                     group_name: value.group_name,
                                 });
                             }}>
-                                <p className="truncate">{value.group_name}</p>
+                                {value.group_name.length > 0 ? <p className="truncate">{value.group_name}</p>
+                                :
+                                <p className="">Untitled</p>
+                                }
                             </button>
                         </div>
                     ))
