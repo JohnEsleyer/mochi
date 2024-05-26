@@ -27,3 +27,38 @@ export const useGroupArrayContext = () => {
   }
   return context;
 };
+
+export interface Word {
+  word: string;
+  romaji: string;
+  class: string;
+  meaning: string;
+  context: string;
+}
+
+export interface JsonData {
+  japanese: string;
+  meaning: string;
+  furigana: string;
+  romaji: string;
+  context: string;
+  words: Word[];
+}
+
+export interface SavedData {
+  created_at: string;
+  id: number;
+  text: string
+  group_id: number;
+}
+
+export interface GroupsJsonData {
+  id: number;
+  created_at: string;
+  group_name: string;
+}
+
+export interface SavedText{
+  meta: SavedData;
+  body: JsonData;
+}

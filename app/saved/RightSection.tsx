@@ -1,20 +1,25 @@
-import { AlertDialogHeader, AlertDialogFooter } from "@/components/ui/alert-dialog";
-import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogTitle, AlertDialogDescription, AlertDialogCancel, AlertDialogAction } from "@radix-ui/react-alert-dialog";
+
 import AllSavedText from "./savedTextPreview";
 import { useCurrentGroup } from "./providers/CurrentGroupProvider";
 import { CurrentGroupContext } from "./types";
 import supabase from "@/utils/supabase";
 import { useEffect, useState } from "react";
 import { useGroups } from "./providers/GroupArrayProvider";
+import Loading from '/public/loading.svg';
+import Image from 'next/image';
 
-
+// This is the component displayed on the right section of the 'Save' page.
+// Displays the Japanese texts saved by the users
 
 export default function RightSection() {
     const { currentGroupData, setCurrentGroupData } = useCurrentGroup();
     const [renameValue, setRenameValue] = useState('');
     const { groups, setGroups } = useGroups();
+    const [loadDelete, setLoadDelete] = useState(false);
+
 
     const handleDeleteGroup = async () => {
+        setLoadDelete(true);
 
         const { error } = await supabase
             .from('groups')
@@ -37,6 +42,14 @@ export default function RightSection() {
         }
     };
 
+    useEffect(() => {
+        if (loadDelete) {
+            setTimeout(() => {
+                setLoadDelete(false);
+            }, 2000);
+        }
+    }, [loadDelete]);
+
 
     const handleRenameGroup = async (event: any) => {
         setRenameValue(event.target.value);
@@ -51,10 +64,10 @@ export default function RightSection() {
 
         if (error) {
             console.log(error);
-        }else{
+        } else {
             setGroups((prevValues) => (
                 prevValues.map((value) => (
-                    value.id == currentGroupData.id ? {id: currentGroupData.id, group_name: currentGroupData.group_name} : value
+                    value.id == currentGroupData.id ? { id: currentGroupData.id, group_name: event.target.value } : value
                 ))
             ));
         }
@@ -68,7 +81,7 @@ export default function RightSection() {
     return (
         <div className="col-span-4 overflow-y-scroll lg:col-span-5 p-5">
             <div className="h-10">
-                {currentGroupData.id == -1 ? <div></div> : <div>
+                {currentGroupData.id == -1 ? <div className="font-bold text-xl">Default</div> : <div>
                     <div className="flex flex-col">
                         <input
                             className=" pl-1 text-2xl bg-gray-800 font-bold"
@@ -77,18 +90,25 @@ export default function RightSection() {
                             disabled={false}
                             value={renameValue}
                             onChange={(event) => {
-                               
                                 handleRenameGroup(event);
                             }}
                         />
                         <button onClick={handleDeleteGroup}>
-                            <span className="flex items-center hover:text-red-500">
+                            <span className="flex items-center pt-2 pb-4 text-xs w-32 hover:text-red-500">
 
                                 <span className="material-symbols-outlined">
                                     delete
                                 </span>
                                 Delete Group
+                                {loadDelete && <Image
+                                    className="pl-1"
+                                    src={Loading}
+                                    height={20}
+                                    width={20}
+                                    alt="loading"
+                                />}
                             </span>
+
 
                         </button>
                     </div>
@@ -96,7 +116,6 @@ export default function RightSection() {
 
                 <div className="flex-1 grid grid-cols-3 ">
                     <AllSavedText />
-
                 </div>
             </div>
 
