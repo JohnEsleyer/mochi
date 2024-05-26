@@ -7,20 +7,29 @@ import { useEffect, useState } from "react";
 import { useGroups } from "./providers/GroupArrayProvider";
 import Loading from '/public/loading.svg';
 import Image from 'next/image';
+import OverlayDialog from "@/components/OverlayDialog";
 
 // This is the component displayed on the right section of the 'Save' page.
 // Displays the Japanese texts saved by the users
-
 export default function RightSection() {
     const { currentGroupData, setCurrentGroupData } = useCurrentGroup();
     const [renameValue, setRenameValue] = useState('');
     const { groups, setGroups } = useGroups();
     const [loadDelete, setLoadDelete] = useState(false);
 
+    const [dialogOpen, setDialogOpen] = useState(false);
+
+    const handleOpenDialog = () => {
+        setDialogOpen(true);
+    };
+
+    const handleCloseDialog = () => {
+        setDialogOpen(false);
+    }
 
     const handleDeleteGroup = async () => {
         setLoadDelete(true);
-
+        handleOpenDialog();
         const { error } = await supabase
             .from('groups')
             .delete()
@@ -40,6 +49,7 @@ export default function RightSection() {
             )));
 
         }
+
     };
 
     useEffect(() => {
@@ -80,6 +90,18 @@ export default function RightSection() {
 
     return (
         <div className="col-span-4 overflow-y-scroll lg:col-span-5 p-5">
+            <OverlayDialog 
+                open={dialogOpen} 
+                onClose={handleCloseDialog} 
+                title={"Delete Group"} 
+                textContent="Are you sure you want to delete this group?"
+                continueColor="red"
+                closeColor="" 
+                onContinue={async () => {
+                    handleDeleteGroup();
+                    handleCloseDialog();
+            }} />
+            
             <div className="h-10">
                 {currentGroupData.id == -1 ? <div className="font-bold text-xl">Default</div> : <div>
                     <div className="flex flex-col">
@@ -93,8 +115,8 @@ export default function RightSection() {
                                 handleRenameGroup(event);
                             }}
                         />
-                        <button onClick={handleDeleteGroup}>
-                            <span className="flex items-center pt-2 pb-4 text-xs w-32 hover:text-red-500">
+                        <button onClick={handleOpenDialog}>
+                            <span className="flex items-center text-xs w-32 hover:text-red-500">
 
                                 <span className="material-symbols-outlined">
                                     delete

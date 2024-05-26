@@ -67,7 +67,7 @@ const Template: React.FC<TemplateProps> = ({ children }) => {
                         Analyser
                       </Link>
                       <Link href="/saved" className="text-blue-300">
-                        Saved Texts
+                        Saved
                       </Link>
                       <Link href="/hiragana" className="text-amber-300">
                         Hiragana

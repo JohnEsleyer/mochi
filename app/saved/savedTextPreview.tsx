@@ -12,6 +12,7 @@ import { colorWordClass } from "@/utils/colors";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
 import { useGroups } from "./providers/GroupArrayProvider";
 import { useCurrentGroup } from "./providers/CurrentGroupProvider";
+import OverlayDialog from "@/components/OverlayDialog";
 
 
 
@@ -24,13 +25,22 @@ function AllSavedText() {
     }
 
     const [isLoading, setIsLoading] = useState(false);
-    const [openDialog, setOpenDialog] = useState(false);
-    const [toDeleteId, setToDeleteId] = useState(0);
+
     const [isShowAnalysis, setIsShowAnalysis] = useState(false);
     const [currentAnalysisID, setCurrentAnalysisID] = useState(1);
     const {groups, setGroups} = useGroups();
     const {currentGroupData, setCurrentGroupData} = useCurrentGroup();
     const [savedTexts, setSavedTexts] = useState<SavedText[]>([]);
+    
+    const [dialogOpen, setDialogOpen] = useState(false);
+
+    const handleOpenDialog = () => {
+        setDialogOpen(true);
+    };
+
+    const handleCloseDialog = () => {
+        setDialogOpen(false);
+    };
     
 
     const fetchSavedData = async () => {
@@ -122,6 +132,10 @@ function AllSavedText() {
             .eq('id', currentAnalysisID);
         if (error) {
             console.log(error);
+        }else{
+            setSavedTexts((prevValues) => (
+                prevValues.filter((value) => (value.meta.id !== currentAnalysisID))
+            ));
         }
         setIsLoading(false);
         setIsShowAnalysis(false);
@@ -180,6 +194,17 @@ function AllSavedText() {
 
     return (
         <div className="col-span-3 h-10">
+            <OverlayDialog 
+                open={dialogOpen} 
+                onClose={handleCloseDialog} 
+                title={"Delete Saved Text?"} 
+                textContent="Are you sure you want to delete this text?"
+                continueColor="red"
+                closeColor="" 
+                onContinue={async () => {
+                    handleDelete();
+                    handleCloseDialog();
+            }} />
 
 
             {isShowAnalysis ? <div className="h-full ">
@@ -211,7 +236,7 @@ function AllSavedText() {
 
                                         <span>
                                             <div className="flex flex-wrap">
-                                                <button onClick={handleDelete} >
+                                                <button onClick={handleOpenDialog} >
                                                     <span className="p-1 hover:text-red-500 flex justify-center material-symbols-outlined">
                                                         delete
                                                     </span>
@@ -300,7 +325,7 @@ function AllSavedText() {
                         savedTexts.map((value, index) => {
                             if (value.body){
                                 if(currentGroupData.id == value.meta.group_id){
-                                return (
+                                    return (
                                     <button key={index} onClick={() => {
                                         setCurrentAnalysisID(value.meta.id);
                                         setIsShowAnalysis(true);
@@ -319,12 +344,11 @@ function AllSavedText() {
                         })
                     }
                     </div> : <div className="w-full h-96 flex items-center justify-center text-gray-400">
-                            <p>Your analyzed texts awaityou here. Start saving with a tap on the star icon during analysis.</p>
+                            <p>Your saved analyzed texts will be displayed here. Start saving by tapping on the star icon during text analysis.</p>
                         </div>
                         }
                     
-                </div>}
-               
+                </div>}       
         </div>
     );
 }
