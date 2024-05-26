@@ -249,7 +249,7 @@ export default function ChatAI() {
         };
 
         const { data, error } = await supabase
-            .from('saved')
+            .from('save')
             .insert([
                 {
                     text: JSON.stringify(savedData),

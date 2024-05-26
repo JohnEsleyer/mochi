@@ -3,7 +3,7 @@
 import supabase from "@/utils/supabase";
 import { group } from "console";
 import { useContext, useEffect, useState } from "react";
-import { GroupContext } from "./groupContext";
+import { CurrentGroupContext } from "./types";
 import React from "react";
 import Image from "next/image";
 import ArrowBack from "/public/arrow_back.svg"
@@ -45,7 +45,7 @@ interface GroupsJsonData {
 
 
 function AllSavedText() {
-    const { currentGroupData } = useContext(GroupContext)!;
+    const { currentGroupData } = useContext(CurrentGroupContext)!;
 
     var heightWidth;
     if (typeof window == "undefined") {
@@ -68,7 +68,7 @@ function AllSavedText() {
         const fetchSavedData = async () => {
             try {
                 const { data, error } = await supabase
-                    .from('saved')
+                    .from('save')
                     .select('*')
 
                 const saveData = data as SavedData[];
@@ -126,14 +126,14 @@ function AllSavedText() {
                 let savedData, e;
                 if (currentGroupData.id == -1) {
                     const { data, error } = await supabase
-                        .from('saved')
+                        .from('save')
                         .select('*')
                         .eq('group_id', -1);
                     savedData = data;
                     e = error;
                 } else {
                     const { data, error } = await supabase
-                        .from('saved')
+                        .from('save')
                         .select('*')
                         .eq('group_id', currentGroupData.id);
                     savedData = data;
@@ -181,7 +181,7 @@ function AllSavedText() {
         setIsLoading(true);
         console.log("toDelete:" + toDeleteId);
         const { error } = await supabase
-            .from('saved')
+            .from('save')
             .delete()
             .eq('id', savedData[currentAnalysisIndex].id);
         if (error) {
@@ -216,7 +216,6 @@ function AllSavedText() {
 
                         <div className="border-2 border-gray-700 rounded flex flex-col opacity-100 transform transition-opacity duration-500 ease-in-out">
                             {/* // Header */}
-
                             <div className="row-span-3 bg-gray-900 shadow-2xl overflow-y-auto no-scrollbar">
                                 <div className="flex justify-start">
 
@@ -255,7 +254,7 @@ function AllSavedText() {
                                                                 onClick={() => {
                                                                     const updateSavedText = async () => {
                                                                         const { data, error } = await supabase
-                                                                            .from('saved')
+                                                                            .from('save')
                                                                             .update({ group_id: value.id })
                                                                             .eq('id', savedData[currentAnalysisIndex].id);
                                                                         if (error) {
