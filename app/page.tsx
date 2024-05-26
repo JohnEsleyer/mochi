@@ -249,7 +249,9 @@ export default function LandingPage() {
             <span className='text-orange-300'>i</span>
           </span>
           <p className="text-white mt-4">
-            Powered by Google's <span className="text-purple-400">Gemini</span>
+            Powered by Google <span className="text-purple-400">Gemini</span>
+          </p>
+          <p className="text-white">
           </p>
 
         </div>
