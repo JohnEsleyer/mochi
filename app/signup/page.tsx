@@ -58,7 +58,7 @@ export default function SignUp() {
   return  (
     <div className="bg-gray-800 min-h-screen flex items-center justify-center">
       {/* // Start of Sign In Container */}
-      <div className="max-w-md w-full p-6 bg-gray-700 rounded-lg">
+      <div className="max-w-md w-full p-6 bg-gray-900 rounded-lg">
         <h2 className="text-2xl font-bold mb-4 text-white">Sign Up</h2>
 
         <form onSubmit={handleSubmit}>
@@ -67,6 +67,7 @@ export default function SignUp() {
             <input
               type="email"
               id="email"
+              placeholder="email@domain.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded text-black"
@@ -77,6 +78,7 @@ export default function SignUp() {
             <label htmlFor="password" className="block mb-2 text-white">Password</label>
             <input
               type="password"
+              placeholder="******"
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -88,6 +90,7 @@ export default function SignUp() {
             <label htmlFor="passwordConfirmation" className="block mb-2 text-white">Confirm Password</label>
             <input
               type="password"
+              placeholder="******"
               id="passwordConfirmation"
               value={passwordConfirmation}
               onChange={(e) => setPasswordConfirmation(e.target.value)}
@@ -112,7 +115,9 @@ export default function SignUp() {
           />}
         </div>
         {/* // End of Loading Indicator */}
-
+        <a className="flex justify-center w-full text-white underline" href="/signin">
+          <p>Sign In</p>
+        </a>
        
       </div>
       {/* // End of Sign In Container */}

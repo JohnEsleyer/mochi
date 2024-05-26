@@ -2,10 +2,8 @@ import { GoogleGenerativeAI, HarmBlockThreshold, HarmCategory } from "@google/ge
 import filterJapanese from "./filterJapanese";
 import removeCodeBlock from "./removeCodeBlock";
 
-const MODEL_NAME = "gemini-1.0-pro";
+const MODEL_NAME = "gemini-1.5-flash";
 const API_KEY = process.env.GEMINI_API_KEY || '';
-
-
 
 export default async function runAi(text: Conversation) {
     const genAI = new GoogleGenerativeAI(API_KEY);
