@@ -296,7 +296,7 @@ function AllSavedText() {
                                     {
                                     savedTexts.map((savedText) => (
                                         savedText.meta.id == currentAnalysisID && Object.keys(savedText.body.words).map((value, index) => (
-                                                <div className='container lg:w-1/2 flex flex-col rounded-lg p-4 shadow-md lg:shadow-lg'>
+                                                <div key={savedText.meta.id} className='container lg:w-1/2 flex flex-col rounded-lg p-4 shadow-md lg:shadow-lg'>
                                                     <span className={`text-3xl font-bold mb-2 ${savedText.body.words[index].class in colorWordClass ?
                                                         colorWordClass[savedText.body.words[index].class] : 'text-white-300'}`}>
                                                         {savedText.body.words[index].word}
