@@ -13,7 +13,6 @@ export async function POST(request: Request) {
   console.log("Access Token:" + access_token);
   
   if (!user){
-   
     console.log("Failed");
     return NextResponse.json({
       status: 500,
@@ -40,6 +39,12 @@ export async function POST(request: Request) {
         attempt++;
         // Add a 1-second delay before retrying
         await new Promise(resolve => setTimeout(resolve, 1000));
+        return Response.json({
+          status: 500,
+          body: {
+
+          },
+        });
       }
     }
     

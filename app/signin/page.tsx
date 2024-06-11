@@ -93,7 +93,7 @@ export default function SignIn() {
           />}
         </div>
         {/* // End of Loading Indicator */}
-        <a className="flex justify-center w-full text-white underline" href="/signin">
+        <a className="flex justify-center w-full text-white underline" href="/signup">
           <p>Sign Up</p>
         </a>
        
