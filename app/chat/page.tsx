@@ -105,8 +105,6 @@ export default function ChatAI() {
 
     const submitMessage = async () => {
         setIsChatFailed(false);
-        
-
 
         var prevMessage: string[] = [];
         var prevHiragana: string[] = [];
@@ -142,6 +140,7 @@ export default function ChatAI() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),
             });
+
             const { body, status } = await response.json();
             if (status == 500) {
                 setIsChatFailed(true);
@@ -209,10 +208,10 @@ export default function ChatAI() {
                     'Content-Type': 'application/json',
                 },
             });
-
+            
             const response: AnalyserResponse = await res.json();
             console.log(response.status);
-
+            
             const { status } = response;
 
             if (status === 500) {

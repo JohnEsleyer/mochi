@@ -46,7 +46,7 @@ export default function SignUp() {
       if (!error){
         setIsLoggedIn(true);
       }else{
-        setErrorText('Authentication failed. Please ensure your credentials are correct.');
+        setErrorText('Sign up failed. ' + error.message);
       }
  
     } catch (error) {
