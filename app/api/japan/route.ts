@@ -15,7 +15,7 @@ export async function POST(request: Request) {
 
   if (!user) {
     return NextResponse.json({
-      status: 401,
+      status: 500,
       body: {
         meaning: '',
         romaji: '',
@@ -41,9 +41,9 @@ export async function POST(request: Request) {
       }
     );
   } else {
-    const maxAttempts = 1; // Set the maximum number of attempts
+    const maxAttempts = 2; // Set the maximum number of attempts
 
-    let attempt = 1;
+    let attempt = 0;
     let jsonObject;
 
     while (attempt <= maxAttempts) {
@@ -64,7 +64,7 @@ export async function POST(request: Request) {
       console.error(`Failed to parse JSON after ${maxAttempts} attempts. Check the JSON format.`);
 
       return Response.json({
-        status: 401,
+        status: 500,
         body: {
           meaning: '',
           romaji: '',

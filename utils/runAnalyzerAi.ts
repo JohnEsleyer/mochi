@@ -39,7 +39,7 @@ export default async function runAi(text: string) {
     console.log("Filtered Japanese:" + JSON.stringify(allKanji));
     const parts = [
       { text: `Given a Japanese text: "${text}"
-      Give the following JSON (if the given text is gibberish or non-japanese give a single $ sign instead instead.):
+      Give the following JSON (if the given text is gibberish or non-japanese give a single $ sign instead instead.). Do not add quotations inside the values of any JSON key-value pair to avoid parsing errors:
       {
       "meaning": "The meaning of the text",
       "romaji": "The romaji equivalent of the text",
