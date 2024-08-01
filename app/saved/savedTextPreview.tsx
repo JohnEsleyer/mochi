@@ -76,27 +76,26 @@ function AllSavedText() {
         setIsLoading(false);
     };
 
-    useEffect(() => {
-        
-        
+    const fetchGroupData = async () => {
+        try {
+            let { data, error } = await supabase
+                .from('groups')
+                .select('*')
 
-        const fetchGroupData = async () => {
-            try {
-                let { data, error } = await supabase
-                    .from('groups')
-                    .select('*')
-
-                if (error) {
-                    throw error;
-                }
-                console.log(data);
-                setGroups(data as GroupsJsonData[]);
-
-            } catch (error) {
-                console.log("Error fetching data");
+            if (error) {
+                throw error;
             }
+            console.log(data);
+            setGroups(data as GroupsJsonData[]);
 
-        };
+        } catch (error) {
+            console.log("Error fetching data");
+        }
+
+    };
+
+    useEffect(() => {
+      
         fetchGroupData();
         fetchSavedData();
 
@@ -282,9 +281,17 @@ function AllSavedText() {
                                                 </React.Fragment>
                                             ))
                                         ))
-
                                         
                                     }</span>
+                                    {savedTexts.map((savedText) => (
+                                            savedText.meta.id == currentAnalysisID && <div key={savedText.meta.id}>
+                                            <ul className="p-2">
+                                            <li>{savedText.body.furigana}</li>
+                                            <li>{savedText.body.meaning}</li>
+                                            </ul>
+                                        </div>
+                                        ))
+                                        }
                                 </div>
                             </div>
                             <div className="flex-1 overflow-y-auto no-scrollbar">
@@ -334,7 +341,6 @@ function AllSavedText() {
                                         <div className="border hover:bg-gray-900 shadow-xl rounded border-gray-700 p-5 m-2">
                                             <p className="">{value.body.japanese}</p>
                                             <p className="">{value.body.meaning}</p>
-                                            <p>{value.meta.id}</p>
     
                                         </div>
                                     </button>)

@@ -18,13 +18,13 @@ export default function LandingPageNavbar(){
             </a>
           </div>
           <div className="flex space-x-4">
-            <Link href="/signup" className="text-white hover:text-gray-300">
+            <Link href="/signup" className="p-2 text-black bg-orange-200 rounded-lg">
               Sign Up
             </Link>
-            <Link href="/signin" className="text-white hover:text-gray-300">
+            <Link href="/signin" className="flex items-center text-white hover:text-gray-300">
               Sign In
             </Link>
-            <Link href="/about" className="text-white hover:text-gray-300">
+            <Link href="/about" className="flex items-center text-white hover:text-gray-300">
               About
             </Link>
           </div>
