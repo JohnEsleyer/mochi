@@ -22,10 +22,6 @@ NEXT_PUBLIC_SUPABASE_URL=SUPABASE_URL
 NEXT_PUBLIC_SUPABASE_KEY=SUPABASE_KEY
 ```
 
-### Supabase Database Schema
-![image](https://github.com/JohnEsleyer/mochi/assets/66754038/0f83ff35-b0ea-468e-b479-557012348644)
-
-
 ### Setup
 1. Clone the repository using the following git command:
 ```
