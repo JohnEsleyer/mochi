@@ -1,17 +1,22 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+
 import "./globals.css";
 import "./globalicon.css";
+import { Fredoka } from 'next/font/google';
 
 
-const inter = Inter({ subsets: ["latin"] });
+const fredoka = Fredoka({
+  subsets: ['latin'],
+  weight: ['400', '700', '700'], // Add weights you want to use
+});
 
 export const metadata: Metadata = {
   icons:{
     icon: '/favicon.ico'
   },
   title: "Mochi: Japanese AI Analyzer",
-  description: "Analyze Japanese Texts with AI",
+  description: "Analyze and chat Japanese Texts with AI",
 };
 
 export default function RootLayout({
@@ -22,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en">
      
-      <body className={inter.className}>{children}</body>
+      <body className={fredoka.className}>{children}</body>
     </html>
   );
 }

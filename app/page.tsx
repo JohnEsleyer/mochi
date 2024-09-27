@@ -71,7 +71,7 @@ export default function LandingPage() {
                 className="bg-orange-200 text-black p-1 pr-2 pl-2 rounded"
 
               >
-                Use Analyser
+                Use Analyzer
               </button>
             </div>
 

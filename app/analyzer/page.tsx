@@ -9,7 +9,7 @@ import supabase from '@/utils/supabase';
 import Loading from "/public/loading.svg"
 import Image from "next/image";
 
-export default function Analyser() {
+export default function Analyzer() {
   const defaultData = {
     status: 200,
     body: {
@@ -30,7 +30,7 @@ export default function Analyser() {
   };
 
 
-  const [responseJson, setJsonResponse] = useState<AnalyserResponse>(defaultData);
+  const [responseJson, setJsonResponse] = useState<AnalyzerResponse>(defaultData);
   const [isFailed, setIsFailed] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>('');
   const [isVisible, setIsVisible] = useState<boolean>(false);
@@ -74,7 +74,7 @@ export default function Analyser() {
         },
       });
 
-      const response: AnalyserResponse = await res.json();
+      const response: AnalyzerResponse = await res.json();
       console.log(response.status);
 
       const { status } = response;
@@ -147,7 +147,7 @@ export default function Analyser() {
                 {/* <Image src='/mochi.png' width={100} height={100} alt='mochi'/> */}
                 <div className='flex items-center mb-6 grid'>
                   <h1 className='text-4xl font-bold mt-4'>
-                    <span className='text-green-300'>Analyser</span>
+                    <span className='text-green-300'>Analyzer</span>
                   </h1>
                   <span className='text-sm'>Analyze Japanese Text with AI</span>
                 </div>
@@ -223,7 +223,7 @@ export default function Analyser() {
                         <span className='text-lg'>{responseJson.body.context}</span>
                       </div>
                     </div>
-                    {/* // Analyser Output */}
+                    {/* // Analyzer Output */}
                     <div className="overflow-auto">
                       <p className='font-bold text-3xl mr-4 p-2 mt-1'>Words Breakdown</p>
                       <span className='font-bold text-3xl mr-4 p-2'>{

@@ -64,7 +64,7 @@ export default function ChatAI() {
     const [isPortrait, setIsPortrait] = useState(heightWidth);
     const [isAnalyze, setIsAnalyze] = useState(false);
     const [isAnalyzeFailed, setIsAnalyzeFailed] = useState(false);
-    const [AnalyserResponse, setAnalyserResponse] = useState<AnalyserResponse>(defaultData);
+    const [AnalyzerResponse, setAnalyzerResponse] = useState<AnalyzerResponse>(defaultData);
     const [isSaved, setIsSaved] = useState(false);
     const [currentAnalyzed, setCurrentAnalyzed] = useState(0);
     const [currentAnalyzedText, setCurrentAnalyzedText] = useState('');
@@ -209,7 +209,7 @@ export default function ChatAI() {
                 },
             });
             
-            const response: AnalyserResponse = await res.json();
+            const response: AnalyzerResponse = await res.json();
             console.log(response.status);
             
             const { status } = response;
@@ -219,7 +219,7 @@ export default function ChatAI() {
                 setIsAnalyzeFailed(true);
             } else {
                 setIsAnalyzeFailed(false);
-                setAnalyserResponse(response);
+                setAnalyzerResponse(response);
             }
         } catch (e) {
             setIsAnalyzeFailed(true);
@@ -239,10 +239,10 @@ export default function ChatAI() {
             romaji: conversationEnglish[currentAnalyzed],
             context: 'none',
             words: 
-                Object.keys(AnalyserResponse.body.words).map((key) => (
+                Object.keys(AnalyzerResponse.body.words).map((key) => (
 
 
-                    AnalyserResponse.body.words[key]
+                    AnalyzerResponse.body.words[key]
 
                 )),
         };
@@ -298,7 +298,7 @@ export default function ChatAI() {
                                     setCurrentAnalyzedText(message);
                                 }}
                             >
-                                Use Analyser
+                                Use Analyzer
                             </button>
                         </div>
 
@@ -445,7 +445,7 @@ export default function ChatAI() {
     };
 
 
-    const AnalyserUI = () => {
+    const AnalyzerUI = () => {
         return (
             <div className={isPortrait ? "h-full" : "border-l-4 border-white h-full"}>
 
@@ -499,11 +499,11 @@ export default function ChatAI() {
                                         </div>
                                         <div className="h-28 overflow-y-auto no-scrollbar">
                                             {!isAnalyzeFailed && <span className='font-bold text-3xl mr-4 p-2'>{
-                                                Object.keys(AnalyserResponse.body.words).map((key) => (
+                                                Object.keys(AnalyzerResponse.body.words).map((key) => (
                                                     <React.Fragment key={key}>
 
-                                                        <span className={`text-3xl font-bold mb-2 ${AnalyserResponse.body.words[key].class in colorWordClass ? colorWordClass[AnalyserResponse.body.words[key].class] : 'text-white-300'}`}>
-                                                            {AnalyserResponse.body.words[key].word}
+                                                        <span className={`text-3xl font-bold mb-2 ${AnalyzerResponse.body.words[key].class in colorWordClass ? colorWordClass[AnalyzerResponse.body.words[key].class] : 'text-white-300'}`}>
+                                                            {AnalyzerResponse.body.words[key].word}
                                                         </span>
                                                     </React.Fragment>
                                                 ))
@@ -517,16 +517,16 @@ export default function ChatAI() {
                                             <div className="flex justify-center p-2">
                                                 <p>Error occured. Please try again later.</p>
                                             </div> : <div className="h-80 lg:flex lg:flex-wrap">
-                                                {Object.keys(AnalyserResponse.body.words).map((key) => (
+                                                {Object.keys(AnalyzerResponse.body.words).map((key) => (
                                                     <React.Fragment key={key}>
                                                         <div className='container lg:w-1/2 flex flex-col rounded-lg p-4 shadow-md lg:shadow-lg'>
-                                                            <span className={`text-3xl font-bold mb-2 ${AnalyserResponse.body.words[key].class in colorWordClass ? colorWordClass[AnalyserResponse.body.words[key].class] : 'text-white-300'}`}>
-                                                                {AnalyserResponse.body.words[key].word}
+                                                            <span className={`text-3xl font-bold mb-2 ${AnalyzerResponse.body.words[key].class in colorWordClass ? colorWordClass[AnalyzerResponse.body.words[key].class] : 'text-white-300'}`}>
+                                                                {AnalyzerResponse.body.words[key].word}
                                                             </span>
-                                                            <span className='text-lg '><b>Romaji</b>: {AnalyserResponse.body.words[key].romaji}</span>
-                                                            <span className='text-lg '><b>Class</b>: {AnalyserResponse.body.words[key].class}</span>
-                                                            <span className='text-lg '><b>Meaning</b>: {AnalyserResponse.body.words[key].meaning}</span>
-                                                            <span className='text-lg '><b>Context</b>: {AnalyserResponse.body.words[key].context}</span>
+                                                            <span className='text-lg '><b>Romaji</b>: {AnalyzerResponse.body.words[key].romaji}</span>
+                                                            <span className='text-lg '><b>Class</b>: {AnalyzerResponse.body.words[key].class}</span>
+                                                            <span className='text-lg '><b>Meaning</b>: {AnalyzerResponse.body.words[key].meaning}</span>
+                                                            <span className='text-lg '><b>Context</b>: {AnalyzerResponse.body.words[key].context}</span>
                                                         </div>
                                                     </React.Fragment>
                                                 ))}
@@ -536,7 +536,7 @@ export default function ChatAI() {
                             }
                         </div>
                         : <div className="bg-gray-800 flex items-center justify-center h-full">
-                            <p className="p-2">Press the 'Use Analyser' button to generate a breakdown of the Japanese text.</p>
+                            <p className="p-2">Press the 'Use Analyzer' button to generate a breakdown of the Japanese text.</p>
                         </div>
                 }
             </div>
@@ -546,7 +546,7 @@ export default function ChatAI() {
     const portraitDisplay = () => {
         return (
             <div className="grid grid-cols-1 h-full ">
-                {isAnalyze ? AnalyserUI() : chatUI()}
+                {isAnalyze ? AnalyzerUI() : chatUI()}
             </div>
         );
     }
@@ -555,7 +555,7 @@ export default function ChatAI() {
 
             <div className="grid grid-cols-2 h-full ">
                 {chatUI()}
-                {AnalyserUI()}
+                {AnalyzerUI()}
             </div>
         );
     };
